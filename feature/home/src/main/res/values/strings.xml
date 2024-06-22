@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="submission">Pengajuan</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="history">Riwayat</string>
+    <string name="profile">Profile</string>
+</resources>

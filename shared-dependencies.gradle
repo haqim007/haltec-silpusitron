@@ -1,0 +1,17 @@
+dependencies {
+    // HILT
+    // implementation(libs.hilt.android)
+    // ksp(libs.hilt.android.compiler)
+    // ksp(libs.hilt.compiler)
+
+    // Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    // Paging
+    implementation(libs.paging.runtime.ktx)
+    // Unit testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+}

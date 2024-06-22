@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SplashScreenTheme" parent="Theme.SILPUSITRON">
+
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
+        <item name="android:windowBackground">#5185F3</item>
+        <item name="android:windowSplashScreenBackground">#5185F3</item>
+        <item name="android:windowSplashScreenAnimationDuration">0</item>
+
+    </style>
+</resources>
