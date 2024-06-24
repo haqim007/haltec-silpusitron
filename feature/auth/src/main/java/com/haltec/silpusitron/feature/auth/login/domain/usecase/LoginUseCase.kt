@@ -7,6 +7,7 @@ import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.core.domain.model.InputTextData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
 import com.haltec.silpusitron.core.domain.model.validate
+import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.koin.core.component.KoinComponent
@@ -21,7 +22,7 @@ class LoginUseCase : KoinComponent{
         password: InputTextData<TextValidationType, String>,
         captcha: InputTextData<TextValidationType, String>,
         userType: UserType
-    ): Flow<Resource<LoginInputData>>{
+    ): Flow<Resource<LoginResult>>{
         username.validate()
         password.validate()
         captcha.validate()
@@ -29,8 +30,10 @@ class LoginUseCase : KoinComponent{
             return flowOf(
                 Resource.Error(
                     message = "Validasi gagal. Silahkan coba kembali",
-                    data = LoginInputData(
-                        username, password, captcha, userType
+                    data = LoginResult(
+                        inputData = LoginInputData(
+                            username, password, captcha, userType
+                        )
                     )
                 )
             )

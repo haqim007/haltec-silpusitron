@@ -23,7 +23,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -63,5 +63,4 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation("com.google.android.recaptcha:recaptcha:18.5.1")
-    implementation(libs.datastore.preferences)
 }

@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.ui.ContainerWithBanner
-import com.haltec.silpusitron.core.ui.ui.ErrorValidationText
+import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
+import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.R
 import com.haltec.silpusitron.feature.auth.di.authModule
@@ -234,7 +234,7 @@ private fun OTPForm(
                 modifier = Modifier
                     .padding(top = 50.dp, bottom = 6.dp)
                     .weight(1f),
-                onClick = { },
+                onClick = { action(OTPUiAction.RequestOTP) },
                 colors = ButtonDefaults.buttonColors().copy(
                     containerColor = MaterialTheme.colorScheme.primary,
                     disabledContainerColor = MaterialTheme.colorScheme.background,

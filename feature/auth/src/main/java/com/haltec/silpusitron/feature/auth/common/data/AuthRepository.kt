@@ -1,17 +1,17 @@
 package com.haltec.silpusitron.feature.auth.common.data
 
 import com.haltec.silpusitron.common.util.DispatcherProvider
+import com.haltec.silpusitron.core.domain.model.InputTextData
 import com.haltec.silpusitron.core.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.feature.auth.common.data.preference.AuthPreference
+import com.haltec.silpusitron.data.preference.AuthPreference
 import com.haltec.silpusitron.feature.auth.common.data.remote.AuthRemoteDataSource
 import com.haltec.silpusitron.feature.auth.common.domain.IAuthRepository
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.login.data.remote.LoginRequest
 import com.haltec.silpusitron.feature.auth.login.data.remote.LoginResponse
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
+import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import com.haltec.silpusitron.feature.auth.otp.data.remote.RequestOTPResponse
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPRequest
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPResponse
@@ -32,8 +32,8 @@ class AuthRepository(
         password: InputTextData<TextValidationType, String>,
         captcha: InputTextData<TextValidationType, String>,
         userType: UserType
-    ): Flow<Resource<LoginInputData>> {
-        return object: NetworkBoundResource<LoginInputData, LoginResponse>(){
+    ): Flow<Resource<LoginResult>> {
+        return object: NetworkBoundResource<LoginResult, LoginResponse>(){
             override suspend fun requestFromRemote(): Result<LoginResponse> {
                 return remoteDataSource.login(
                     LoginRequest(
@@ -45,7 +45,7 @@ class AuthRepository(
                 )
             }
 
-            override fun loadResult(responseData: LoginResponse): Flow<LoginInputData> {
+            override fun loadResult(responseData: LoginResponse): Flow<LoginResult> {
                 return flowOf(responseData.toModel(username, password, captcha, userType))
             }
 

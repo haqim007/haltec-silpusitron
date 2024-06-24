@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.auth.common.data.preference
+package com.haltec.silpusitron.data.preference
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.map
 class AuthPreference(
     private val dataStore: DataStore<Preferences>
 ){
-    suspend fun storeAuth(username: String, token: String){
+    suspend fun storeAuth(
+        username: String,
+        token: String
+    ){
         dataStore.edit {preferences ->
             preferences[USER_NAME] = username
             preferences[TOKEN] = token

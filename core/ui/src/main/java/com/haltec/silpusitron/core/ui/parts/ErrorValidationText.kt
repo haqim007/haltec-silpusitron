@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.ui
+package com.haltec.silpusitron.core.ui.parts
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

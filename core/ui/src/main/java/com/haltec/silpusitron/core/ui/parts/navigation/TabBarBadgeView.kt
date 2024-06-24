@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.ui.navigation
+package com.haltec.silpusitron.core.ui.parts.navigation
 
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Text

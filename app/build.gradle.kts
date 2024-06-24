@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId = "com.haltec.silpusitron"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -70,6 +70,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":feature:landingpage"))
     implementation(project(":feature:auth"))

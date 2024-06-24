@@ -14,7 +14,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -46,6 +46,7 @@ dependencies {
     api(libs.ktor.contentNegotiation)
     implementation(libs.ktor.cio)
     implementation(libs.ktor.client.logging)
+    api(libs.datastore.preferences)
 //    api(libs.ktor.auth)
     //implementation(libs.retrofit)
     // implementation(libs.converter.gson)

@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.ui.navigation
+package com.haltec.silpusitron.core.ui.parts.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle

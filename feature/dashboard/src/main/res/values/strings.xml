@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="analysis_submission_letter_type_letter">Analisis Pengajuan Surat (Jenis Surat)</string>
+    <string name="statistic_summary">Ringkasan Statistik</string>
+    <string name="total">Total</string>
+</resources>

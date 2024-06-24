@@ -15,4 +15,6 @@
     <string name="resent">Kirim Ulang</string>
     <string name="verify_otp">Verifikasi</string>
     <string name="failed_to_retreive_otp">Gagal meminta kode OTP</string>
+    <string name="username_nik">Username/NIK</string>
+    <string name="password_no_kk">Password/No KK</string>
 </resources>

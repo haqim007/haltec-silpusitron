@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.ui.navigation
+package com.haltec.silpusitron.core.ui.parts.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -23,7 +23,7 @@ fun TabBarIconView(
     tabBar: TabBarItem,
     isSelected: Boolean
 ) {
-    BadgedBox(badge = {TabBarBadgeView(count = tabBar.badgeAmount)}) {
+    BadgedBox(badge = { TabBarBadgeView(count = tabBar.badgeAmount) }) {
         Icon(
             imageVector = if (isSelected) tabBar.selectedIcon else tabBar.unselectedIcon,
             contentDescription = tabBar.title,

@@ -1,7 +1,6 @@
 package com.haltec.silpusitron.feature.auth.login.ui
 
 import android.widget.Toast
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.ui.ContainerWithBanner
+import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.di.authModule
 import org.koin.compose.KoinApplication

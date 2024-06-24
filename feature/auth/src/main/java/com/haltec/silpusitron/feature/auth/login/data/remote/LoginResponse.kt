@@ -12,7 +12,9 @@ data class LoginResponse(
 	@Serializable
 	data class Data(
 		val username: String,
-		val token: String
+		val token: String,
+		@SerialName("complete_data")
+		val completeProfile: Boolean
 	)
 
 	@Serializable

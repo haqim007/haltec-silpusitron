@@ -8,6 +8,7 @@ import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
+import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import com.haltec.silpusitron.feature.auth.login.domain.usecase.LoginUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -152,9 +153,9 @@ class LoginViewModel(
                     _state.update { state ->
                         state.copy(
                             loginResult = it,
-                            usernameInput = it.data?.username ?: state.usernameInput,
-                            passwordInput = it.data?.password ?: state.passwordInput,
-                            captchaInput = it.data?.captcha ?: state.captchaInput
+                            usernameInput = it.data?.inputData?.username ?: state.usernameInput,
+                            passwordInput = it.data?.inputData?.password ?: state.passwordInput,
+                            captchaInput = it.data?.inputData?.captcha ?: state.captchaInput
                         )
                     }
                 }
@@ -189,7 +190,7 @@ data class LoginUiState(
         validationError = null
     ),
     val enableLogin: Boolean = false,
-    val loginResult: Resource<LoginInputData> = Resource.Idle(),
+    val loginResult: Resource<LoginResult> = Resource.Idle(),
     val passwordHidden: Boolean = true
 )
 

@@ -71,7 +71,7 @@ import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.ui.ErrorValidationText
+import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.BuildConfig
 import com.haltec.silpusitron.feature.auth.R
@@ -217,7 +217,7 @@ fun LoginForm(
                     value = state.value.username,
                     label = {
                         Text(
-                            text = "Username/NIK"
+                            text = stringResource(R.string.username_nik)
                         )
                     },
                     onValueChange = {
@@ -258,7 +258,7 @@ fun LoginForm(
                     value = state.value.password,
                     label = {
                         Text(
-                            text = "Password/No KK"
+                            text = stringResource(R.string.password_no_kk)
                         )
                     },
                     onValueChange = { action(LoginUiAction.SetPassword(it)) },

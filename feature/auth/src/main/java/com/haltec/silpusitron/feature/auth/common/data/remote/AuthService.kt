@@ -12,6 +12,7 @@ import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
@@ -30,20 +31,12 @@ class AuthService(
             setBody(request)
         }
 
-        // Parse JSON string into a dynamic structure (JsonElement)
-        val json = Json.parseToJsonElement(response.bodyAsText())
-        val errors = json.jsonObject["errors"]?.jsonPrimitive?.content
-        val message = json.jsonObject["message"]?.jsonPrimitive?.content
-        if (response.status != HttpStatusCode.OK && (message != null || errors != null)) {
-            throw CustomRequestException(
-                dataJson = errors,
-                statusCode = response.status,
-                errorMessage = message
-            )
-        }
+        checkOrThrowError(response)
 
         return response.body<LoginResponse>()
     }
+
+
 
     suspend fun verifyOTP(request: VerifyOTPRequest, token: String): VerifyOTPResponse{
         val response = client.post {
@@ -52,17 +45,7 @@ class AuthService(
             setBody(request)
         }
 
-        // Parse JSON string into a dynamic structure (JsonElement)
-        val json = Json.parseToJsonElement(response.bodyAsText())
-        val errors = json.jsonObject["errors"]?.jsonPrimitive?.content
-        val message = json.jsonObject["message"]?.jsonPrimitive?.content
-        if (response.status != HttpStatusCode.OK && (message != null || errors != null)) {
-            throw CustomRequestException(
-                dataJson = errors,
-                statusCode = response.status,
-                errorMessage = message
-            )
-        }
+        checkOrThrowError(response)
 
         return response.body<VerifyOTPResponse>()
     }

@@ -13,6 +13,9 @@ import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,8 +23,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.ui.navigation.TabBarItem
-import com.haltec.silpusitron.core.ui.ui.navigation.TabBarView
+import com.haltec.silpusitron.core.ui.parts.navigation.TabBarItem
+import com.haltec.silpusitron.core.ui.parts.navigation.TabBarView
+import com.haltec.silpusitron.feature.dashboard.ui.DashboardScreen
+import com.haltec.silpusitron.feature.dashboard.ui.DashboardViewModel
+import com.haltec.silpusitron.feature.dashboard.ui.dashboardUiStateDummy
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -69,7 +76,10 @@ fun HomeScreen(
     ) { paddingInner ->
         NavHost(navController = navController, startDestination = DashboardRoute){
             composable<DashboardRoute>{
-                Text(text = "Ini dashboard", modifier = Modifier.padding(paddingInner))
+                val viewModel: DashboardViewModel = koinViewModel()
+               DashboardScreen(state = remember {
+                   mutableStateOf(dashboardUiStateDummy)
+               } /*viewModel.state.collectAsState()*/)
             }
             composable<InquiryRoute>{
                 Text(text = "Ini InquiryRoute", modifier = Modifier.padding(paddingInner))

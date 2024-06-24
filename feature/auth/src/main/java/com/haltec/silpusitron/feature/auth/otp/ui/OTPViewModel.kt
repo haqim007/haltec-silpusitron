@@ -154,11 +154,11 @@ class OTPViewModel(
                         """.trimIndent()
                     )
                 }
-            }
-        }
 
-        if (state.value.requestOTPResult is Resource.Success){
-            startTimer()
+                if(it is Resource.Success){
+                    startTimer()
+                }
+            }
         }
     }
 

@@ -16,7 +16,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -51,4 +51,5 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(libs.androidx.navigation.compose)
+    implementation(project(":feature:dashboard"))
 }
