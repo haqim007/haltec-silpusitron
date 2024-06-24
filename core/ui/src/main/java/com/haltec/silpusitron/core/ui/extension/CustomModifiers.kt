@@ -21,17 +21,18 @@ import androidx.compose.ui.unit.dp
 fun Modifier.surroundInnerShadow(
     shape: Shape,
     blur: Dp,
-    spread: Dp
+    spread: Dp,
+    color: Color = Color.Black.copy(0.5f)
 ) = then(
     innerShadow(
-        shape = shape, color = Color.Black.copy(0.5f),
+        shape = shape, color = color,
         offsetY = (-2).dp, offsetX = (-2).dp, blur = blur, spread = spread
     )
-        // Top left corner shadow.
-        .innerShadow(
-            shape = shape, color = Color.Black.copy(0.5f),
-            offsetY = 2.dp, offsetX = 2.dp, blur = blur, spread = spread
-        )
+    // Top left corner shadow.
+    .innerShadow(
+        shape = shape, color = color,
+        offsetY = 2.dp, offsetX = 2.dp, blur = blur, spread = spread
+    )
 )
 
 @Composable

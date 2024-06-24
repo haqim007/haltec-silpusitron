@@ -68,7 +68,8 @@ fun SummaryCard(data: List<SummaryCardModel>) {
                         .surroundInnerShadow(
                             shape = RoundedCornerShape(15.dp),
                             blur = 5.dp,
-                            spread = 1.dp
+                            spread = 1.dp,
+                            color = item.color.copy(alpha = 0.5f)
                         ),
                     colors = CardDefaults.cardColors().copy(
                         containerColor = BackgroundLight
@@ -87,7 +88,7 @@ fun SummaryCard(data: List<SummaryCardModel>) {
                             .fillMaxSize()
                             .padding(8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Image(
                             painter = painterResource(id = item.icon),
