@@ -6,7 +6,8 @@ data class InputTextData<ValidationType, ValueType>(
     var validationError: ValidationType? = null,
     var value: ValueType,
     var validations: List<ValidationType>,
-    var everChanged: Boolean = false
+    var everChanged: Boolean = false,
+    val options: List<Option>? = null
 ){
     val isValid get() = message == null && validationError == null
 
@@ -14,6 +15,16 @@ data class InputTextData<ValidationType, ValueType>(
         value = newValue
         if (!everChanged) everChanged = true
     }
+
+    data class Option(
+        val key: String,
+        val value: String,
+        val label: String
+    )
+}
+
+fun InputTextData<TextValidationType, String>.isRequired(): Boolean{
+    return validations.firstOrNull { it is TextValidationType.Required } != null
 }
 
 

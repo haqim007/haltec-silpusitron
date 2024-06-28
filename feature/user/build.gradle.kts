@@ -4,16 +4,20 @@ plugins {
     alias(libs.plugins.devtoolsKSP)
     alias(libs.plugins.jetbrainsKotlinParcelize)
     // alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 apply(from = "../../shared-dependencies.gradle")
+apply(from = "../../shared-ui-dependencies.gradle")
+
 
 android {
-    namespace = "com.haltec.silpusitron.feature.user"
+    namespace = "com.haltec.silpusitron.user"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -35,14 +39,19 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
 }

@@ -37,7 +37,7 @@ fun <T, V> ErrorValidationText(
                 else -> null
             }
         Text(
-            text = string ?: data.message ?: "Unknown error",
+            text = string ?: data.message ?: stringResource(R.string.unknown_error),
             modifier = modifier,
             color = MaterialTheme.colorScheme.error,
             fontSize = 12.sp

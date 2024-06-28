@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.user
+package com.haltec.silpusitron.user
 
 import org.junit.Test
 

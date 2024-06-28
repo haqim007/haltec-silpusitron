@@ -51,6 +51,7 @@ fun ContainerWithBanner(
     bannerModifier: Modifier = Modifier,
     sharedModifier: Modifier = Modifier,
     withWelcome: Boolean = false,
+    scrollable: Boolean = true,
     onBannerInvisible: (isVisible: Boolean) -> Unit = {},
     content: @Composable () -> Unit
 ){
@@ -93,7 +94,10 @@ fun ContainerWithBanner(
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .then(
+                    if (scrollable) Modifier.verticalScroll(scrollState) else Modifier
+                )
+
             ,
         ) {
 

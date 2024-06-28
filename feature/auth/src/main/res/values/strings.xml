@@ -17,4 +17,5 @@
     <string name="failed_to_retreive_otp">Gagal meminta kode OTP</string>
     <string name="username_nik">Username/NIK</string>
     <string name="password_no_kk">Password/No KK</string>
+    <string name="failed_to_verify_otp">Gagal memverifikasi OTP</string>
 </resources>

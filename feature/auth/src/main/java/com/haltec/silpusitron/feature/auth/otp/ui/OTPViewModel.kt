@@ -110,6 +110,10 @@ class OTPViewModel(
             is OTPUiAction.StartTimer -> {
                 startTimer()
             }
+
+            OTPUiAction.Retry -> {
+                resetOTPVerificationToIdle()
+            }
         }
     }
 
@@ -120,15 +124,18 @@ class OTPViewModel(
     }
 
     private fun setOTP(otp: String){
-        val otpState = state.value.otpInput
-        otpState.setValue(otp)
-        otpState.validate()
-        _state.update { state ->
-            state.copy(
-                otp = otp,
-                otpInput = otpState
-            )
+        if (otp.length <= 6){
+            val otpState = state.value.otpInput
+            otpState.setValue(otp)
+            otpState.validate()
+            _state.update { state ->
+                state.copy(
+                    otp = otp,
+                    otpInput = otpState
+                )
+            }
         }
+
     }
 
 
@@ -190,6 +197,10 @@ class OTPViewModel(
             }
         }
     }
+
+    private fun resetOTPVerificationToIdle(){
+        _state.update { state -> state.copy(otpVerificationResult = Resource.Idle()) }
+    }
 }
 
 data class OTPState(
@@ -219,4 +230,5 @@ sealed class OTPUiAction{
     data class SetOTP(val otp: String): OTPUiAction()
     data object Verify: OTPUiAction()
     data object StartTimer: OTPUiAction()
+    data object Retry: OTPUiAction()
 }
