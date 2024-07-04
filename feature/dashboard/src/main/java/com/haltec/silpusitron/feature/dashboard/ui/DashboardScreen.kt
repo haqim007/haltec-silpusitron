@@ -71,7 +71,7 @@ fun DashboardScreen(
     } else emptyList()
 
     ContainerWithBanner(
-        containerModifier = modifier
+        modifier = modifier
             .fillMaxSize(),
         bannerModifier = Modifier
             .height(242.dp),

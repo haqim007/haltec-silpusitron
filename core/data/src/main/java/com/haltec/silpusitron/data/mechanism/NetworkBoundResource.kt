@@ -1,5 +1,8 @@
 package com.haltec.silpusitron.data.mechanism
 
+import com.haltec.silpusitron.data.preference.AuthPreference
+import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
@@ -108,3 +111,54 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
     fun asFlow(): Flow<Resource<ResultType>> = result
 
 }
+
+abstract class AuthorizedNetworkBoundResource<ResultType, ResponseType>(
+    private val authPreference: AuthPreference
+): NetworkBoundResource<ResultType, ResponseType>(){
+
+    final override suspend fun requestFromRemoteRunner(): Result<ResponseType> {
+//        return checkToken(authPreference, requestFromRemote = { requestFromRemote() })
+        return requestFromRemote()
+    }
+
+    protected abstract suspend fun getToken(): String?
+
+    override suspend fun onFailed(exceptionOrNull: CustomThrowable?) {
+        if(exceptionOrNull?.code == HttpStatusCode.Unauthorized){
+            authPreference.resetAuth()
+        }
+    }
+
+}
+
+//suspend fun <RequestType> checkToken(
+//    authPreference: AuthPreference,
+//    requestFromRemote: suspend () -> Result<RequestType>
+//): Result<RequestType>{
+//    var apiResponse: Result<RequestType>? = null
+//
+//    // Repeat three times in case request failed because of http code 401.
+//    // Because from the network API when the token expired,
+//    // it will response refreshed token instead of just (error) message
+//    run repeatBlock@{
+//        repeat(3){
+//            apiResponse = requestFromRemote()
+//            if (apiResponse?.isSuccess == false){
+//                val exception = apiResponse?.exceptionOrNull() as? CustomThrowable
+//                if (exception?.code == 401 && exception.data?.data != null){
+//                    authPreference.updateToken(
+//                        exception.token,
+//                        stringToTimestamp(exception.data.data.exp, DATE_TIME_FORMAT) ?: 0
+//                    )
+//                    delay(3000)
+//                }else{
+//                    return@repeatBlock
+//                }
+//            }else{
+//                return@repeatBlock
+//            }
+//        }
+//    }
+//
+//    return apiResponse!!
+//}

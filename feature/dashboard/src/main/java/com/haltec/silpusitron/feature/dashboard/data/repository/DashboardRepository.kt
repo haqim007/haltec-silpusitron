@@ -23,6 +23,7 @@ class DashboardRepository(
     private suspend fun getToken(): String{
         return preferences.getToken().first()
     }
+
     override fun getData(): Flow<Resource<DashboardData>> {
         return object : NetworkBoundResource<DashboardData, DashboardResponse>() {
             override suspend fun requestFromRemote(): Result<DashboardResponse> {

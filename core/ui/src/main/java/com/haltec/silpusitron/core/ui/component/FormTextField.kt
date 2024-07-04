@@ -17,7 +17,10 @@ import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 fun <T, V> FormTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    label: @Composable (() -> Unit),
+    inputLabel: String,
+    inputData: InputTextData<T, V>,
+    modifier: Modifier = Modifier,
     singleLine: Boolean = false,
     colors: TextFieldColors = TextFieldDefaults.colors().copy(
         focusedContainerColor = MaterialTheme.colorScheme.background,
@@ -25,9 +28,8 @@ fun <T, V> FormTextField(
         disabledContainerColor = DisabledInputContainer
     ),
     isLoading: Boolean = false,
-    inputData: InputTextData<T, V>,
+    leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     readOnly: Boolean = false,
@@ -36,13 +38,10 @@ fun <T, V> FormTextField(
 ){
     TextField(
         value = value,
-        label = {
-            Text(
-                text = label
-            )
-        },
+        label = label,
         onValueChange = onValueChange,
         trailingIcon = trailingIcon,
+        leadingIcon = leadingIcon,
         singleLine = singleLine,
         modifier = modifier,
         colors = colors,
@@ -51,7 +50,7 @@ fun <T, V> FormTextField(
         supportingText = {
             ErrorValidationText(
                 data = inputData,
-                label,
+                inputLabel,
             )
         },
         visualTransformation = visualTransformation,

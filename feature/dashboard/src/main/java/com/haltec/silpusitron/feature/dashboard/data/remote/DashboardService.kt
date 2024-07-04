@@ -10,7 +10,6 @@ class DashboardService(
     override val API_VERSION: String
 ) : KtorService() {
 
-    private val client by lazy { createClient() }
     private val path = "dashboard"
     suspend fun getDashboard(token: String): DashboardResponse{
         val response = client.get {

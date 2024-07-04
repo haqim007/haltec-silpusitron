@@ -9,6 +9,9 @@ object SplashScreenRoute
 object LoginRoute
 
 @Serializable
+object ConfirmProfileData
+
+@Serializable
 object OTP
 
 @Serializable

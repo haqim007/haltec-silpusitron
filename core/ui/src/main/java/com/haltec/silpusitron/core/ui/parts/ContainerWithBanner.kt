@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.core.ui.component.Banner
+import com.haltec.silpusitron.core.ui.component.LottieLoader
 import com.haltec.silpusitron.core.ui.theme.AppTypography
 import com.haltec.silpusitron.core.ui.theme.OnPrimaryLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
@@ -47,7 +49,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun ContainerWithBanner(
-    containerModifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
     bannerModifier: Modifier = Modifier,
     sharedModifier: Modifier = Modifier,
     withWelcome: Boolean = false,
@@ -87,7 +89,8 @@ fun ContainerWithBanner(
     }
 
     Box(
-        modifier = containerModifier
+        modifier = modifier,
+        contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -175,7 +178,7 @@ fun ContainerWithBanner(
 fun ContainerWithBannerPreview(){
     SILPUSITRONTheme {
         ContainerWithBanner(
-            containerModifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             bannerModifier = Modifier.height(270.dp),
             withWelcome = true
         ){

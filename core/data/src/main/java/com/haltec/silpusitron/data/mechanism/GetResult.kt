@@ -69,10 +69,4 @@ suspend fun <T> getResult(callback: suspend () -> T): Result<T> {
 class CustomThrowable(
     val code: HttpStatusCode = HttpStatusCode.OK,
     override val message: String?
-) : Throwable(message) {
-    companion object {
-        const val DEFAULT_CODE = 999
-        const val UNKNOWN_HOST_EXCEPTION = 503
-        const val NOT_FOUND = 404
-    }
-}
+) : Throwable(message)

@@ -50,13 +50,14 @@ import com.haltec.silpusitron.feature.auth.R
 import com.haltec.silpusitron.feature.auth.di.authModule
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
+import com.haltec.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun OTPScreen(
     modifier: Modifier = Modifier
 ){
     ContainerWithBanner(
-        containerModifier = modifier
+        modifier = modifier
             .fillMaxSize(),
         bannerModifier = Modifier
             .height(242.dp),
@@ -135,7 +136,7 @@ private fun OTPForm(
                         action(OTPUiAction.RequestOTP)
                     }
                 ) {
-                    Text(stringResource(R.string.try_again))
+                    Text(stringResource(CoreR.string.try_again))
                 }
             },
             icon = {

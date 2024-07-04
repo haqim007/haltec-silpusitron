@@ -66,7 +66,9 @@ import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.haltec.silpusitron.common.di.commonModule
+import com.haltec.silpusitron.core.domain.model.isRequired
 import com.haltec.silpusitron.core.ui.component.FormTextField
+import com.haltec.silpusitron.core.ui.component.InputLabel
 import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
@@ -86,7 +88,8 @@ fun LoginForm(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
     userType: UserType,
-    onLoginSuccess: () -> Unit
+    onProfileDataComplete: () -> Unit,
+    onProfileDataIncomplete: () -> Unit
 ) {
     var recaptchaClient: RecaptchaClient? by remember {
         mutableStateOf(null)
@@ -125,7 +128,11 @@ fun LoginForm(
         state.value.loginResult.let {
             showLoginErrorAlert = false
             if (it is Resource.Success){
-                onLoginSuccess()
+                if (it.data?.isProfileCompleted == true){
+                    onProfileDataComplete()
+                }else{
+                    onProfileDataIncomplete()
+                }
             }
             else if(it is Resource.Error){
                 showLoginErrorAlert = true
@@ -166,7 +173,7 @@ fun LoginForm(
                         initRecaptcha = null
                     }
                 ) {
-                    Text(stringResource(R.string.try_again))
+                    Text(stringResource(CoreR.string.try_again))
                 }
             },
             dismissButton = {
@@ -217,7 +224,13 @@ fun LoginForm(
                     onValueChange = {
                         action(LoginUiAction.SetUsername(it))
                     },
-                    label = stringResource(R.string.username_nik),
+                    label = {
+                        InputLabel(
+                            label = stringResource(R.string.username_nik),
+                            isRequired = state.value.usernameInput.isRequired()
+                        )
+                    },
+                    inputLabel = stringResource(R.string.username_nik),
                     singleLine = true,
                     isLoading = isLoading,
                     inputData = state.value.usernameInput,
@@ -230,45 +243,17 @@ fun LoginForm(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-
-//                TextField(
-//                    value = state.value.username,
-//                    label = {
-//                        Text(
-//                            text = stringResource(R.string.username_nik)
-//                        )
-//                    },
-//                    onValueChange = {
-//                        action(LoginUiAction.SetUsername(it))
-//                    },
-//                    trailingIcon = {
-//                        Image(
-//                            painter = painterResource(id = R.drawable.baseline_people_24),
-//                            contentDescription = null
-//                        )
-//                    },
-//                    singleLine = true,
-//                    modifier = Modifier
-//                        .fillMaxWidth(),
-//                    colors = TextFieldDefaults.colors().copy(
-//                        focusedContainerColor = MaterialTheme.colorScheme.background,
-//                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-//                        disabledContainerColor = DisabledInputContainer
-//                    ),
-//                    enabled = !isLoading,
-//                    isError = !state.value.usernameInput.isValid,
-//                    supportingText = {
-//                        ErrorValidationText(
-//                            data = state.value.usernameInput,
-//                            "Username",
-//                        )
-//                    }
-//                )
                 
                 FormTextField(
                     value = state.value.password,
                     onValueChange = { action(LoginUiAction.SetPassword(it)) },
-                    label = stringResource(R.string.password_no_kk),
+                    inputLabel = stringResource(R.string.password_no_kk),
+                    label = {
+                        InputLabel(
+                            label = stringResource(R.string.password_no_kk),
+                            isRequired = state.value.passwordInput.isRequired()
+                        )
+                    },
                     singleLine = true,
                     isLoading = isLoading,
                     inputData = state.value.passwordInput,
@@ -297,52 +282,6 @@ fun LoginForm(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
 
-//                TextField(
-//                    modifier = Modifier
-//                        .fillMaxWidth(),
-//                    colors = TextFieldDefaults.colors().copy(
-//                        focusedContainerColor = MaterialTheme.colorScheme.background,
-//                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-//                        disabledContainerColor = DisabledInputContainer
-//                    ),
-//                    value = state.value.password,
-//                    label = {
-//                        Text(
-//                            text = stringResource(R.string.password_no_kk)
-//                        )
-//                    },
-//                    onValueChange = { action(LoginUiAction.SetPassword(it)) },
-//                    singleLine = true,
-//                    visualTransformation = if (state.value.passwordHidden) PasswordVisualTransformation()
-//                    else VisualTransformation.None,
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-//                    trailingIcon = {
-//                        IconButton(onClick = {
-//                            if (state.value.passwordHidden) action(LoginUiAction.ShowPassword)
-//                            else action(LoginUiAction.HidePassword)
-//                        }) {
-//                            val iconVisibility =
-//                                if (state.value.passwordHidden) Icons.Filled.VisibilityOff
-//                                else Icons.Filled.Visibility
-//                            val description =
-//                                if (state.value.passwordHidden)
-//                                    stringResource(R.string.show_password)
-//                                else
-//                                    stringResource(R.string.hide_password)
-//                            Icon(
-//                                imageVector = iconVisibility, contentDescription = description
-//                            )
-//                        }
-//                    },
-//                    enabled = !isLoading,
-//                    isError = !state.value.passwordInput.isValid,
-//                    supportingText = {
-//                        ErrorValidationText(
-//                            state.value.passwordInput,
-//                            "Password"
-//                        )
-//                    }
-//                )
 
                 AnimatedContent(
                     targetState = state.value.captcha,
@@ -396,7 +335,7 @@ fun LoginForm(
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                             )
 
-                            Text(text = stringResource(R.string.please_wait))
+                            Text(text = stringResource(CoreR.string.please_wait))
 
                         }else{
                             Checkbox(checked = state.value.captcha is Resource.Success, onCheckedChange = {
@@ -491,7 +430,11 @@ fun LoginFormPreview() {
         modules(listOf(commonModule, authModule))
     }) {
         SILPUSITRONTheme {
-            LoginForm(userType = UserType.APP) {}
+            LoginForm(
+                userType = UserType.APP,
+                onProfileDataComplete = {},
+                onProfileDataIncomplete = {}
+            )
         }
     }
 }

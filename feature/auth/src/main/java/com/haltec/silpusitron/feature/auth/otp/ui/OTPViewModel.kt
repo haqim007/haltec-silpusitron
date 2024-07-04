@@ -1,13 +1,12 @@
 package com.haltec.silpusitron.feature.auth.otp.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
-import com.haltec.silpusitron.feature.auth.common.domain.CheckSessionUseCase
-import com.haltec.silpusitron.feature.auth.common.domain.LogoutUseCase
 import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.validate
+import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.core.domain.model.getMaxLength
+import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
+import com.haltec.silpusitron.feature.auth.common.domain.CheckSessionUseCase
 import com.haltec.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.RequestOTPUseCase
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.VerifyOTPUseCase
@@ -25,7 +24,6 @@ import kotlinx.coroutines.launch
 
 @OptIn(FlowPreview::class)
 class OTPViewModel(
-    private val logoutUseCase: LogoutUseCase,
     private val checkSessionUseCase: CheckSessionUseCase,
     private val verifyOTPUseCase: VerifyOTPUseCase,
     private val requestOTPUseCase: RequestOTPUseCase
@@ -91,10 +89,6 @@ class OTPViewModel(
                 }
             }
 
-            OTPUiAction.Logout -> {
-                logout()
-            }
-
             is OTPUiAction.SetOTP -> {
                 setOTP(action.otp)
             }
@@ -118,20 +112,22 @@ class OTPViewModel(
     }
 
 
-    // TODO: Hanya untuk tes
-    private fun logout(){
-        viewModelScope.launch { logoutUseCase() }
-    }
-
+    private var otpMaxLength: Int? = null
     private fun setOTP(otp: String){
-        if (otp.length <= 6){
-            val otpState = state.value.otpInput
-            otpState.setValue(otp)
-            otpState.validate()
+
+        if (otpMaxLength == null){
+            // ensure it will only computed once
+            otpMaxLength = state.value.otpInput.getMaxLength()
+        }
+        if (otp.length <= (otpMaxLength ?: 0)){
+            val newOTPState = updateStateInputText(
+                state.value.otpInput, otp
+            )
+
             _state.update { state ->
                 state.copy(
                     otp = otp,
-                    otpInput = otpState
+                    otpInput = newOTPState
                 )
             }
         }
@@ -225,7 +221,6 @@ data class OTPState(
 
 sealed class OTPUiAction{
     data object CheckSession: OTPUiAction()
-    data object Logout: OTPUiAction()
     data object RequestOTP: OTPUiAction()
     data class SetOTP(val otp: String): OTPUiAction()
     data object Verify: OTPUiAction()
