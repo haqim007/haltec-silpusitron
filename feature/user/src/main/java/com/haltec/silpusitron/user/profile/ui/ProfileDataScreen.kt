@@ -62,6 +62,7 @@ import com.haltec.silpusitron.user.R
 import com.haltec.silpusitron.user.profile.di.profileModule
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
 import org.koin.compose.KoinApplication
 import org.koin.compose.KoinContext
@@ -75,6 +76,7 @@ fun ProfileDataScreen(
     modifier: Modifier = Modifier,
     state: FormProfileUiState,
     action: (action: FormProfileUiAction) -> Unit,
+    onTokenExpired: () -> Unit,
     onComplete: () -> Unit
 ){
 
@@ -97,32 +99,42 @@ fun ProfileDataScreen(
             scrollable = false
         ) {
 
-            if (state.profileData is Resource.Success){
-                ProfileDataForm(
-                    modifier = Modifier,
-                    state = state,
-                    action = action
-                )
-            }
-            else if (state.profileData is Resource.Error){
-                ErrorView(
-                    state.profileData.message,
-                    onTryAgain = { action(FormProfileUiAction.GetProfileData) }
-                )
-            }else{
-                LoadingView()
+            when (state.profileData) {
+                is Resource.Success -> {
+                    ProfileDataForm(
+                        modifier = Modifier,
+                        state = state,
+                        action = action
+                    )
+                }
+
+                is Resource.Error -> {
+                    ErrorView(
+                        state.profileData.message,
+                        onTryAgain = { action(FormProfileUiAction.GetProfileData) }
+                    )
+                }
+
+                else -> {
+                    LoadingView()
+                }
             }
 
         }
 
         when(state.submitResult){
             is Resource.Error -> {
-                SubmitErrorView(
-                    state.submitResult.message,
-                    onTryAgain = {
-                        action(FormProfileUiAction.ResetSubmitResult)
-                    }
-                )
+                if (state.submitResult.httpCode == HttpStatusCode.Unauthorized.value){
+                    onTokenExpired()
+                }
+                else{
+                    SubmitErrorView(
+                        state.submitResult.message,
+                        onTryAgain = {
+                            action(FormProfileUiAction.ResetSubmitResult)
+                        }
+                    )
+                }
             }
             is Resource.Idle -> Unit
             is Resource.Loading -> {
@@ -452,11 +464,11 @@ fun ProfileDataForm(
                 inputData = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onGloballyPositioned {
+                    .onGloballyPositioned { coordinates ->
                         action(
                             FormProfileUiAction.SaveInputViewCoordinateY(
                                 inputName,
-                                it.positionInRoot().y
+                                coordinates.positionInRoot().y
                             )
                         )
                     },
@@ -949,7 +961,8 @@ fun FormProfileScreenPreview(){
             ProfileDataScreen(
                 state = formProfileStateDummy,
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                onTokenExpired = {},
             )
         }
     }
@@ -970,7 +983,8 @@ fun FormProfileScreenPreviewError(){
                     profileData = Resource.Error(message = "Error occured here but it is just dummy")
                 ),
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                                onTokenExpired = {}
             )
         }
     }
@@ -994,7 +1008,8 @@ fun FormProfileScreenPreviewSuccess(){
                     ),
                 ),
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                onTokenExpired = {}
             )
         }
 
@@ -1018,7 +1033,8 @@ fun FormProfileScreenPreviewSubmitSuccess(){
                     submitResult = Resource.Success(ProfileDataDummy)
                 ),
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                onTokenExpired = {}
             )
         }
 
@@ -1042,7 +1058,8 @@ fun FormProfileScreenPreviewSubmitLoading(){
                     submitResult = Resource.Loading()
                 ),
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                onTokenExpired = {}
             )
         }
 
@@ -1066,7 +1083,8 @@ fun FormProfileScreenPreviewSubmitError(){
                     submitResult = Resource.Error(message = "Error disini")
                 ),
                 action = {action -> },
-                onComplete = {}
+                onComplete = {}, 
+                onTokenExpired = {}
             )
         }
 

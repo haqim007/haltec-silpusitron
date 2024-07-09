@@ -2,13 +2,11 @@ package com.haltec.silpusitron.data.mechanism
 
 import com.haltec.silpusitron.data.preference.AuthPreference
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 
 /*
 *
@@ -34,19 +32,19 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
                     }
 
                 }else{
-                    val mException = apiResponse.exceptionOrNull() as? CustomThrowable
+                    val excCustomThrowable = apiResponse.exceptionOrNull() as? CustomThrowable
 
-                    if (mException != null){
-                        val res = apiResponse.getOrNull()
-                        onFailed(mException)
+                    if (excCustomThrowable != null){
+                        onFailed(excCustomThrowable)
                         emit(
                             Resource.Error(
-                                message = mException.message ?: "Failed to fetch data",
-                                data = currentLocalData ?: res?.let { loadResult(res).first() },
-                                httpCode = mException.code.value,
+                                message = excCustomThrowable.message ?: "Failed to fetch data",
+                                data = loadResultOnError(excCustomThrowable.dataJson),
+                                httpCode = excCustomThrowable.code.value,
                             )
                         )
-                    }else{
+                    }
+                    else{
                         val exceptionFallback = apiResponse.exceptionOrNull()
                         emit(
                             Resource.Error(
@@ -107,6 +105,14 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
     * 
     * */
     protected open suspend fun onBeforeRequest(): Boolean = true
+
+    /**
+     * Load from network when the response with errors. Convert data from network to model here
+     *
+     * @param data
+     * @return
+     */
+    protected open fun loadResultOnError(responseData: JsonElement?): ResultType? = null
 
     fun asFlow(): Flow<Resource<ResultType>> = result
 

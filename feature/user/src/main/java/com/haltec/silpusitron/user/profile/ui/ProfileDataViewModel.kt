@@ -21,6 +21,7 @@ import com.haltec.silpusitron.user.profile.domain.usecase.GetProfileUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetReligionOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetSubDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.SubmitProfileUseCase
+import com.haltec.silpusitron.user.profile.domain.usecase.ValidateAllInputUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +39,7 @@ class ProfileDataViewModel(
     private val getEducationOptionsUseCase: GetEducationOptionsUseCase,
     private val getDistrictsUseCase: GetDistrictsUseCase,
     private val getSubDistrictsUseCase: GetSubDistrictsUseCase,
+    private val validateAllInputUseCase: ValidateAllInputUseCase,
     private val submitProfileUseCase: SubmitProfileUseCase
 ) : BaseViewModel<FormProfileUiState, FormProfileUiAction>() {
     override val _state = MutableStateFlow(FormProfileUiState())
@@ -88,26 +90,52 @@ class ProfileDataViewModel(
     }
 
     private fun submit(){
-        val validatedInput = state.value.inputs.toMutableMap()
-        state.value.inputs.forEach {
-            validatedInput[it.key] = it.value.validate()
-        }
-        val isAllValid: Boolean = validatedInput.entries.find { !it.value.isValid } == null
-
-        if (!isAllValid){
+        val validateInputs = validateAllInputUseCase(state.value.inputs)
+        if (!validateInputs.isAllValid){
             _state.update { state ->
                 state.copy(
-                    inputs = validatedInput,
-                    firstErrorInputKey = validatedInput.entries.find { !it.value.isValid }?.key
+                    inputs = validateInputs.input,
+                    firstErrorInputKey = validateInputs.firstErrorInputKey
                 )
             }
-            return
         }
 
         viewModelScope.launch {
             with(state.value){
                 submitProfileUseCase(profileData.data!!, inputs).collectLatest {
-                    _state.update { state -> state.copy(submitResult = it) }
+                   if (it is Resource.Success){
+                       _state.update { state ->
+                           state.copy(
+                               submitResult = it,
+                               inputs = it.data!!.input
+                           )
+                       }
+                   }
+                   else if(it is Resource.Error){
+                       val errorInputs = it.data?.input
+                       val currentInput = state.value.inputs.toMutableMap()
+                       errorInputs?.forEach { (key, input) ->
+                           currentInput[key]?.let { currentInputItem ->
+                               currentInput[key] = currentInputItem.copy(
+                                   message = input.message
+                               )
+                           }
+                       }
+                       _state.update { state ->
+                           state.copy(
+                               submitResult = it,
+                               inputs = currentInput,
+                               firstErrorInputKey = currentInput.entries.find { !it.value.isValid }?.key,
+                           )
+                       }
+                   }
+                   else{
+                       _state.update { state ->
+                           state.copy(
+                               submitResult = it,
+                           )
+                       }
+                   }
                 }
             }
         }

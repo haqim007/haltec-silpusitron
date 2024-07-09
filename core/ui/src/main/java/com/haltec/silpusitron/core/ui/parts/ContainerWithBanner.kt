@@ -1,6 +1,7 @@
 package com.haltec.silpusitron.core.ui.parts
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -14,14 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.core.ui.component.Banner
-import com.haltec.silpusitron.core.ui.component.LottieLoader
 import com.haltec.silpusitron.core.ui.theme.AppTypography
 import com.haltec.silpusitron.core.ui.theme.OnPrimaryLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
@@ -71,6 +69,15 @@ fun ContainerWithBanner(
             delayMillis = 500
         ),
         label = "floatAnimationLogo"
+    )
+    
+    val topPaddingLogo by animateDpAsState(
+        targetValue = if (withWelcomeState) 30.dp else 50.dp,
+        animationSpec = tween(
+            durationMillis = 1000,
+            delayMillis = 500
+        ),
+        label = "topPaddingLogo"
     )
 
     LaunchedEffect(key1 = Unit) {
@@ -104,7 +111,7 @@ fun ContainerWithBanner(
             ,
         ) {
 
-            Banner(bannerModifier){
+            Banner(bannerModifier.height(270.dp)){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
@@ -113,7 +120,7 @@ fun ContainerWithBanner(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = "logo",
                         modifier = sharedModifier
-                            .padding(top = 54.dp)
+                            .padding(top = topPaddingLogo)
                             .height(57.dp)
                             .scale(scale)
                     )

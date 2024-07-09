@@ -73,6 +73,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":feature:landingpage"))
+    implementation(project(":feature:dashboard"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:user"))
     implementation(project(":feature:home"))

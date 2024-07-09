@@ -23,6 +23,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
 
 class ProfileRepository(
     private val remoteDataSource: ProfileRemoteDataSource,
@@ -157,6 +160,14 @@ class ProfileRepository(
 
             override fun loadResult(responseData: SubmitProfileResponse): Flow<ProfileData> {
                 return flowOf(responseData.toProfileData(data))
+            }
+
+            override fun loadResultOnError(responseData: JsonElement?): ProfileData? {
+                if (responseData == null) return null
+
+                return Json
+                    .decodeFromJsonElement<SubmitProfileResponse>(responseData)
+                    .toProfileData(data)
             }
         }
             .asFlow()

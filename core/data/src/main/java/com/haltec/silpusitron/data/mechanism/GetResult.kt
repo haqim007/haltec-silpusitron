@@ -7,6 +7,7 @@ import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ResponseException
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.HttpStatusCode.Companion.ExpectationFailed
+import kotlinx.serialization.json.JsonElement
 
 suspend fun <T> getResult(callback: suspend () -> T): Result<T> {
     return try {
@@ -52,7 +53,8 @@ suspend fun <T> getResult(callback: suspend () -> T): Result<T> {
         Result.failure(
             CustomThrowable(
                 code = e.statusCode,
-                message = e.errorMessage
+                message = e.errorMessage,
+                dataJson = e.dataJson
             )
         )
     } catch (e: Exception) {
@@ -68,5 +70,6 @@ suspend fun <T> getResult(callback: suspend () -> T): Result<T> {
 
 class CustomThrowable(
     val code: HttpStatusCode = HttpStatusCode.OK,
+    val dataJson: JsonElement? = null,
     override val message: String?
 ) : Throwable(message)

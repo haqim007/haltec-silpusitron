@@ -81,7 +81,7 @@ class ProfileService(
 
     suspend fun submitProfile(token: String, data: ProfileRequest): SubmitProfileResponse{
         val response = client.put{
-            endpoint("penduduk")
+            endpoint("users/profile")
             bearerAuth(token)
             setBody(data)
         }

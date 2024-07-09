@@ -15,6 +15,7 @@ import com.haltec.silpusitron.user.profile.domain.usecase.GetProfileUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetReligionOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetSubDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.SubmitProfileUseCase
+import com.haltec.silpusitron.user.profile.domain.usecase.ValidateAllInputUseCase
 import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -35,12 +36,13 @@ val profileModule = module {
     factory { GetDistrictsUseCase() }
     factory { GetSubDistrictsUseCase() }
     factory { SubmitProfileUseCase() }
+    factory { ValidateAllInputUseCase() }
     viewModel {
         ProfileDataViewModel(
             get(), get(), get(),
             get(), get(), get(),
             get(), get(), get(),
-            get(), get()
+            get(), get(), get()
         )
     }
 }

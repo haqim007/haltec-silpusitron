@@ -33,10 +33,18 @@ fun InputTextData<TextValidationType, String>.isRequired(): Boolean{
 }
 
 fun InputTextData<TextValidationType, String>.getMaxLength(): Int{
-    val validation = this.validations.firstOrNull {
+    val maxLength = this.validations.firstOrNull {
         it is TextValidationType.MaxLength
     }
-    return (validation as? TextValidationType.MaxLength)?.maxLength ?: 0
+    if (maxLength != null){
+        return (maxLength as? TextValidationType.MaxLength)?.maxLength ?:  0
+    }
+
+    val exactLength = this.validations.firstOrNull { it is TextValidationType.ExactLength }
+    if (exactLength != null){
+        return (exactLength as? TextValidationType.ExactLength)?.length ?:  0
+    }
+    return 0
 }
 
 

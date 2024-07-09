@@ -18,6 +18,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.ParametersBuilder
 import io.ktor.http.contentType
 import io.ktor.http.path
 import io.ktor.http.takeFrom
@@ -69,13 +70,15 @@ abstract class KtorService{
         }
     }
 
-
-
-
-    fun HttpRequestBuilder.endpoint(path: String, type: ContentType = ContentType.Application.Json){
+    fun HttpRequestBuilder.endpoint(
+        path: String,
+        parametersBuilder: ParametersBuilder? = null,
+        type: ContentType = ContentType.Application.Json
+    ){
         url {
             takeFrom(BASE_URL)
             path("$API_VERSION$path")
+            parametersBuilder?.build()
             contentType(type)
         }
     }
@@ -83,11 +86,11 @@ abstract class KtorService{
     protected suspend fun checkOrThrowError(response: HttpResponse) {
         // Parse JSON string into a dynamic structure (JsonElement)
         val json = Json.parseToJsonElement(response.bodyAsText())
-        val errors = json.jsonObject["errors"]?.jsonPrimitive?.content
+        val errors = json.jsonObject["errors"]?.jsonObject
         val message = json.jsonObject["message"]?.jsonPrimitive?.content
         if (response.status != HttpStatusCode.OK && (message != null || errors != null)) {
             throw CustomRequestException(
-                dataJson = errors,
+                dataJson = json,
                 statusCode = response.status,
                 errorMessage = message
             )
