@@ -118,7 +118,7 @@ fun LoginForm(
                     }
                     .onFailure {
                         initRecaptcha = false
-                        Log.d("recaptchaClient", it.localizedMessage ?: "error")
+                        Log.e("recaptchaClient", it.stackTraceToString())
                     }
             }
         }
@@ -192,7 +192,11 @@ fun LoginForm(
                 Text(text = stringResource(R.string.attention_))
             },
             text = {
-                Text(text = stringResource(R.string.recaptcha_has_failed_to_initiate_please_try_again_later))
+                Text(
+                    text = stringResource(
+                        R.string.recaptcha_has_failed_to_initiate_please_try_again_later
+                    )
+                )
             }
         )
     }

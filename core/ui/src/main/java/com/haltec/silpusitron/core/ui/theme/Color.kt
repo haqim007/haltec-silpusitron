@@ -32,5 +32,10 @@ val DisabledInputContainer = Color(0x1A000000)
 val SuccessColor = Color(0xFF2AB270)
 val DialogBackgroundColor = Color(0xFF666666)
 
+val gradientColors = listOf(
+    PrimaryVariantLight,
+    PrimaryLight
+)
+
 
 

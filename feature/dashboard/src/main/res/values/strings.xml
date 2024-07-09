@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="analysis_submission_letter_type_letter">Analisis Pengajuan Surat (Jenis Surat)</string>
+    <string name="analysis_submission_letter_by_type">Analisis Pengajuan Surat (Jenis Surat)</string>
+    <string name="analysis_submission_letter_by_status">Analisis Pengajuan Surat (Status Surat)</string>
     <string name="statistic_summary">Ringkasan Statistik</string>
     <string name="total">Total</string>
+    <string name="incoming_letter">Surat masuk</string>
+    <string name="outgoing_letter">Surat keluar</string>
+    <string name="incoming_letter_n">Surat masuk: %1$s</string>
+    <string name="outgoing_letter_n">Surat keluar: %1$s</string>
+    <string name="service_ratio">Rasio Pelayanan</string>
 </resources>
