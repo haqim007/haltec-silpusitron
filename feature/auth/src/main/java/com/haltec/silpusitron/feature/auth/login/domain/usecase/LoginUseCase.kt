@@ -23,10 +23,14 @@ class LoginUseCase : KoinComponent{
         captcha: InputTextData<TextValidationType, String>,
         userType: UserType
     ): Flow<Resource<LoginResult>>{
-        username.validate()
-        password.validate()
-        captcha.validate()
-        if (!username.isValid || !password.isValid || !captcha.isValid){
+        val validatedUsername = username.validate()
+        val validatedPassword = password.validate()
+        val validatedCaptcha = captcha.validate()
+        if (
+                !validatedUsername.isValid ||
+                !validatedPassword.isValid ||
+                !validatedCaptcha.isValid
+            ){
             return flowOf(
                 Resource.Error(
                     message = "Validasi gagal. Silahkan coba kembali",

@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.user
+package com.haltec.silpusitron.user
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.haltec.silpusitron.feature.user.test", appContext.packageName)
+        assertEquals("com.haltec.silpusitron.user.test", appContext.packageName)
     }
 }

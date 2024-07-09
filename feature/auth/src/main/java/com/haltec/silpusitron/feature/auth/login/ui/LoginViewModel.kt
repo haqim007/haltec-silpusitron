@@ -75,24 +75,26 @@ class LoginViewModel(
     }
 
     private fun setUsername(username: String){
-        val usernameState = state.value.usernameInput
-        usernameState.setValue(username)
-        usernameState.validate()
+        val newUsernameState = updateStateInputText(
+            state.value.usernameInput,
+            username
+        )
         _state.update { state ->
             state.copy(
-                usernameInput = usernameState,
+                usernameInput = newUsernameState,
                 username = username
             )
         }
     }
 
     private fun setPassword(password: String){
-        val passwordState = state.value.passwordInput
-        passwordState.setValue(password)
-        passwordState.validate()
+        val newPasswordState = updateStateInputText(
+            state.value.passwordInput,
+            password
+        )
         _state.update { state ->
             state.copy(
-                passwordInput = passwordState,
+                passwordInput = newPasswordState,
                 password = password
             )
         }
@@ -110,20 +112,15 @@ class LoginViewModel(
 
     private fun setCaptchaValid(isValid: Boolean, token: String? = null, error: Throwable? = null) {
         viewModelScope.launch {
-            val captchaState = state.value.captchaInput
-            if (token != null) {
-                captchaState.setValue(token)
-            }
-            captchaState.validate()
+            val newCaptchaState = updateStateInputText(
+                state.value.captchaInput,
+                token ?: ""
+            )
             if (isValid && token != null){
                 _state.update { state ->
                     state.copy(
                         captcha = Resource.Success(data = token),
-                        captchaInput = state.captchaInput.copy(
-                            value = token,
-                            validationError = null,
-                            message = null
-                        )
+                        captchaInput = newCaptchaState
                     )
                 }
             }
@@ -131,7 +128,7 @@ class LoginViewModel(
                 _state.update { state ->
                     state.copy(
                         captcha = Resource.Error(message = error.localizedMessage ?: "Unknown error"),
-                        captchaInput = captchaState.copy(
+                        captchaInput = newCaptchaState.copy(
                             value = ""
                         )
                     )

@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,13 +50,14 @@ import com.haltec.silpusitron.feature.auth.R
 import com.haltec.silpusitron.feature.auth.di.authModule
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
+import com.haltec.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun OTPScreen(
     modifier: Modifier = Modifier
 ){
     ContainerWithBanner(
-        containerModifier = modifier
+        modifier = modifier
             .fillMaxSize(),
         bannerModifier = Modifier
             .height(242.dp),
@@ -105,6 +107,26 @@ private fun OTPForm(
         action(OTPUiAction.RequestOTP)
     }
 
+    if (state.value.otpVerificationResult is Resource.Error){
+        AlertDialog(
+            onDismissRequest = { action(OTPUiAction.Retry) },
+            confirmButton = {
+                TextButton(onClick = { action(OTPUiAction.Retry) }) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            icon = {
+                Icon(Icons.Default.Warning, contentDescription = null)
+            },
+            title = {
+                Text(text = stringResource(R.string.attention_))
+            },
+            text = {
+                Text(text = state.value.otpVerificationResult.message ?: stringResource(R.string.failed_to_verify_otp))
+            }
+        )
+    }
+
     if (state.value.requestOTPResult is Resource.Error){
         AlertDialog(
             onDismissRequest = { action(OTPUiAction.RequestOTP) },
@@ -114,7 +136,7 @@ private fun OTPForm(
                         action(OTPUiAction.RequestOTP)
                     }
                 ) {
-                    Text(stringResource(R.string.try_again))
+                    Text(stringResource(CoreR.string.try_again))
                 }
             },
             icon = {
@@ -176,22 +198,27 @@ private fun OTPForm(
         else
             MaterialTheme.colorScheme.error
 
+        val maxLength = 6
         BasicTextField(
             value = state.value.otp,
             onValueChange = {
-                action(OTPUiAction.SetOTP(it))
+                if (it.length <= maxLength)
+                {
+                    action(OTPUiAction.SetOTP(it))
+                }
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword
             ),
             singleLine = true,
             modifier = Modifier.padding(top = 16.dp),
-            enabled = !state.value.isLoading
+            enabled = !state.value.isLoading,
+
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                repeat(6) { index ->
+                repeat(maxLength) { index ->
                     val number: String = when {
                         index >= state.value.otp.length -> ""
                         else -> state.value.otp[index].toString()

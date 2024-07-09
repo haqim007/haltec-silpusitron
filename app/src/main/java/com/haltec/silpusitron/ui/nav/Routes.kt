@@ -6,10 +6,16 @@ import kotlinx.serialization.Serializable
 object SplashScreenRoute
 
 @Serializable
+object PublicDashboardRoute
+
+@Serializable
 object LoginRoute
 
 @Serializable
-object OTP
+object ConfirmProfileDataRoute
+
+@Serializable
+object OTPRoute
 
 @Serializable
 object HomeRoute

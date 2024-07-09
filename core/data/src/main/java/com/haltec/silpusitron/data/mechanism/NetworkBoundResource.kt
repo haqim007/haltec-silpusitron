@@ -1,11 +1,12 @@
 package com.haltec.silpusitron.data.mechanism
 
+import com.haltec.silpusitron.data.preference.AuthPreference
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 
 /*
 *
@@ -31,19 +32,19 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
                     }
 
                 }else{
-                    val mException = apiResponse.exceptionOrNull() as? CustomThrowable
+                    val excCustomThrowable = apiResponse.exceptionOrNull() as? CustomThrowable
 
-                    if (mException != null){
-                        val res = apiResponse.getOrNull()
-                        onFailed(mException)
+                    if (excCustomThrowable != null){
+                        onFailed(excCustomThrowable)
                         emit(
                             Resource.Error(
-                                message = mException.message ?: "Failed to fetch data",
-                                data = currentLocalData ?: res?.let { loadResult(res).first() },
-                                httpCode = mException.code.value,
+                                message = excCustomThrowable.message ?: "Failed to fetch data",
+                                data = loadResultOnError(excCustomThrowable.dataJson),
+                                httpCode = excCustomThrowable.code.value,
                             )
                         )
-                    }else{
+                    }
+                    else{
                         val exceptionFallback = apiResponse.exceptionOrNull()
                         emit(
                             Resource.Error(
@@ -105,6 +106,65 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
     * */
     protected open suspend fun onBeforeRequest(): Boolean = true
 
+    /**
+     * Load from network when the response with errors. Convert data from network to model here
+     *
+     * @param data
+     * @return
+     */
+    protected open fun loadResultOnError(responseData: JsonElement?): ResultType? = null
+
     fun asFlow(): Flow<Resource<ResultType>> = result
 
 }
+
+abstract class AuthorizedNetworkBoundResource<ResultType, ResponseType>(
+    private val authPreference: AuthPreference
+): NetworkBoundResource<ResultType, ResponseType>(){
+
+    final override suspend fun requestFromRemoteRunner(): Result<ResponseType> {
+//        return checkToken(authPreference, requestFromRemote = { requestFromRemote() })
+        return requestFromRemote()
+    }
+
+    protected abstract suspend fun getToken(): String?
+
+    override suspend fun onFailed(exceptionOrNull: CustomThrowable?) {
+        if(exceptionOrNull?.code == HttpStatusCode.Unauthorized){
+            authPreference.resetAuth()
+        }
+    }
+
+}
+
+//suspend fun <RequestType> checkToken(
+//    authPreference: AuthPreference,
+//    requestFromRemote: suspend () -> Result<RequestType>
+//): Result<RequestType>{
+//    var apiResponse: Result<RequestType>? = null
+//
+//    // Repeat three times in case request failed because of http code 401.
+//    // Because from the network API when the token expired,
+//    // it will response refreshed token instead of just (error) message
+//    run repeatBlock@{
+//        repeat(3){
+//            apiResponse = requestFromRemote()
+//            if (apiResponse?.isSuccess == false){
+//                val exception = apiResponse?.exceptionOrNull() as? CustomThrowable
+//                if (exception?.code == 401 && exception.data?.data != null){
+//                    authPreference.updateToken(
+//                        exception.token,
+//                        stringToTimestamp(exception.data.data.exp, DATE_TIME_FORMAT) ?: 0
+//                    )
+//                    delay(3000)
+//                }else{
+//                    return@repeatBlock
+//                }
+//            }else{
+//                return@repeatBlock
+//            }
+//        }
+//    }
+//
+//    return apiResponse!!
+//}

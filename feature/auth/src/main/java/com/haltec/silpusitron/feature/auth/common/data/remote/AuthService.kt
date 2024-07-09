@@ -23,7 +23,6 @@ class AuthService(
     override val BASE_URL: String,
     override val API_VERSION: String
 ) : KtorService(){
-    private val client by lazy { createClient() }
     private val path = "users"
     suspend fun login(request: LoginRequest): LoginResponse {
         val response = client.post {

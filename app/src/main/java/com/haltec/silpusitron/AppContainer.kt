@@ -2,15 +2,13 @@ package com.haltec.silpusitron
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,12 +17,18 @@ import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.login.ui.LoginScreen
 import com.haltec.silpusitron.feature.auth.otp.ui.OTPScreen
+import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedScreen
+import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.haltec.silpusitron.feature.landingpage.ui.splash.MySplashScreen
 import com.haltec.silpusitron.home.HomeScreen
+import com.haltec.silpusitron.ui.nav.ConfirmProfileDataRoute
 import com.haltec.silpusitron.ui.nav.HomeRoute
 import com.haltec.silpusitron.ui.nav.LoginRoute
-import com.haltec.silpusitron.ui.nav.OTP
+import com.haltec.silpusitron.ui.nav.OTPRoute
+import com.haltec.silpusitron.ui.nav.PublicDashboardRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
+import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
+import com.haltec.silpusitron.user.profile.ui.ProfileDataScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -44,7 +48,7 @@ fun AppContainer(
                 }
             }
         }else if(state.value.isSessionValid == false){
-            navController.navigate(LoginRoute){
+            navController.navigate(PublicDashboardRoute){
                 popUpTo(navController.graph.id){
                     inclusive = true
                 }
@@ -63,11 +67,11 @@ fun AppContainer(
                     composable<SplashScreenRoute> {
                         MySplashScreen(
                             sharedModifier = Modifier.sharedElement(
-                                this@SharedTransitionLayout.rememberSharedContentState(key = "logo-splash"),
+                                this@SharedTransitionLayout.rememberSharedContentState(key = "logo"),
                                 animatedVisibilityScope = this@composable
                             ),
                             navigate = {
-                                viewModel.doAction(AppUiAction.CheckSession)
+                                 viewModel.doAction(AppUiAction.CheckSession)
                             }
                         )
                     }
@@ -76,11 +80,18 @@ fun AppContainer(
                             userType = UserType.APP,
                             sharedModifier = Modifier
                                 .sharedElement(
-                                    this@SharedTransitionLayout.rememberSharedContentState(key = "logo-splash"),
+                                    this@SharedTransitionLayout.rememberSharedContentState(key = "logo"),
                                     animatedVisibilityScope = this@composable
                                 ),
-                            onLoginSuccess = {
-                                navController.navigate(OTP) {
+                            onProfileDataComplete = {
+                                navController.navigate(OTPRoute) {
+                                    popUpTo(navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onProfileDataIncomplete = {
+                                navController.navigate(ConfirmProfileDataRoute) {
                                     popUpTo(navController.graph.id) {
                                         inclusive = true
                                     }
@@ -88,11 +99,57 @@ fun AppContainer(
                             }
                         )
                     }
-                    composable<OTP> {
+                    composable<PublicDashboardRoute> {
+                        val dashboardViewModel: DashboardExposedViewModel = koinViewModel()
+                        val dashboardState by dashboardViewModel.state.collectAsState()
+                        DashboardExposedScreen(
+                            state = dashboardState,
+                            action = dashboardViewModel::doAction,
+                            onLogin = {
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    composable<ConfirmProfileDataRoute> {
+                        val profileViewModel: ProfileDataViewModel = koinViewModel()
+                        val profileState by profileViewModel.state.collectAsState()
+
+                        ProfileDataScreen(
+                            state = profileState,
+                            action = {
+                                profileViewModel.doAction(it)
+                            },
+                            onTokenExpired = {
+                                navController.navigate(LoginRoute){
+                                    popUpTo(navController.graph.id){
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onComplete = {
+                                navController.navigate(OTPRoute) {
+                                    popUpTo(navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    composable<OTPRoute> {
                         OTPScreen()
                     }
                     composable<HomeRoute> {
-                        HomeScreen()
+                        HomeScreen(
+                            sharedModifier = Modifier
+                                .sharedElement(
+                                    this@SharedTransitionLayout.rememberSharedContentState(key = "logo"),
+                                    animatedVisibilityScope = this@composable
+                                )
+                        )
                     }
                 }
             }

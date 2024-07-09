@@ -39,8 +39,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -68,10 +66,12 @@ import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.haltec.silpusitron.core.domain.model.isRequired
+import com.haltec.silpusitron.core.ui.component.FormTextField
+import com.haltec.silpusitron.core.ui.component.InputLabel
 import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
+import com.haltec.silpusitron.core.ui.theme.BackgroundLight
+import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.BuildConfig
 import com.haltec.silpusitron.feature.auth.R
@@ -88,7 +88,8 @@ fun LoginForm(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
     userType: UserType,
-    onLoginSuccess: () -> Unit
+    onProfileDataComplete: () -> Unit,
+    onProfileDataIncomplete: () -> Unit
 ) {
     var recaptchaClient: RecaptchaClient? by remember {
         mutableStateOf(null)
@@ -127,7 +128,11 @@ fun LoginForm(
         state.value.loginResult.let {
             showLoginErrorAlert = false
             if (it is Resource.Success){
-                onLoginSuccess()
+                if (it.data?.isProfileCompleted == true){
+                    onProfileDataComplete()
+                }else{
+                    onProfileDataIncomplete()
+                }
             }
             else if(it is Resource.Error){
                 showLoginErrorAlert = true
@@ -168,7 +173,7 @@ fun LoginForm(
                         initRecaptcha = null
                     }
                 ) {
-                    Text(stringResource(R.string.try_again))
+                    Text(stringResource(CoreR.string.try_again))
                 }
             },
             dismissButton = {
@@ -213,59 +218,45 @@ fun LoginForm(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                TextField(
+
+                FormTextField(
                     value = state.value.username,
-                    label = {
-                        Text(
-                            text = stringResource(R.string.username_nik)
-                        )
-                    },
                     onValueChange = {
                         action(LoginUiAction.SetUsername(it))
                     },
+                    label = {
+                        InputLabel(
+                            label = stringResource(R.string.username_nik),
+                            isRequired = state.value.usernameInput.isRequired()
+                        )
+                    },
+                    inputLabel = stringResource(R.string.username_nik),
+                    singleLine = true,
+                    isLoading = isLoading,
+                    inputData = state.value.usernameInput,
                     trailingIcon = {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_people_24),
                             contentDescription = null
                         )
                     },
-                    singleLine = true,
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = MaterialTheme.colorScheme.background,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                        disabledContainerColor = DisabledInputContainer
-                    ),
-                    enabled = !isLoading,
-                    isError = !state.value.usernameInput.isValid,
-                    supportingText = {
-                        ErrorValidationText(
-                            data = state.value.usernameInput,
-                            "Username",
-                        )
-                    }
+                        .fillMaxWidth()
                 )
-
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = MaterialTheme.colorScheme.background,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                        disabledContainerColor = DisabledInputContainer
-                    ),
+                
+                FormTextField(
                     value = state.value.password,
+                    onValueChange = { action(LoginUiAction.SetPassword(it)) },
+                    inputLabel = stringResource(R.string.password_no_kk),
                     label = {
-                        Text(
-                            text = stringResource(R.string.password_no_kk)
+                        InputLabel(
+                            label = stringResource(R.string.password_no_kk),
+                            isRequired = state.value.passwordInput.isRequired()
                         )
                     },
-                    onValueChange = { action(LoginUiAction.SetPassword(it)) },
                     singleLine = true,
-                    visualTransformation = if (state.value.passwordHidden) PasswordVisualTransformation()
-                    else VisualTransformation.None,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    isLoading = isLoading,
+                    inputData = state.value.passwordInput,
                     trailingIcon = {
                         IconButton(onClick = {
                             if (state.value.passwordHidden) action(LoginUiAction.ShowPassword)
@@ -284,15 +275,13 @@ fun LoginForm(
                             )
                         }
                     },
-                    enabled = !isLoading,
-                    isError = !state.value.passwordInput.isValid,
-                    supportingText = {
-                        ErrorValidationText(
-                            state.value.passwordInput,
-                            "Password"
-                        )
-                    }
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    visualTransformation = if (state.value.passwordHidden) PasswordVisualTransformation()
+                    else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
+
 
                 AnimatedContent(
                     targetState = state.value.captcha,
@@ -346,7 +335,7 @@ fun LoginForm(
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                             )
 
-                            Text(text = stringResource(R.string.please_wait))
+                            Text(text = stringResource(CoreR.string.please_wait))
 
                         }else{
                             Checkbox(checked = state.value.captcha is Resource.Success, onCheckedChange = {
@@ -441,7 +430,11 @@ fun LoginFormPreview() {
         modules(listOf(commonModule, authModule))
     }) {
         SILPUSITRONTheme {
-            LoginForm(userType = UserType.APP) {}
+            LoginForm(
+                userType = UserType.APP,
+                onProfileDataComplete = {},
+                onProfileDataIncomplete = {}
+            )
         }
     }
 }

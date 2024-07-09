@@ -3,7 +3,7 @@ package com.haltec.silpusitron.core.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -13,20 +13,18 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.core.ui.theme.PrimaryLight
 import com.haltec.silpusitron.core.ui.theme.PrimaryVariantLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.haltec.silpusitron.core.ui.theme.gradientColors
 
 
 @Composable
 fun Banner(
-    modifier: Modifier = Modifier.height(270.dp),
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {}
 ) {
-    val listColors = listOf(
-        PrimaryVariantLight,
-        PrimaryLight
-    )
 
     Card(
         modifier = modifier,
@@ -40,7 +38,7 @@ fun Banner(
                 .fillMaxSize()
                 .background(
                     brush = Brush.linearGradient(
-                        listColors,
+                        gradientColors,
                         start = Offset(0f, Float.POSITIVE_INFINITY),
                         end = Offset(Float.POSITIVE_INFINITY, 1000f),
                     )
@@ -55,6 +53,11 @@ fun Banner(
 @Composable
 fun BannerPreview(){
     SILPUSITRONTheme {
-        Banner()
+        Banner {
+            LottieLoader(
+                jsonRaw = R.raw.lottie_loader,
+                modifier = Modifier.size(100.dp)
+            )
+        }
     }
 }

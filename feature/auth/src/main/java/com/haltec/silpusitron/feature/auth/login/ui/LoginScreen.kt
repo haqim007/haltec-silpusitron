@@ -30,12 +30,13 @@ import com.haltec.silpusitron.core.ui.R as CoreR
 fun LoginScreen(
     modifier: Modifier = Modifier,
     userType: UserType,
-    onLoginSuccess: () -> Unit,
-    sharedModifier: Modifier = Modifier
+    onProfileDataComplete: () -> Unit,
+    sharedModifier: Modifier = Modifier,
+    onProfileDataIncomplete: () -> Unit
 ){
 
     ContainerWithBanner(
-        containerModifier = modifier
+        modifier = modifier
             .fillMaxSize(),
         bannerModifier = Modifier
             .height(280.dp),
@@ -50,7 +51,8 @@ fun LoginScreen(
                     top = 30.dp
                 ),
             userType = userType,
-            onLoginSuccess = onLoginSuccess
+            onProfileDataComplete = onProfileDataComplete,
+            onProfileDataIncomplete = onProfileDataIncomplete
         )
 
         Image(
@@ -85,7 +87,17 @@ fun LoginScreenPreview() {
     }) {
         SILPUSITRONTheme {
             LoginScreen(
-                userType = UserType.APP, onLoginSuccess = {
+                userType = UserType.APP,
+                onProfileDataComplete = {
+                    Toast
+                        .makeText(
+                            context,
+                            "Succeeded",
+                            Toast.LENGTH_LONG
+                        )
+                        .show()
+                },
+                onProfileDataIncomplete = {
                     Toast
                         .makeText(
                             context,

@@ -4,9 +4,7 @@
     <string name="hide_password">Hide password</string>
     <string name="i_am_not_robot">Saya Bukan Robot</string>
     <string name="login">LOGIN</string>
-    <string name="try_again">Coba lagi</string>
     <string name="close_app">Tutup Aplikasi</string>
-    <string name="please_wait">Harap tunggu</string>
     <string name="ok">OK</string>
     <string name="attention_">Perhatian!</string>
     <string name="recaptcha_has_failed_to_initiate_please_try_again_later">Recaptcha gagal dimuat. Silahkan coba lagi</string>
@@ -17,4 +15,5 @@
     <string name="failed_to_retreive_otp">Gagal meminta kode OTP</string>
     <string name="username_nik">Username/NIK</string>
     <string name="password_no_kk">Password/No KK</string>
+    <string name="failed_to_verify_otp">Gagal memverifikasi OTP</string>
 </resources>

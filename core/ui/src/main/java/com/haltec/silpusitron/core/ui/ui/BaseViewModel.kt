@@ -2,6 +2,9 @@ package com.haltec.silpusitron.core.ui.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.haltec.silpusitron.core.domain.model.InputTextData
+import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.core.domain.model.validate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +18,18 @@ abstract class BaseViewModel<UiState, UIAction>: ViewModel() {
     val state get() = _state.asStateFlow()
 
     abstract fun doAction(action: UIAction)
+
+    protected fun updateStateInputText(
+        inputState: InputTextData<TextValidationType, String>,
+        newValue: String
+    ): InputTextData<TextValidationType, String> {
+
+        val newInputState = inputState
+            .setValue(newValue)
+            .validate()
+
+        return newInputState
+    }
 
     fun <T> Flow<T>.launchCollectLatest(callback: (value: T) -> Unit){
         viewModelScope.launch {
