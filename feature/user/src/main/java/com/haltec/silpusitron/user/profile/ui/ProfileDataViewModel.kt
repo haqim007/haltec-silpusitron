@@ -1,17 +1,16 @@
 package com.haltec.silpusitron.user.profile.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.domain.model.validate
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.user.profile.domain.model.ProfileData
-import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
-import com.haltec.silpusitron.user.profile.domain.model.ProfileInputOptions
+import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.user.profile.domain.usecase.GetBloodTypeOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetDistrictsUseCase
+import com.haltec.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase
+import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import com.haltec.silpusitron.user.profile.domain.usecase.GetEducationOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetFamRelationStatusOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetGenderOptionsUseCase
@@ -22,7 +21,6 @@ import com.haltec.silpusitron.user.profile.domain.usecase.GetReligionOptionsUseC
 import com.haltec.silpusitron.user.profile.domain.usecase.GetSubDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.SubmitProfileUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.ValidateAllInputUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -41,7 +39,7 @@ class ProfileDataViewModel(
     private val getSubDistrictsUseCase: GetSubDistrictsUseCase,
     private val validateAllInputUseCase: ValidateAllInputUseCase,
     private val submitProfileUseCase: SubmitProfileUseCase
-) : BaseViewModel<FormProfileUiState, FormProfileUiAction>() {
+) : BaseFormViewModel<FormProfileUiState, FormProfileUiAction>() {
     override val _state = MutableStateFlow(FormProfileUiState())
     override fun doAction(action: FormProfileUiAction) {
         when(action){
@@ -517,15 +515,15 @@ sealed class FormProfileUiAction{
 data class FormProfileUiState(
     val profileData: Resource<ProfileData> = Resource.Idle(),
     val inputs: Map<FormProfileInputKey, InputTextData<TextValidationType, String>> = mapOf(),
-    val genderOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val religionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val bloodTypeOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val famRelationStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val educationOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val professionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val marriageStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val districtOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val subDistrictOptions: Resource<ProfileInputOptions> = Resource.Idle(),
+    val genderOptions: Resource<InputOptions> = Resource.Idle(),
+    val religionOptions: Resource<InputOptions> = Resource.Idle(),
+    val bloodTypeOptions: Resource<InputOptions> = Resource.Idle(),
+    val famRelationStatusOptions: Resource<InputOptions> = Resource.Idle(),
+    val educationOptions: Resource<InputOptions> = Resource.Idle(),
+    val professionOptions: Resource<InputOptions> = Resource.Idle(),
+    val marriageStatusOptions: Resource<InputOptions> = Resource.Idle(),
+    val districtOptions: Resource<InputOptions> = Resource.Idle(),
+    val subDistrictOptions: Resource<InputOptions> = Resource.Idle(),
     val inputsCoordinateY: Map<FormProfileInputKey, Float> = mapOf(),
     val firstErrorInputKey: FormProfileInputKey? = null,
     val submitResult: Resource<ProfileData> = Resource.Idle()
@@ -564,7 +562,10 @@ val formProfileStateDummy = FormProfileUiState(
         ),
         FormProfileInputKey.PHONE_NUMBER to InputTextData(
             inputName = FormProfileInputKey.PHONE_NUMBER.toString(),
-            validations = listOf(TextValidationType.Required, TextValidationType.MaxLength(13)),
+            validations = listOf(
+                TextValidationType.Required,
+                TextValidationType.MaxLength(13)
+            ),
             value = ""
         ),
         FormProfileInputKey.RW to InputTextData(

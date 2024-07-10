@@ -51,6 +51,8 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    implementation(project(":shared:district"))
+    implementation(project(":shared:form"))
 
     implementation("co.yml:ycharts:2.1.0")
 }

@@ -1,9 +1,8 @@
 package com.haltec.silpusitron.feature.auth.common.domain
 
-import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import com.haltec.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
 import kotlinx.coroutines.flow.Flow

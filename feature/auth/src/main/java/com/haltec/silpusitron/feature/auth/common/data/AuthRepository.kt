@@ -1,8 +1,6 @@
 package com.haltec.silpusitron.feature.auth.common.data
 
 import com.haltec.silpusitron.common.util.DispatcherProvider
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.data.preference.AuthPreference
@@ -16,6 +14,8 @@ import com.haltec.silpusitron.feature.auth.otp.data.remote.RequestOTPResponse
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPRequest
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPResponse
 import com.haltec.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

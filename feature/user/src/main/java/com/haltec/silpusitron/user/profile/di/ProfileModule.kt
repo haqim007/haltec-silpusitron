@@ -1,11 +1,11 @@
 package com.haltec.silpusitron.user.profile.di
 
+import com.haltec.silpusitron.shared.district.di.districtModule
 import com.haltec.silpusitron.user.profile.data.remote.ProfileRemoteDataSource
 import com.haltec.silpusitron.user.profile.data.remote.ProfileService
 import com.haltec.silpusitron.user.profile.data.repository.ProfileRepository
 import com.haltec.silpusitron.user.profile.domain.IProfileRepository
 import com.haltec.silpusitron.user.profile.domain.usecase.GetBloodTypeOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetEducationOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetFamRelationStatusOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetGenderOptionsUseCase
@@ -33,7 +33,7 @@ val profileModule = module {
     factory { GetFamRelationStatusOptionsUseCase() }
     factory { GetMarriageStatusOptionsUseCase() }
     factory { GetEducationOptionsUseCase() }
-    factory { GetDistrictsUseCase() }
+    includes(districtModule)
     factory { GetSubDistrictsUseCase() }
     factory { SubmitProfileUseCase() }
     factory { ValidateAllInputUseCase() }

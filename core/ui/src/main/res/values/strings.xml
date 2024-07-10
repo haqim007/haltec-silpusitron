@@ -16,4 +16,11 @@
     <string name="oops_error_occured">Waduh! Terjadi kesalahan</string>
     <string name="click_to_reload_this_options">Klik untuk mendapatkan ulang pilihan</string>
     <string name="successfully_saved">Data berhasil disimpan</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="filter">Filter</string>
+    <string name="cancel">Batalkan</string>
+    <string name="ok">OK</string>
+    <string name="attention_">Perhatian!</string>
+    <string name="close_app">Tutup aplikasi</string>
 </resources>

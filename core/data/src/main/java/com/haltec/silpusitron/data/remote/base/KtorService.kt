@@ -72,13 +72,15 @@ abstract class KtorService{
 
     fun HttpRequestBuilder.endpoint(
         path: String,
-        parametersBuilder: ParametersBuilder? = null,
+        parametersList: List<Pair<String, String>> = listOf(), // Pair<Name, Value>
         type: ContentType = ContentType.Application.Json
     ){
         url {
             takeFrom(BASE_URL)
             path("$API_VERSION$path")
-            parametersBuilder?.build()
+            parametersList.forEach { param ->
+                parameters.append(param.first, param.second)
+            }
             contentType(type)
         }
     }

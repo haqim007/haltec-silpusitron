@@ -1,15 +1,16 @@
 package com.haltec.silpusitron.feature.auth.otp.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.domain.model.getMaxLength
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.getMaxLength
 import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.common.domain.CheckSessionUseCase
 import com.haltec.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.RequestOTPUseCase
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.VerifyOTPUseCase
+import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class OTPViewModel(
     private val checkSessionUseCase: CheckSessionUseCase,
     private val verifyOTPUseCase: VerifyOTPUseCase,
     private val requestOTPUseCase: RequestOTPUseCase
-) : BaseViewModel<OTPState, OTPUiAction>(){
+) : BaseFormViewModel<OTPState, OTPUiAction>(){
     override val _state = MutableStateFlow(OTPState())
 
     init {
@@ -120,9 +121,7 @@ class OTPViewModel(
             otpMaxLength = state.value.otpInput.getMaxLength()
         }
         if (otp.length <= (otpMaxLength ?: 0)){
-            val newOTPState = updateStateInputText(
-                state.value.otpInput, otp
-            )
+            val newOTPState = updateStateInputText(state.value.otpInput, otp)
 
             _state.update { state ->
                 state.copy(
@@ -202,12 +201,12 @@ class OTPViewModel(
 data class OTPState(
     val isSessionValid: Boolean? = null,
     val otp: String = "",
-    val otpInput: InputTextData<TextValidationType, String> = InputTextData(
+    val otpInput: com.haltec.silpusitron.shared.form.domain.model.InputTextData<com.haltec.silpusitron.shared.form.domain.model.TextValidationType, String> = com.haltec.silpusitron.shared.form.domain.model.InputTextData(
         inputName = "otp",
         value = "",
         validations = listOf(
-            TextValidationType.Required,
-            TextValidationType.ExactLength(6)
+            com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required,
+            com.haltec.silpusitron.shared.form.domain.model.TextValidationType.ExactLength(6)
         )
     ),
     val requestOTPResult: Resource<RequestOTPResult> = Resource.Idle(),

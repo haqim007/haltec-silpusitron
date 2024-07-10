@@ -24,6 +24,9 @@
             <option value="$PROJECT_DIR$/feature/landingpage" />
             <option value="$PROJECT_DIR$/feature/submission" />
             <option value="$PROJECT_DIR$/feature/user" />
+            <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/district" />
+            <option value="$PROJECT_DIR$/shared/form" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

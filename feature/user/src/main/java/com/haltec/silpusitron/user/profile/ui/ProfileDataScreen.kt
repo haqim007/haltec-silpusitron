@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -44,30 +42,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.domain.model.isRequired
-import com.haltec.silpusitron.core.ui.component.FormDropDown
-import com.haltec.silpusitron.core.ui.component.FormTextField
 import com.haltec.silpusitron.core.ui.component.InputLabel
 import com.haltec.silpusitron.core.ui.component.LottieLoader
 import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
 import com.haltec.silpusitron.core.ui.parts.ErrorView
 import com.haltec.silpusitron.core.ui.parts.LoadingView
-import com.haltec.silpusitron.core.ui.theme.DialogBackgroundColor
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.theme.SuccessColor
+import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.data.mechanism.Resource
+import com.haltec.silpusitron.shared.form.domain.model.isRequired
+import com.haltec.silpusitron.shared.form.ui.components.FormDropDown
+import com.haltec.silpusitron.shared.form.ui.components.FormTextField
 import com.haltec.silpusitron.user.R
 import com.haltec.silpusitron.user.profile.di.profileModule
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.delay
-import org.koin.compose.KoinApplication
-import org.koin.compose.KoinContext
-import org.koin.core.module.Module
-import org.koin.mp.KoinPlatformTools
 import com.haltec.silpusitron.core.ui.R as CoreR
 
 
@@ -928,25 +922,6 @@ fun ProfileDataForm(
         }
 
 
-    }
-}
-
-@Composable
-fun KoinPreviewWrapper(
-    modules: List<Module>,
-    content: @Composable () -> Unit
-){
-    val alreadyExists = KoinPlatformTools.defaultContext().getOrNull() != null
-    if (!alreadyExists){
-        KoinApplication(application = {
-            modules(modules)
-        }) {
-            content()
-        }
-    }else{
-        KoinContext {
-            content()
-        }
     }
 }
 

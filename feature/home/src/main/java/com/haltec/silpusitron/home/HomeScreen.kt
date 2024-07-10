@@ -13,7 +13,7 @@ import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,15 +25,16 @@ import androidx.navigation.compose.rememberNavController
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.parts.navigation.TabBarItem
 import com.haltec.silpusitron.core.ui.parts.navigation.TabBarView
-import com.haltec.silpusitron.feature.dashboard.ui.DashboardScreen
-import com.haltec.silpusitron.feature.dashboard.ui.DashboardViewModel
-import com.haltec.silpusitron.feature.dashboard.ui.dashboardUiStateDummy
+import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
+import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserViewModel
+import com.haltec.silpusitron.feature.dashboard.user.ui.dashboardUiStateDummy
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    sharedModifier: Modifier = Modifier,
 ){
     val navController = rememberNavController()
 
@@ -76,10 +77,15 @@ fun HomeScreen(
     ) { paddingInner ->
         NavHost(navController = navController, startDestination = DashboardRoute){
             composable<DashboardRoute>{
-                val viewModel: DashboardViewModel = koinViewModel()
-               DashboardScreen(state = remember {
-                   mutableStateOf(dashboardUiStateDummy)
-               } /*viewModel.state.collectAsState()*/)
+                val viewModel: DashboardUserViewModel = koinViewModel()
+                val state by remember {
+                    mutableStateOf(dashboardUiStateDummy)
+                }
+               DashboardUserScreen(
+                   sharedModifier = sharedModifier,
+                   state = state, /*viewModel.state.collectAsState()*/
+                   action = viewModel::doAction
+               )
             }
             composable<InquiryRoute>{
                 Text(text = "Ini InquiryRoute", modifier = Modifier.padding(paddingInner))
@@ -99,6 +105,8 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview(){
     SILPUSITRONTheme {
-        HomeScreen()
+        HomeScreen(
+            sharedModifier = Modifier
+        )
     }
 }

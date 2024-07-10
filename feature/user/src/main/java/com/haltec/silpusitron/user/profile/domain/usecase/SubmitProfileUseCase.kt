@@ -1,7 +1,7 @@
 package com.haltec.silpusitron.user.profile.domain.usecase
 
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.user.profile.domain.IProfileRepository
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
