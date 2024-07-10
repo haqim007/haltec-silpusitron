@@ -5,7 +5,11 @@ import com.haltec.silpusitron.data.mechanism.getResult
 class DashboardExposedRemoteDataSource(
     private val service: DashboardExposedService
 ) {
-    suspend fun getDashboard() = getResult {
-        service.getDashboard()
+    suspend fun getDashboard(
+        districtId: String? = null,
+        startDate: String? = null,
+        endDate: String? = null
+    ) = getResult {
+        service.getDashboard(districtId, startDate, endDate)
     }
 }

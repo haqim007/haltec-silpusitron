@@ -2,7 +2,7 @@ package com.haltec.silpusitron.user.profile.data.remote
 
 import com.haltec.silpusitron.data.remote.base.KtorService
 import com.haltec.silpusitron.user.profile.data.remote.request.ProfileRequest
-import com.haltec.silpusitron.user.profile.data.remote.response.DistrictsResponse
+import com.haltec.silpusitron.shared.district.data.remote.response.DistrictsResponse
 import com.haltec.silpusitron.user.profile.data.remote.response.ProfileInputOptionsResponse
 import com.haltec.silpusitron.user.profile.data.remote.response.ProfileResponse
 import com.haltec.silpusitron.user.profile.data.remote.response.SubDistrictsResponse
@@ -45,17 +45,6 @@ class ProfileService(
     suspend fun getFormOptions(token: String, optionPath: FormOptionPath): ProfileInputOptionsResponse {
         val response = client.get{
             endpoint("data-umum/key/$optionPath")
-            bearerAuth(token)
-        }
-
-        checkOrThrowError(response)
-
-        return response.body()
-    }
-
-    suspend fun getDistricts(token: String): DistrictsResponse {
-        val response = client.get{
-            endpoint("kecamatan")
             bearerAuth(token)
         }
 

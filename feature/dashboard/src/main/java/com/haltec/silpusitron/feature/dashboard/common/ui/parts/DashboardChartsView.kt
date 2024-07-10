@@ -30,7 +30,6 @@ fun DashboardChartsView(
 ) {
     Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
     ) {
         data.forEach { chart ->
             when (chart) {

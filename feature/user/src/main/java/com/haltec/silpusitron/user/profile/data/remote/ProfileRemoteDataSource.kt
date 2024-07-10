@@ -14,10 +14,6 @@ class ProfileRemoteDataSource(
         service.getFormOptions(token, path)
     }
 
-    suspend fun getDistricts(token: String) = getResult {
-        service.getDistricts(token)
-    }
-
     suspend fun getSubDistricts(token: String, districtId: String?) = getResult {
         service.getSubDistricts(token, districtId)
     }

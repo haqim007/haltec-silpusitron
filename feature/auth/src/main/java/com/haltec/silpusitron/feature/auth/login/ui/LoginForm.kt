@@ -66,10 +66,10 @@ import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.domain.model.isRequired
-import com.haltec.silpusitron.core.ui.component.FormTextField
+import com.haltec.silpusitron.shared.form.domain.model.isRequired
+import com.haltec.silpusitron.shared.form.ui.components.FormTextField
 import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
+import com.haltec.silpusitron.shared.form.ui.components.ErrorValidationText
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.data.mechanism.Resource
@@ -149,14 +149,14 @@ fun LoginForm(
                         showLoginErrorAlert = false
                     }
                 ) {
-                    Text(stringResource(R.string.ok))
+                    Text(stringResource(CoreR.string.ok))
                 }
             },
             icon = {
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
                 Text(text = state.value.loginResult.message ?: stringResource(CoreR.string.please_solve_form_input_issue))
@@ -182,14 +182,14 @@ fun LoginForm(
                         (context as? Activity)?.finish()
                     }
                 ) {
-                    Text(stringResource(R.string.close_app))
+                    Text(stringResource(CoreR.string.close_app))
                 }
             },
             icon = {
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
                 Text(
@@ -223,7 +223,7 @@ fun LoginForm(
                 horizontalAlignment = Alignment.Start
             ) {
 
-                FormTextField(
+                com.haltec.silpusitron.shared.form.ui.components.FormTextField(
                     value = state.value.username,
                     onValueChange = {
                         action(LoginUiAction.SetUsername(it))
@@ -247,8 +247,8 @@ fun LoginForm(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                
-                FormTextField(
+
+                com.haltec.silpusitron.shared.form.ui.components.FormTextField(
                     value = state.value.password,
                     onValueChange = { action(LoginUiAction.SetPassword(it)) },
                     inputLabel = stringResource(R.string.password_no_kk),
@@ -355,7 +355,7 @@ fun LoginForm(
                 }
 
                 if(!state.value.captchaInput.isValid){
-                    ErrorValidationText(
+                    com.haltec.silpusitron.shared.form.ui.components.ErrorValidationText(
                         state.value.captchaInput,
                         labelName = "Captcha"
                     )

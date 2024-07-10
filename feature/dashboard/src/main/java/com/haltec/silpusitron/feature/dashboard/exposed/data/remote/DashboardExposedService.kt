@@ -25,24 +25,23 @@ class DashboardExposedService(
     }
 
     suspend fun getDashboard(
-        districtId: Int? = null,
+        districtId: String? = null,
         startDate: String? = null,
         endDate: String? = null
     ): DashboardResponse {
         val response = client.get {
-            val parametersBuilder = ParametersBuilder()
-
-            if (startDate != null && endDate != null){
-                parametersBuilder.append("tanggal_awal", startDate)
-                parametersBuilder.append("tanggal_akhir", endDate)
-            }
+            val parameters: MutableList<Pair<String, String>> = mutableListOf()
 
             if (districtId != null){
-                endpoint("landing_page/$districtId", parametersBuilder)
+                parameters.add(Pair("kecamatan_id", districtId))
             }
-            else {
-                endpoint("landing_page", parametersBuilder)
+
+            if (startDate != null && endDate != null){
+                parameters.add(Pair("tanggal_awal", startDate))
+                parameters.add(Pair("tanggal_akhir", endDate))
             }
+
+            endpoint("landing_page", parameters)
         }
 
         checkOrThrowError(response)

@@ -1,15 +1,13 @@
 package com.haltec.silpusitron.feature.auth.login.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.domain.model.validate
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
-import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import com.haltec.silpusitron.feature.auth.login.domain.usecase.LoginUseCase
+import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
 @OptIn(FlowPreview::class)
 class LoginViewModel(
     private val useCase: LoginUseCase
-): BaseViewModel<LoginUiState, LoginUiAction>() {
+): BaseFormViewModel<LoginUiState, LoginUiAction>() {
     override val _state = MutableStateFlow(LoginUiState())
 
     init {
@@ -175,7 +173,10 @@ data class LoginUiState(
         inputName = "password",
         message = null,
         value = "",
-        validations = listOf(TextValidationType.Required, TextValidationType.MinLength(7)),
+        validations = listOf(
+            TextValidationType.Required,
+            TextValidationType.MinLength(7)
+        ),
         validationError = null
     ),
     val captcha: Resource<String> = Resource.Idle(),

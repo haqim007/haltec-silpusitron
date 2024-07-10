@@ -8,6 +8,7 @@ plugins {
     // alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.gms.google.service)
 }
 
 apply(from = "../shared-dependencies.gradle")
@@ -80,4 +81,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.datastore.preferences)
     implementation(libs.androidx.core.splashscreen)
+    implementation(platform(libs.firebase.bom))
 }

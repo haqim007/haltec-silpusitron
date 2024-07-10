@@ -1,7 +1,7 @@
 package com.haltec.silpusitron.user.profile.domain.usecase
 
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.user.profile.domain.IProfileRepository
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
@@ -15,7 +15,7 @@ class SubmitProfileUseCase: KoinComponent {
 
     operator fun invoke(
         data: ProfileData,
-        input: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>
+        input: Map<FormProfileInputKey, com.haltec.silpusitron.shared.form.domain.model.InputTextData<com.haltec.silpusitron.shared.form.domain.model.TextValidationType, String>>
     ): Flow<Resource<ProfileData>>{
         return repository.submitProfile(data, input)
     }

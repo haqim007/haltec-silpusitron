@@ -54,4 +54,6 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    api(project(":shared:form"))
+    implementation(project(":shared:district"))
 }

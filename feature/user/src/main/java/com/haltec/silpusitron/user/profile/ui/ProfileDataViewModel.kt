@@ -1,17 +1,16 @@
 package com.haltec.silpusitron.user.profile.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.domain.model.validate
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.user.profile.domain.model.ProfileData
-import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
-import com.haltec.silpusitron.user.profile.domain.model.ProfileInputOptions
+import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.user.profile.domain.usecase.GetBloodTypeOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetDistrictsUseCase
+import com.haltec.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase
+import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import com.haltec.silpusitron.user.profile.domain.usecase.GetEducationOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetFamRelationStatusOptionsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.GetGenderOptionsUseCase
@@ -22,7 +21,6 @@ import com.haltec.silpusitron.user.profile.domain.usecase.GetReligionOptionsUseC
 import com.haltec.silpusitron.user.profile.domain.usecase.GetSubDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.SubmitProfileUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.ValidateAllInputUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -41,7 +39,7 @@ class ProfileDataViewModel(
     private val getSubDistrictsUseCase: GetSubDistrictsUseCase,
     private val validateAllInputUseCase: ValidateAllInputUseCase,
     private val submitProfileUseCase: SubmitProfileUseCase
-) : BaseViewModel<FormProfileUiState, FormProfileUiAction>() {
+) : BaseFormViewModel<FormProfileUiState, FormProfileUiAction>() {
     override val _state = MutableStateFlow(FormProfileUiState())
     override fun doAction(action: FormProfileUiAction) {
         when(action){
@@ -516,16 +514,16 @@ sealed class FormProfileUiAction{
  */
 data class FormProfileUiState(
     val profileData: Resource<ProfileData> = Resource.Idle(),
-    val inputs: Map<FormProfileInputKey, InputTextData<TextValidationType, String>> = mapOf(),
-    val genderOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val religionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val bloodTypeOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val famRelationStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val educationOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val professionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val marriageStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val districtOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val subDistrictOptions: Resource<ProfileInputOptions> = Resource.Idle(),
+    val inputs: Map<FormProfileInputKey, com.haltec.silpusitron.shared.form.domain.model.InputTextData<com.haltec.silpusitron.shared.form.domain.model.TextValidationType, String>> = mapOf(),
+    val genderOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val religionOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val bloodTypeOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val famRelationStatusOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val educationOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val professionOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val marriageStatusOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val districtOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
+    val subDistrictOptions: Resource<com.haltec.silpusitron.shared.form.domain.model.InputOptions> = Resource.Idle(),
     val inputsCoordinateY: Map<FormProfileInputKey, Float> = mapOf(),
     val firstErrorInputKey: FormProfileInputKey? = null,
     val submitResult: Resource<ProfileData> = Resource.Idle()
@@ -533,220 +531,223 @@ data class FormProfileUiState(
 
 val formProfileStateDummy = FormProfileUiState(
     inputs = mapOf(
-        FormProfileInputKey.MOTHER_NAME to InputTextData(
+        FormProfileInputKey.MOTHER_NAME to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.MOTHER_NAME.toString(),
             value = "",
             validations = listOf(
-                TextValidationType.Required,
+                com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required,
             )
         ),
-        FormProfileInputKey.SUB_DISTRICT to InputTextData(
+        FormProfileInputKey.SUB_DISTRICT to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.SUB_DISTRICT.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "desa",
                     value = "1",
                     label = "Bendo"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "desa",
                     value = "2",
                     label = "Bendogerit"
                 )
             )
         ),
-        FormProfileInputKey.RT to InputTextData(
+        FormProfileInputKey.RT to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.RT.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = ""
         ),
-        FormProfileInputKey.PHONE_NUMBER to InputTextData(
+        FormProfileInputKey.PHONE_NUMBER to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.PHONE_NUMBER.toString(),
-            validations = listOf(TextValidationType.Required, TextValidationType.MaxLength(13)),
+            validations = listOf(
+                com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required,
+                com.haltec.silpusitron.shared.form.domain.model.TextValidationType.MaxLength(13)
+            ),
             value = ""
         ),
-        FormProfileInputKey.RW to InputTextData(
+        FormProfileInputKey.RW to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.RW.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = ""
         ),
-        FormProfileInputKey.BLOOD_TYPE to InputTextData(
+        FormProfileInputKey.BLOOD_TYPE to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.BLOOD_TYPE.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "8",
                     label = "A",
                     key = "GOLONGAN_DARAH"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "9",
                     label = "A-",
                     key = "GOLONGAN_DARAH"
                 )
             )
         ),
-        FormProfileInputKey.FULL_NAME to InputTextData(
+        FormProfileInputKey.FULL_NAME to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.FULL_NAME.toString(),
             validations = listOf(),
             value = ""
         ),
-        FormProfileInputKey.RELIGION to InputTextData(
+        FormProfileInputKey.RELIGION to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.RELIGION.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "1",
                     label = "Islam",
                     key = "agama"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "2",
                     label = "Islam",
                     key = "agama"
                 )
             )
         ),
-        FormProfileInputKey.LONGITUDE to InputTextData(
+        FormProfileInputKey.LONGITUDE to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.LONGITUDE.toString(),
             validations = listOf(),
             value = ""
         ),
-        FormProfileInputKey.ID_NUMBER to InputTextData(
-            validations = listOf(TextValidationType.Required),
+        FormProfileInputKey.ID_NUMBER to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             inputName = FormProfileInputKey.ID_NUMBER.toString()
         ),
-        FormProfileInputKey.BIRTH_PLACE to InputTextData(
+        FormProfileInputKey.BIRTH_PLACE to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.BIRTH_PLACE.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "tempatLahir"
         ),
-        FormProfileInputKey.FAMILY_RELATION to InputTextData(
+        FormProfileInputKey.FAMILY_RELATION to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.FAMILY_RELATION.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "118",
                     label = "ANAK",
                     key = "HUBUNGAN_KELUARGA"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "119",
                     label = "CUCU",
                     key = "HUBUNGAN_KELUARGA"
                 )
             )
         ),
-        FormProfileInputKey.FAM_CARD_NUMBER to InputTextData(
+        FormProfileInputKey.FAM_CARD_NUMBER to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.FAM_CARD_NUMBER.toString(),
             validations = listOf(),
             value = "noKk"
         ),
-        FormProfileInputKey.GENDER to InputTextData(
+        FormProfileInputKey.GENDER to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.GENDER.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "JENIS_KELAMIN",
                     value = "21",
                     label = "Laki-Laki"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "JENIS_KELAMIN",
                     value = "22",
                     label = "Perempuan"
                 )
             )
         ),
-        FormProfileInputKey.BIRTH_DATE to InputTextData(
+        FormProfileInputKey.BIRTH_DATE to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.BIRTH_DATE.toString(),
             validations = listOf(),
             value = "09 September 2009"
         ),
-        FormProfileInputKey.EDUCATION to InputTextData(
+        FormProfileInputKey.EDUCATION to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.EDUCATION.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "98",
                     label = "TIDAK/BELUM SEKOLAH",
                     key = "PENDIDIKAN"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "99",
                     label = "SD SEKOLAH",
                     key = "PENDIDIKAN"
                 )
             )
         ),
-        FormProfileInputKey.LATITUDE to InputTextData(
+        FormProfileInputKey.LATITUDE to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.LATITUDE.toString(),
             validations = listOf(),
             value = "lintang"
         ),
-        FormProfileInputKey.DISTRICT to InputTextData(
+        FormProfileInputKey.DISTRICT to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.DISTRICT.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "kecamatan",
                     value = "1",
                     label = "Kepanjenkidul"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     key = "desa",
                     value = "2",
                     label = "Sananwetan"
                 )
             )
         ),
-        FormProfileInputKey.ADDRESS to InputTextData(
+        FormProfileInputKey.ADDRESS to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.ADDRESS.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = ""
         ),
-        FormProfileInputKey.PROFESSION to InputTextData(
+        FormProfileInputKey.PROFESSION to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.PROFESSION.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "23",
                     label = "ANGGOTA DPRD KABUPATEN/KOTA",
                     key = "PEKERJAAN"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "24",
                     label = "AKUNTAN",
                     key = "PEKERJAAN"
                 )
             )
         ),
-        FormProfileInputKey.FATHER_NAME to InputTextData(
+        FormProfileInputKey.FATHER_NAME to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.FATHER_NAME.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = ""
         ),
-        FormProfileInputKey.MARRIAGE_STATUS to InputTextData(
+        FormProfileInputKey.MARRIAGE_STATUS to com.haltec.silpusitron.shared.form.domain.model.InputTextData(
             inputName = FormProfileInputKey.MARRIAGE_STATUS.toString(),
-            validations = listOf(TextValidationType.Required),
+            validations = listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
             value = "",
             options = listOf(
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "1",
                     label = "Kawin",
                     key = "status_kawin"
                 ),
-                InputTextData.Option(
+                com.haltec.silpusitron.shared.form.domain.model.InputTextData.Option(
                     value = "2",
                     label = "Kawin Lagi",
                     key = "status_kawin"

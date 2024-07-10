@@ -1,6 +1,8 @@
 package com.haltec.silpusitron.feature.dashboard.common.ui.parts
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,16 +19,21 @@ import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserUiState
 @Composable
 fun DashboardContent(
     modifier: Modifier = Modifier,
+    chartModifier: Modifier = Modifier,
     data: Resource<List<DashboardData>>,
     onTryAgain: () -> Unit
 ){
     Column(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center
     ) {
 
         when(data){
             is Resource.Success -> {
-                DashboardChartsView(data.data ?: emptyList())
+                DashboardChartsView(
+                    modifier = chartModifier,
+                    data = data.data ?: emptyList()
+                )
             }
             is Resource.Error -> {
                 ErrorView(

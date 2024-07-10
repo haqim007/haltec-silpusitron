@@ -5,5 +5,9 @@ import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardDat
 import kotlinx.coroutines.flow.Flow
 
 interface IDashboardExposedRepository {
-    fun getData(): Flow<Resource<List<DashboardData>>>
+    fun getData(
+        districtId: String? = null,
+        startDate: String? = null,
+        endDate: String? = null
+    ): Flow<Resource<List<DashboardData>>>
 }

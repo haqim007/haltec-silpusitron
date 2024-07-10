@@ -62,5 +62,6 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
-    implementation("com.google.android.recaptcha:recaptcha:18.5.1")
+    implementation(project(":shared:form"))
+    implementation(libs.recaptcha)
 }

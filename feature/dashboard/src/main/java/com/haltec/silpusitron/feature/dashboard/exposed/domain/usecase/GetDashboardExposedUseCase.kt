@@ -12,7 +12,13 @@ import org.koin.core.component.inject
 class GetDashboardExposedUseCase: KoinComponent{
 
     private val repository: IDashboardExposedRepository by inject<IDashboardExposedRepository>()
-    operator fun invoke(): Flow<Resource<List<DashboardData>>>{
-        return repository.getData()
+    operator fun invoke(
+        districtId: String? = null,
+        startDate: String? = null,
+        endDate: String? = null
+    ): Flow<Resource<List<DashboardData>>>{
+        return repository.getData(
+            districtId, startDate, endDate
+        )
     }
 }
