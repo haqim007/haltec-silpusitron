@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":shared:district"))
     implementation(project(":shared:form"))
-
-    implementation("co.yml:ycharts:2.1.0")
+    implementation(libs.coil.compose)
+    implementation(libs.ycharts)
+    implementation (libs.accompanist.pager)
 }

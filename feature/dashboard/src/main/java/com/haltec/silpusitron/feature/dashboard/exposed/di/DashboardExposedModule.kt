@@ -5,6 +5,7 @@ import com.haltec.silpusitron.feature.dashboard.exposed.data.remote.DashboardExp
 import com.haltec.silpusitron.feature.dashboard.exposed.data.repository.DashboardExposedRepository
 import com.haltec.silpusitron.feature.dashboard.exposed.domain.repository.IDashboardExposedRepository
 import com.haltec.silpusitron.feature.dashboard.exposed.domain.usecase.GetDashboardExposedUseCase
+import com.haltec.silpusitron.feature.dashboard.exposed.domain.usecase.GetNewsImagesUseCase
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.haltec.silpusitron.shared.district.di.districtModule
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -16,5 +17,6 @@ internal val dashboardExposedModule = module {
     factory<IDashboardExposedRepository> { DashboardExposedRepository(get(), get()) }
     includes(districtModule)
     factory { GetDashboardExposedUseCase() }
-    viewModel { DashboardExposedViewModel(get(), get()) }
+    factory { GetNewsImagesUseCase() }
+    viewModel { DashboardExposedViewModel(get(), get(), get()) }
 }

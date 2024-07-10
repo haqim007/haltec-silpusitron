@@ -8,7 +8,9 @@ import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardCha
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardData
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.PiesData
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.Summaries
+import com.haltec.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
 import com.haltec.silpusitron.feature.dashboard.exposed.domain.usecase.GetDashboardExposedUseCase
+import com.haltec.silpusitron.feature.dashboard.exposed.domain.usecase.GetNewsImagesUseCase
 import com.haltec.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,8 @@ import kotlinx.datetime.LocalDateTime
 
 class DashboardExposedViewModel(
     private val getDashboardExposedUseCase: GetDashboardExposedUseCase,
-    private val getDistrictsUseCase: GetDistrictsUseCase
+    private val getDistrictsUseCase: GetDistrictsUseCase,
+    private val getNewsImagesUseCase: GetNewsImagesUseCase
 ) : BaseViewModel<DashboardExposedUiState, DashboardExposedUiAction>() {
     override val _state = MutableStateFlow(DashboardExposedUiState())
     override fun doAction(action: DashboardExposedUiAction) {
@@ -31,6 +34,22 @@ class DashboardExposedViewModel(
 
             DashboardExposedUiAction.LoadDistricts -> {
                 loadDistrictOptions()
+            }
+
+            DashboardExposedUiAction.LoadNews -> {
+                loadNewsImages()
+            }
+        }
+    }
+
+    private fun loadNewsImages() {
+        viewModelScope.launch {
+            getNewsImagesUseCase().collectLatest {
+                _state.update { state ->
+                    state.copy(
+                        news = it
+                    )
+                }
             }
         }
     }
@@ -87,6 +106,7 @@ class DashboardExposedViewModel(
 data class DashboardExposedUiState(
     val data: Resource<List<DashboardData>> = Resource.Idle(),
     val districtOptions: Resource<InputOptions> = Resource.Idle(),
+    val news: Resource<List<NewsImage>> = Resource.Idle(),
     val districtId: String? = null,
     val startDate: LocalDateTime? = null,
     val endDate: LocalDateTime? = null
@@ -100,6 +120,7 @@ sealed class DashboardExposedUiAction{
         val startDate: LocalDateTime? = null,
         val endDate: LocalDateTime? = null
     ): DashboardExposedUiAction()
+    data object LoadNews: DashboardExposedUiAction()
 }
 
 

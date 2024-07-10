@@ -1,8 +1,8 @@
 [versions]
-# Config
+accompanistPager = "0.12.0"
+coilCompose = "2.6.0"
 firebaseBom = "33.1.1"
 kotlinxDatetime = "0.6.0"
-
 agp = "8.5.0"
 coreSplashscreen = "1.0.1"
 kotlin = "2.0.0"
@@ -11,7 +11,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxSerializationJson = "1.6.3"
-lifecycleRuntimeKtx = "2.8.2"
+lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 appcompat = "1.7.0"
@@ -34,7 +34,7 @@ okhttp = "5.0.0-alpha.11"
 loggingInterceptor = "5.0.0-alpha.11"
 chucker = "3.5.2"
 # Viewmodel
-viewModelCompose = "2.8.2"
+viewModelCompose = "2.8.3"
 # Paging
 pagingCompose = "3.3.0"
 # Image
@@ -47,11 +47,14 @@ dataStore = "1.1.1"
 # Animation
 composeAnimation = "1.7.0-beta04"
 gmsGoogleService = "4.4.2"
+ycharts = "2.1.0"
 
 [libraries]
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -111,6 +114,7 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 datastore-preferences = {group= "androidx.datastore", name = "datastore-preferences", version.ref="dataStore"}
 # Animation
 androidx-compose-animation = {group = "androidx.compose.animation", name="animation", version.ref="composeAnimation"}
+ycharts = { module = "co.yml:ycharts", version.ref = "ycharts" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -12,4 +12,8 @@ class DashboardExposedRemoteDataSource(
     ) = getResult {
         service.getDashboard(districtId, startDate, endDate)
     }
+
+    suspend fun getNewsImages() = getResult {
+        service.getNewsImages()
+    }
 }

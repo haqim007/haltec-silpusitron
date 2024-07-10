@@ -75,7 +75,7 @@ fun SummaryCard(
                                 color = item.color.copy(alpha = 0.5f)
                             ),
                         colors = CardDefaults.cardColors().copy(
-                            containerColor = BackgroundLight
+                            containerColor = MaterialTheme.colorScheme.background
                         ),
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 2.dp
@@ -113,8 +113,9 @@ fun SummaryCard(
                             Text(
                                 text = item.title,
                                 style = MaterialTheme.typography.labelSmall.copy(
-                                    fontSize = 10.sp,
-                                    textAlign = TextAlign.Center
+                                    fontSize = 12.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold
                                 )
                             )
 

@@ -48,4 +48,14 @@ class DashboardExposedService(
 
         return response.body<DashboardResponse>()
     }
+
+    suspend fun getNewsImages(): NewsImagesResponse {
+        val response = client.get {
+            endpoint("konten",)
+        }
+
+        checkOrThrowError(response)
+
+        return response.body<NewsImagesResponse>()
+    }
 }
