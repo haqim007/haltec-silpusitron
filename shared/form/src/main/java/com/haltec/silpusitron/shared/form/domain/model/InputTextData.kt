@@ -1,13 +1,16 @@
 package com.haltec.silpusitron.shared.form.domain.model
 
+import java.io.File
+
 
 data class InputTextData<ValidationType, ValueType>(
     val inputName: String,
     val message: String? = null,
     val validationError: ValidationType? = null,
-    val value: ValueType,
+    val value: ValueType?,
     val validations: List<ValidationType>,
     val everChanged: Boolean = false,
+    val inputLabel: String = "",
     val options: List<Option>? = null,
 ){
     val isValid get() = message == null && validationError == null
@@ -47,7 +50,10 @@ fun InputTextData<TextValidationType, String>.getMaxLength(): Int{
     return 0
 }
 
+// TODO()
+//fun InputTextData<FileValidationType, File>.validate(){}
 
+fun InputTextData<TextValidationType, String>.valueOrEmpty() = this.value ?: ""
 fun InputTextData<TextValidationType, String>.validate(): InputTextData<TextValidationType, String> {
     var foundError = false
     var whichValidationError: TextValidationType? = null
@@ -55,34 +61,34 @@ fun InputTextData<TextValidationType, String>.validate(): InputTextData<TextVali
         if (foundError) return@forEach
         when(validation){
             is TextValidationType.Required -> {
-                if (value.isBlank()){
+                if (value.isNullOrBlank()){
                     whichValidationError = validation
                     foundError = true
                 }
             }
             is TextValidationType.Email -> {
-                val emailComponents = value.split("@")
-                if (emailComponents.size == 1 || emailComponents[1].split(".").size == 1) {
+                val emailComponents = value?.split("@")
+                if (emailComponents?.size == 1 || emailComponents?.get(1)?.split(".")?.size == 1) {
                     whichValidationError = validation
                     foundError = true
                 }
             }
 
             is TextValidationType.ExactLength -> {
-                if (value.length != validation.length){
+                if (value?.length != validation.length){
                     whichValidationError = validation
                     foundError = true
                 }
             }
 
             is TextValidationType.MaxLength -> {
-                if (value.length > validation.maxLength){
+                if ((value?.length ?: 0) > validation.maxLength){
                     whichValidationError = validation
                     foundError = true
                 }
             }
             is TextValidationType.MinLength -> {
-                if (value.length < validation.minLength){
+                if ((value?.length ?: 0) < validation.minLength){
                     whichValidationError = validation
                     foundError = true
                 }

@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.data.preference
+package com.haltec.silpusitron.shared.auth.preference
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

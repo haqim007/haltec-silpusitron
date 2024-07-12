@@ -54,6 +54,7 @@ import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.shared.form.domain.model.isRequired
+import com.haltec.silpusitron.shared.form.domain.model.valueOrEmpty
 import com.haltec.silpusitron.shared.form.ui.components.FormDropDown
 import com.haltec.silpusitron.shared.form.ui.components.FormTextField
 import com.haltec.silpusitron.user.R
@@ -341,7 +342,7 @@ fun ProfileDataForm(
 
         if(fullNameInput != null) {
             FormTextField(
-                value = fullNameInput.value,
+                value = fullNameInput.valueOrEmpty(),
                 onValueChange = {},
                 inputLabel = stringResource(R.string.name),
                 label = {
@@ -359,7 +360,7 @@ fun ProfileDataForm(
 
         famCardNumberInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
                 inputLabel = stringResource(R.string.family_card_number),
                 label = {
@@ -377,7 +378,7 @@ fun ProfileDataForm(
 
         idNumberInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
                 inputLabel = stringResource(R.string.id_number),
                 label = {
@@ -395,7 +396,7 @@ fun ProfileDataForm(
 
         birthDateInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
                 inputLabel = stringResource(R.string.birth_date),
                 label = {
@@ -420,7 +421,7 @@ fun ProfileDataForm(
                         isRequired = genderInput.isRequired()
                     )
                 },
-                value = genderInput.value,
+                value = genderInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -438,7 +439,7 @@ fun ProfileDataForm(
         phoneNumberInput?.let {
             val inputName = FormProfileInputKey.fromString(it.inputName)
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = { newValue ->
                     action(
                         FormProfileUiAction
@@ -491,7 +492,7 @@ fun ProfileDataForm(
                         isRequired = it.isRequired()
                     )
                 },
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = { newValue ->
                     action(
                         FormProfileUiAction.SetInput(
@@ -518,7 +519,7 @@ fun ProfileDataForm(
                         isRequired = subDistrictInput.isRequired()
                     )
                 },
-                value = subDistrictInput.value,
+                value = subDistrictInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction.SetInput(
@@ -530,7 +531,7 @@ fun ProfileDataForm(
                 inputData = subDistrictInput,
                 isLoading = state.subDistrictOptions is Resource.Loading,
                 enabled = districtInput?.options?.isNotEmpty() == true &&
-                        districtInput.value.isNotEmpty(),
+                        districtInput.value?.isNotEmpty() == true,
                 loadNetworkError = state.subDistrictOptions is Resource.Error,
                 reloadNetwork = {
                     action(FormProfileUiAction.GetSubDistrictOptions)
@@ -541,7 +542,7 @@ fun ProfileDataForm(
         addressInput?.let {
             val inputName = FormProfileInputKey.fromString(addressInput.inputName)
             FormTextField(
-                value = addressInput.value,
+                value = addressInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -578,7 +579,7 @@ fun ProfileDataForm(
             rtInput?.let {
                 val inputName = FormProfileInputKey.fromString(rtInput.inputName)
                 FormTextField(
-                    value = rtInput.value,
+                    value = rtInput.valueOrEmpty(),
                     onValueChange = {
                         action(
                             FormProfileUiAction
@@ -616,7 +617,7 @@ fun ProfileDataForm(
             rwInput?.let {
                 val inputName = FormProfileInputKey.fromString(rwInput.inputName)
                 FormTextField(
-                    value = rwInput.value,
+                    value = rwInput.valueOrEmpty(),
                     onValueChange = {
                         action(
                             FormProfileUiAction
@@ -655,7 +656,7 @@ fun ProfileDataForm(
         birthPlaceInput?.let {
             val inputName = FormProfileInputKey.fromString(birthPlaceInput.inputName)
             FormTextField(
-                value = birthPlaceInput.value,
+                value = birthPlaceInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -696,7 +697,7 @@ fun ProfileDataForm(
                         isRequired = religionInput.isRequired()
                     )
                 },
-                value = religionInput.value,
+                value = religionInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -720,7 +721,7 @@ fun ProfileDataForm(
                         isRequired = marriageStatusInput.isRequired()
                     )
                 },
-                value = marriageStatusInput.value,
+                value = marriageStatusInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -744,7 +745,7 @@ fun ProfileDataForm(
                         isRequired = professionInput.isRequired()
                     )
                 },
-                value = professionInput.value,
+                value = professionInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -768,7 +769,7 @@ fun ProfileDataForm(
                         isRequired = educationInput.isRequired()
                     )
                 },
-                value = educationInput.value,
+                value = educationInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -792,7 +793,7 @@ fun ProfileDataForm(
                         isRequired = famRelationInput.isRequired()
                     )
                 },
-                value = famRelationInput.value,
+                value = famRelationInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -816,7 +817,7 @@ fun ProfileDataForm(
                         isRequired = bloodTypeInput.isRequired()
                     )
                 },
-                value = bloodTypeInput.value,
+                value = bloodTypeInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -834,7 +835,7 @@ fun ProfileDataForm(
         fatherNameInput?.let {
             val inputName = FormProfileInputKey.fromString(fatherNameInput.inputName)
             FormTextField(
-                value = fatherNameInput.value,
+                value = fatherNameInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction
@@ -869,7 +870,7 @@ fun ProfileDataForm(
         motherNameInput?.let {
             val inputName = FormProfileInputKey.fromString(motherNameInput.inputName)
             FormTextField(
-                value = motherNameInput.value,
+                value = motherNameInput.valueOrEmpty(),
                 onValueChange = {
                     action(
                         FormProfileUiAction

@@ -1,5 +1,6 @@
 package com.haltec.silpusitron.user.profile.di
 
+import com.haltec.silpusitron.shared.auth.di.authSharedModule
 import com.haltec.silpusitron.shared.district.di.districtModule
 import com.haltec.silpusitron.user.profile.data.remote.ProfileRemoteDataSource
 import com.haltec.silpusitron.user.profile.data.remote.ProfileService
@@ -22,6 +23,7 @@ import org.koin.dsl.module
 
 
 val profileModule = module {
+    includes(authSharedModule)
     factory { ProfileService(getProperty("BASE_URL"), getProperty("API_VERSION")) }
     factory { ProfileRemoteDataSource(get()) }
     factory<IProfileRepository> { ProfileRepository(get(), get(), get()) }

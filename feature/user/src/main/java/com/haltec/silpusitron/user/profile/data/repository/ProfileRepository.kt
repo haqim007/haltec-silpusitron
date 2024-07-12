@@ -1,11 +1,12 @@
 package com.haltec.silpusitron.user.profile.data.repository
 
 import com.haltec.silpusitron.common.util.DispatcherProvider
+import com.haltec.silpusitron.data.mechanism.Resource
+import com.haltec.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResource
+import com.haltec.silpusitron.shared.auth.preference.AuthPreference
+import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
-import com.haltec.silpusitron.data.mechanism.AuthorizedNetworkBoundResource
-import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.data.preference.AuthPreference
 import com.haltec.silpusitron.user.profile.data.remote.FormOptionPath
 import com.haltec.silpusitron.user.profile.data.remote.ProfileRemoteDataSource
 import com.haltec.silpusitron.user.profile.data.remote.response.ProfileInputOptionsResponse
@@ -17,7 +18,6 @@ import com.haltec.silpusitron.user.profile.data.toProfileRequest
 import com.haltec.silpusitron.user.profile.domain.IProfileRepository
 import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.user.profile.domain.model.ProfileData
-import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

@@ -3,7 +3,6 @@ package com.haltec.silpusitron.feature.auth.common.data
 import com.haltec.silpusitron.common.util.DispatcherProvider
 import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.data.preference.AuthPreference
 import com.haltec.silpusitron.feature.auth.common.data.remote.AuthRemoteDataSource
 import com.haltec.silpusitron.feature.auth.common.domain.IAuthRepository
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
@@ -14,8 +13,10 @@ import com.haltec.silpusitron.feature.auth.otp.data.remote.RequestOTPResponse
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPRequest
 import com.haltec.silpusitron.feature.auth.otp.data.remote.VerifyOTPResponse
 import com.haltec.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
+import com.haltec.silpusitron.shared.auth.preference.AuthPreference
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.valueOrEmpty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -37,9 +38,9 @@ class AuthRepository(
             override suspend fun requestFromRemote(): Result<LoginResponse> {
                 return remoteDataSource.login(
                     LoginRequest(
-                        username = username.value,
-                        password = password.value,
-                        captcha = captcha.value,
+                        username = username.valueOrEmpty(),
+                        password = password.valueOrEmpty(),
+                        captcha = captcha.valueOrEmpty(),
                         userType = userType.value
                     )
                 )

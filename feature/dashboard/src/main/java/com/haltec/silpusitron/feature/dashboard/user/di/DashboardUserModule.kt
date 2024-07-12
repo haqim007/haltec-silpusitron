@@ -6,10 +6,12 @@ import com.haltec.silpusitron.feature.dashboard.user.data.remote.DashboardUserRe
 import com.haltec.silpusitron.feature.dashboard.user.data.remote.DashboardUserService
 import com.haltec.silpusitron.feature.dashboard.user.data.repository.DashboardUserRepository
 import com.haltec.silpusitron.feature.dashboard.user.domain.repository.IDashboardUserRepository
+import com.haltec.silpusitron.shared.auth.di.authSharedModule
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 internal val dashboardUserModule = module {
+    includes(authSharedModule)
     factory { DashboardUserService(getProperty("BASE_URL"), getProperty("API_VERSION")) }
     factory { DashboardUserRemoteDataSource(get()) }
     factory<IDashboardUserRepository> { DashboardUserRepository(get(), get(), get()) }

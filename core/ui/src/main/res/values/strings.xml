@@ -23,4 +23,12 @@
     <string name="ok">OK</string>
     <string name="attention_">Perhatian!</string>
     <string name="close_app">Tutup aplikasi</string>
+    <string name="open">Buka</string>
+    <string name="click_to_see_doc_requirements">Klik untuk melihat persyaratan berkas</string>
+    <string name="close">Tutup</string>
+    <string name="refresh_loading">Refresh Loading</string>
+    <string name="failed_to_load_data">Gagal memuat data</string>
+    <string name="oops_empty">Hah, Kosong?!</string>
+    <string name="more">Selengkapnya</string>
+    <string name="click_to_see_more_options">Klik untuk melihat menu lainnya</string>
 </resources>

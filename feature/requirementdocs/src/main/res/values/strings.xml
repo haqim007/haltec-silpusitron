@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="requirement_docs_info">Informasi Berkas Persyaratan</string>
+    <string name="requirements">Persyaratan</string>
+    <string name="there_is_no_data">Belum ada data yang kamu cari. Silahkan coba lagi nanti</string>
+</resources>

@@ -9,6 +9,9 @@ object SplashScreenRoute
 object PublicDashboardRoute
 
 @Serializable
+object SimpleRequirementFilesRoute
+
+@Serializable
 object LoginRoute
 
 @Serializable

@@ -30,6 +30,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.haltec.silpusitron.core.ui.generateColorShades
 import com.haltec.silpusitron.feature.dashboard.R
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.PiesData
+import com.haltec.silpusitron.feature.dashboard.common.domain.model.total
 import kotlin.math.roundToInt
 
 
@@ -112,7 +113,7 @@ fun PieChartCard(
                             )
                         )
                         Text(
-                            "200",
+                            data.total.roundToInt().toString(),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp

@@ -29,10 +29,10 @@ data class DashboardResponse(
 	@Serializable
 	data class RasioPelayananResponse(
 		val label: String,
-		@SerialName("jumlah_masuk")
-		val jumlahMasuk: Int,
-		@SerialName("jumlah_keluar")
-		val jumlahKeluar: Int
+		@SerialName("surat_masuk")
+		val totalLetterIn: Int,
+		@SerialName("surat_keluar")
+		val totalLetterOut: Int
 	)
 
 	@Serializable

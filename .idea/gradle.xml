@@ -22,9 +22,11 @@
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/landingpage" />
+            <option value="$PROJECT_DIR$/feature/requirementdocs" />
             <option value="$PROJECT_DIR$/feature/submission" />
             <option value="$PROJECT_DIR$/feature/user" />
             <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/shared/auth" />
             <option value="$PROJECT_DIR$/shared/district" />
             <option value="$PROJECT_DIR$/shared/form" />
           </set>

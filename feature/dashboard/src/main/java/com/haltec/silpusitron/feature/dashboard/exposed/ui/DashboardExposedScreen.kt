@@ -1,31 +1,39 @@
 package com.haltec.silpusitron.feature.dashboard.exposed.ui
 
-import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRightAlt
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -39,11 +47,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -51,115 +54,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import com.canopas.lib.showcase.IntroShowcase
+import com.canopas.lib.showcase.IntroShowcaseScope
+import com.canopas.lib.showcase.component.IntroShowcaseState
+import com.canopas.lib.showcase.component.ShowcaseStyle
+import com.canopas.lib.showcase.component.rememberIntroShowcaseState
 import com.haltec.silpusitron.common.di.commonModule
+import com.haltec.silpusitron.core.ui.component.SmallTopBar
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.gradientColors
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.data.mechanism.Resource
+import com.haltec.silpusitron.feature.dashboard.R
 import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
 import com.haltec.silpusitron.feature.dashboard.common.ui.parts.DashboardContent
-import com.haltec.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.DashboardFilterView
+import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.NewsImagesPager
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import com.haltec.silpusitron.core.ui.R as CoreR
-
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun NewsImagesPager(
-    onDismissRequest: () -> Unit,
-    data: List<NewsImage>,
-) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
-        // Draw a rectangle shape with rounded corners inside the dialog
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(500.dp)
-                .padding(2.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors().copy(
-                containerColor = MaterialTheme.colorScheme.background
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                IconButton(
-                    onClick = onDismissRequest,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.End)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Cancel,
-                        contentDescription = stringResource(id = CoreR.string.cancel)
-                    )
-                }
-
-                val pagerState = rememberPagerState(
-                    pageCount = data.size
-                )
-                LaunchedEffect(key1 = Unit) {
-                    while (true){
-                        pagerState.animateScrollToPage(
-                            if (pagerState.currentPage < pagerState.pageCount-1){
-                                pagerState.currentPage + 1
-                            }else{
-                                0
-                            }
-                        )
-
-                        // Introduce a delay and check if the coroutine is still active
-                        delay(5000) // Adjust the delay as needed
-                        if (!isActive) break // Exit the loop if the coroutine is cancelled
-                    }
-                }
-                HorizontalPager(state = pagerState) { page ->
-                    // Our page content
-                    Column {
-                        Text(
-                            text = data[page].title,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier
-                                .padding(bottom = 24.dp)
-                                .align(Alignment.CenterHorizontally)
-
-                        )
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(data[page].imageURL)
-                                .crossfade(true)
-                                .build(),
-                            placeholder = null,
-                            error = painterResource(id = CoreR.drawable.error_alert),
-                            onError = {
-                                Log.e("NewsImage", it.result.throwable.message.toString())
-                            },
-                            contentDescription = data[page].title,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.clip(RoundedCornerShape(8.dp))
-                        )
-                    }
-                }
-
-            }
-        }
-    }
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -169,7 +81,8 @@ fun DashboardExposedScreen(
     sharedModifier: Modifier = Modifier,
     state: DashboardExposedUiState,
     action: (action: DashboardExposedUiAction) -> Unit,
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onOpenRequirementFiles: () -> Unit
 ){
 
     var showFilterSheet by remember {
@@ -178,8 +91,7 @@ fun DashboardExposedScreen(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-
-    var showNewsDialog by remember {
+    var showAllFloatingButton by remember {
         mutableStateOf(false)
     }
 
@@ -189,32 +101,46 @@ fun DashboardExposedScreen(
         action(DashboardExposedUiAction.LoadNews)
     }
 
-    LaunchedEffect(key1 = state.news) {
-        if (state.news is Resource.Success) showNewsDialog = true
+    LaunchedEffect(key1 = state.showNewsDialog, key2 = state.news) {
+        if ((state.showNewsDialog == false && state.news is Resource.Success) || state.news is Resource.Error){
+            delay(500)
+            action(DashboardExposedUiAction.ShowAppIntro())
+        }
+        else if (state.news is Resource.Success && state.showNewsDialog != false) {
+            action(DashboardExposedUiAction.ShowNewsDialog)
+        }
     }
 
-    if (showNewsDialog){
+    if (state.showNewsDialog == true){
         NewsImagesPager(
             onDismissRequest = {
-                showNewsDialog = false
+                action(DashboardExposedUiAction.HideNewsDialog)
             },
             data = state.news.data ?: listOf()
         )
     }
 
+    val introShowcaseState = rememberIntroShowcaseState()
+
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    showFilterSheet = true
+            DashboardFloatingButton(
+                state,
+                action,
+                introShowcaseState,
+                showAllFloatingButton,
+                onShowAllFloatingButton = {show ->
+                    showAllFloatingButton = show
+                },
+                onOpenRequirementFiles,
+                showFilterSheet,
+                onShowFilterSheet = {show ->
+                    showFilterSheet = show
                 }
-            ) {
-                Icon(Icons.Filled.FilterAlt, contentDescription = "")
-            }
+            )
         }
-    ) {contentPadding ->
-
+    ) { contentPadding ->
 
         Column(
             modifier = modifier
@@ -222,25 +148,7 @@ fun DashboardExposedScreen(
                 .fillMaxSize()
         ) {
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .background(
-                        brush = Brush.linearGradient(
-                            gradientColors,
-                            start = Offset(0f, Float.POSITIVE_INFINITY),
-                            end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                        ),
-                        shape = RoundedCornerShape(
-                            bottomEnd = 20.dp, bottomStart = 20.dp
-                        )
-                    )
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .padding(horizontal = 16.dp)
-
-            ){
+            SmallTopBar {
                 Image(
                     painter = painterResource(id = CoreR.drawable.logo),
                     contentDescription = "logo",
@@ -274,16 +182,15 @@ fun DashboardExposedScreen(
                     .verticalScroll(rememberScrollState()),
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .padding(horizontal = 18.dp)
-                ,
+                    .padding(horizontal = 18.dp),
                 data = state.data,
-                onTryAgain = {action(DashboardExposedUiAction.GetData)}
+                onTryAgain = { action(DashboardExposedUiAction.GetData) }
             )
 
         }
 
         // bottom sheet
-        if (showFilterSheet){
+        if (showFilterSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
                     showFilterSheet = false
@@ -297,7 +204,13 @@ fun DashboardExposedScreen(
                         action(DashboardExposedUiAction.LoadDistricts)
                     },
                     setFilter = { districtId, startDate, endDate ->
-                        action(DashboardExposedUiAction.SetFilter(districtId, startDate, endDate))
+                        action(
+                            DashboardExposedUiAction.SetFilter(
+                                districtId,
+                                startDate,
+                                endDate
+                            )
+                        )
                         showFilterSheet = false
                     },
                     districtId = state.districtId,
@@ -305,6 +218,239 @@ fun DashboardExposedScreen(
                     endDate = state.endDate
                 )
             }
+        }
+
+    }
+}
+
+@Composable
+private fun DashboardFloatingButton(
+    state: DashboardExposedUiState,
+    action: (action: DashboardExposedUiAction) -> Unit,
+    introShowcaseState: IntroShowcaseState,
+    showAllFloatingButton: Boolean,
+    onShowAllFloatingButton: (show: Boolean) -> Unit,
+    onOpenRequirementFiles: () -> Unit,
+    showFilterSheet: Boolean,
+    onShowFilterSheet: (show: Boolean) -> Unit,
+) {
+    IntroShowcase(
+        showIntroShowCase = state.showAppIntro,
+        dismissOnClickOutside = true,
+        onShowCaseCompleted = {
+            //App Intro finished!!
+            action(DashboardExposedUiAction.ShowAppIntro(false))
+        },
+        state = introShowcaseState,
+    ) {
+
+        AnimatedVisibility(
+            visible = showAllFloatingButton,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(durationMillis = 500)
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(durationMillis = 500)
+            )
+        ) {
+            Column {
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = {
+                        onOpenRequirementFiles()
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .introShowCaseTarget(
+                            index = 1,
+                            style = ShowcaseStyle.Default.copy(
+                                backgroundColor = MaterialTheme.colorScheme.primary,
+                                backgroundAlpha = 0.98f, // specify transparency of background
+                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
+                            ),
+                            // specify the content to show to introduce app feature
+                            content = {
+                                Column {
+                                    Text(
+                                        text = stringResource(R.string.doc_requirements),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = stringResource(CoreR.string.click_to_see_doc_requirements),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 16.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .align(Alignment.End),
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        )
+                ) {
+                    Image(
+                        modifier = Modifier.size(40.dp),
+                        painter = painterResource(id = CoreR.drawable.document_checks),
+                        contentDescription = stringResource(id = CoreR.string.click_to_see_doc_requirements)
+                    )
+                }
+
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        onShowFilterSheet(true)
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .introShowCaseTarget(
+                            index = 2,
+                            style = ShowcaseStyle.Default.copy(
+                                backgroundColor = MaterialTheme.colorScheme.primary,
+                                backgroundAlpha = 0.98f, // specify transparency of background
+                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
+                            ),
+                            // specify the content to show to introduce app feature
+                            content = {
+                                Column {
+                                    Text(
+                                        text = stringResource(R.string.filter_feature),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.click_here_to_filter_data),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 16.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .align(Alignment.End),
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        )
+                ) {
+                    Icon(Icons.Filled.FilterAlt, contentDescription = "")
+                }
+
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = {
+                        onShowAllFloatingButton(false)
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .introShowCaseTarget(
+                            index = 1,
+                            style = ShowcaseStyle.Default.copy(
+                                backgroundColor = MaterialTheme.colorScheme.primary,
+                                backgroundAlpha = 0.98f, // specify transparency of background
+                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
+                            ),
+                            // specify the content to show to introduce app feature
+                            content = {
+                                Column {
+                                    Text(
+                                        text = stringResource(R.string.doc_requirements),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = stringResource(CoreR.string.click_to_see_doc_requirements),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 16.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .align(Alignment.End),
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = stringResource(id = CoreR.string.close)
+                    )
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = !showAllFloatingButton,
+            enter = expandIn(),
+            exit = shrinkOut()
+        ){
+            Column{
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = {
+                        onShowAllFloatingButton(true)
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .introShowCaseTarget(
+                            index = 0,
+                            style = ShowcaseStyle.Default.copy(
+                                backgroundColor = MaterialTheme.colorScheme.primary,
+                                backgroundAlpha = 0.98f, // specify transparency of background
+                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
+                            ),
+                            // specify the content to show to introduce app feature
+                            content = {
+                                Column {
+                                    Text(
+                                        text = stringResource(R.string.more_menu),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = stringResource(CoreR.string.click_to_see_more_options),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        fontSize = 16.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .align(Alignment.End),
+                                        tint = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreHoriz,
+                        contentDescription = stringResource(id = CoreR.string.more)
+                    )
+                }
+            }
+
         }
     }
 }
@@ -325,7 +471,8 @@ private fun DashboardExposedScreenPreview(){
             DashboardExposedScreen(
                 state = state,
                 action = {action -> },
-                onLogin = {}
+                onLogin = {},
+                onOpenRequirementFiles = {}
             )
         }
     }
@@ -348,7 +495,8 @@ private fun DashboardExposedScreenLoadingPreview(){
             DashboardExposedScreen(
                 state = state,
                 action = {action -> },
-                onLogin = {}
+                onLogin = {},
+                onOpenRequirementFiles = { }
             )
         }
     }

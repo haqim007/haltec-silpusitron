@@ -56,3 +56,6 @@ data class PiesData(
     )
 }
 
+val List<PiesData.PieData>.total: Float
+    get() = this.sumOf { it.value.toDouble() }.toFloat()
+

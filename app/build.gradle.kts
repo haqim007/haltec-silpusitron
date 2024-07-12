@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:user"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:requirementdocs"))
     implementation(libs.androidx.navigation.compose)
     implementation(libs.datastore.preferences)
     implementation(libs.androidx.core.splashscreen)

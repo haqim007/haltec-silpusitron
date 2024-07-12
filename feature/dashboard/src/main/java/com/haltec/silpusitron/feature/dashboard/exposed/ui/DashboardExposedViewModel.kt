@@ -39,16 +39,37 @@ class DashboardExposedViewModel(
             DashboardExposedUiAction.LoadNews -> {
                 loadNewsImages()
             }
+
+            is DashboardExposedUiAction.ShowAppIntro -> {
+                if (state.value.alreadyShowAppIntro != true){
+                    _state.update { state ->
+                        state.copy(
+                            showAppIntro = action.show,
+                            alreadyShowAppIntro = !action.show
+                        )
+                    }
+                }
+
+            }
+
+            DashboardExposedUiAction.HideNewsDialog -> {
+                _state.update { state -> state.copy(showNewsDialog = false) }
+            }
+            DashboardExposedUiAction.ShowNewsDialog -> {
+                _state.update { state -> state.copy(showNewsDialog = true) }
+            }
         }
     }
 
     private fun loadNewsImages() {
-        viewModelScope.launch {
-            getNewsImagesUseCase().collectLatest {
-                _state.update { state ->
-                    state.copy(
-                        news = it
-                    )
+        if (state.value.news !is Resource.Success){
+            viewModelScope.launch {
+                getNewsImagesUseCase().collectLatest {
+                    _state.update { state ->
+                        state.copy(
+                            news = it
+                        )
+                    }
                 }
             }
         }
@@ -109,7 +130,10 @@ data class DashboardExposedUiState(
     val news: Resource<List<NewsImage>> = Resource.Idle(),
     val districtId: String? = null,
     val startDate: LocalDateTime? = null,
-    val endDate: LocalDateTime? = null
+    val endDate: LocalDateTime? = null,
+    val showAppIntro: Boolean = false,
+    val alreadyShowAppIntro: Boolean? = null,
+    val showNewsDialog: Boolean? = null
 )
 
 sealed class DashboardExposedUiAction{
@@ -121,6 +145,9 @@ sealed class DashboardExposedUiAction{
         val endDate: LocalDateTime? = null
     ): DashboardExposedUiAction()
     data object LoadNews: DashboardExposedUiAction()
+    data class ShowAppIntro(val show: Boolean = true): DashboardExposedUiAction()
+    data object ShowNewsDialog: DashboardExposedUiAction()
+    data object HideNewsDialog: DashboardExposedUiAction()
 }
 
 

@@ -11,11 +11,13 @@ import com.haltec.silpusitron.feature.auth.login.ui.LoginViewModel
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.RequestOTPUseCase
 import com.haltec.silpusitron.feature.auth.otp.domain.usecase.VerifyOTPUseCase
 import com.haltec.silpusitron.feature.auth.otp.ui.OTPViewModel
+import com.haltec.silpusitron.shared.auth.di.authSharedModule
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
 val authModule = module {
+    includes(authSharedModule)
     factory { AuthRemoteDataSource(get()) }
     factory { AuthService(getProperty("BASE_URL"), getProperty("API_VERSION")) }
     factory <IAuthRepository>{ AuthRepository(get(), get(), get()) }

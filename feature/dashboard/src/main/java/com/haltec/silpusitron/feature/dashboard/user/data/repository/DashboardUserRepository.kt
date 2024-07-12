@@ -1,15 +1,14 @@
 package com.haltec.silpusitron.feature.dashboard.user.data.repository
 
 import com.haltec.silpusitron.common.util.DispatcherProvider
-import com.haltec.silpusitron.data.mechanism.AuthorizedNetworkBoundResource
-import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.data.preference.AuthPreference
-import com.haltec.silpusitron.feature.dashboard.user.data.remote.DashboardUserRemoteDataSource
 import com.haltec.silpusitron.feature.dashboard.common.data.remote.response.DashboardResponse
 import com.haltec.silpusitron.feature.dashboard.common.data.toDashboardData
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardData
+import com.haltec.silpusitron.feature.dashboard.user.data.remote.DashboardUserRemoteDataSource
 import com.haltec.silpusitron.feature.dashboard.user.domain.repository.IDashboardUserRepository
+import com.haltec.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResource
+import com.haltec.silpusitron.shared.auth.preference.AuthPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

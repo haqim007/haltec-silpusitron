@@ -53,7 +53,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
-    implementation(project(":core:domain"))
     api(project(":shared:form"))
+    implementation(project(":shared:auth"))
     implementation(project(":shared:district"))
 }

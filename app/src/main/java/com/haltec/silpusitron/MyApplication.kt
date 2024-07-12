@@ -6,6 +6,7 @@ import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.di.appModule
 import com.haltec.silpusitron.feature.auth.di.authModule
 import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
+import com.haltec.silpusitron.feature.requirementdocs.di.requirementDocModule
 import com.haltec.silpusitron.home.homeModule
 import com.haltec.silpusitron.user.profile.di.profileModule
 import org.koin.android.ext.koin.androidContext
@@ -25,8 +26,9 @@ class MainApplication : Application() {
             properties(mapOf("API_VERSION" to BuildConfig.API_VERSION))
             // Load modules
              modules(
-                 commonModule, dataModule, authModule,
-                 appModule, dashboardModule, profileModule, homeModule
+                 commonModule, dataModule, authModule, appModule,
+                 dashboardModule, requirementDocModule, profileModule,
+                 homeModule
              )
         }
 

@@ -33,8 +33,8 @@ fun DashboardResponse.toDashboardData(): List<DashboardData> {
                     BarCharts.BarChartsData(
                         item.label,
                         listOf(
-                            item.jumlahMasuk.toFloat(),
-                            item.jumlahKeluar.toFloat()
+                            item.totalLetterIn.toFloat(),
+                            item.totalLetterOut.toFloat()
                         )
                     )
                 }
