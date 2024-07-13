@@ -61,4 +61,5 @@ dependencies {
     api(libs.androidx.compose.animation)
     api(libs.lottie.compose)
     api(libs.introshowcaseview)
+    api(libs.androidx.paging.compose)
 }

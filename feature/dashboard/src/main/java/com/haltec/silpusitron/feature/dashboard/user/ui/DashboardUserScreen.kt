@@ -16,7 +16,6 @@ import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
 import com.haltec.silpusitron.feature.dashboard.common.ui.parts.DashboardContent
-import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedUiAction
 import org.koin.compose.KoinApplication
 
 
@@ -25,7 +24,8 @@ fun DashboardUserScreen(
     modifier: Modifier = Modifier,
     sharedModifier: Modifier = Modifier,
     state: DashboardUserUiState,
-    action: (action: DashboardUserUiAction) -> Unit
+    action: (action: DashboardUserUiAction) -> Unit,
+    animateWelcome: Boolean
 ){
 
     ContainerWithBanner(
@@ -34,7 +34,7 @@ fun DashboardUserScreen(
         bannerModifier = Modifier
             .height(242.dp),
         sharedModifier = sharedModifier,
-        withWelcome = true,
+        withWelcome = animateWelcome,
         onBannerInvisible = {
             println("onBannerInvisible: $it")
         }
@@ -65,7 +65,8 @@ fun DashboardScreenPreview(){
         SILPUSITRONTheme {
             DashboardUserScreen(
                 state = state,
-                action = {action -> }
+                action = {action -> },
+                animateWelcome = true
             )
         }
     }

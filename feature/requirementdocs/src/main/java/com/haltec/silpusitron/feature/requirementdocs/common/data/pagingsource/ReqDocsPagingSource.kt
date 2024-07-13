@@ -1,19 +1,21 @@
-package com.haltec.silpusitron.feature.requirementdocs.data.pagingsource
+package com.haltec.silpusitron.feature.requirementdocs.common.data.pagingsource
 
 import android.util.Log
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.haltec.silpusitron.feature.requirementdocs.data.remote.ReqDocsRemoteDataSource
-import com.haltec.silpusitron.feature.requirementdocs.data.repository.DEFAULT_ReqDocs_PAGES
-import com.haltec.silpusitron.feature.requirementdocs.data.toModel
-import com.haltec.silpusitron.feature.requirementdocs.domain.RequirementDoc
+import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.ReqDocsRemoteDataSource
+import com.haltec.silpusitron.feature.requirementdocs.common.data.repository.DEFAULT_ReqDocs_PAGES
+import com.haltec.silpusitron.feature.requirementdocs.common.data.toModel
+import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import io.ktor.serialization.JsonConvertException
 
 const val ReqDocsPagingStartKey = 1
 
-class ReqDocsPagingSource(
-    private val remoteDataSource: ReqDocsRemoteDataSource
+internal class ReqDocsPagingSource(
+    private val remoteDataSource: ReqDocsRemoteDataSource,
+    private val level: String?,
+    private val letterTypeId: Int?,
+    private val searchKeyword: String?
 ): PagingSource<Int, RequirementDoc>() {
     override fun getRefreshKey(state: PagingState<Int, RequirementDoc>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -25,7 +27,9 @@ class ReqDocsPagingSource(
         val position = params.key ?: ReqDocsPagingStartKey
 
         return try {
-            val docsResponse = remoteDataSource.getData(position)
+            val docsResponse = remoteDataSource.getData(
+                position, searchKeyword, level, letterTypeId
+            )
 
             if (docsResponse.isSuccess){
                 val docs = docsResponse.getOrNull()?.toModel() ?: listOf()

@@ -1,17 +1,17 @@
-package com.haltec.silpusitron.feature.requirementdocs.data.remote
+package com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RequirementDocsResponse(
+internal data class RequirementDocsResponse(
 
 	@SerialName("data")
 	val data: RequirementDocDataResponse
 )
 
 @Serializable
-data class RequirementDocItemResponse(
+internal data class RequirementDocItemResponse(
 
 	@SerialName("berkas_persyaratan_id")
 	val requirementDocs: List<RequirementDocsItemResponse>? = null,
@@ -48,7 +48,7 @@ data class RequirementDocItemResponse(
 )
 
 @Serializable
-data class VariableItem(
+internal data class VariableItem(
 
 	@SerialName("default")
 	val hide: Boolean,
@@ -67,7 +67,7 @@ data class VariableItem(
 )
 
 @Serializable
-data class RequirementDocDataResponse(
+internal data class RequirementDocDataResponse(
 
 	@SerialName("per_page")
 	val perPage: Int,
@@ -110,7 +110,7 @@ data class RequirementDocDataResponse(
 )
 
 @Serializable
-data class RequirementDocsItemResponse(
+internal data class RequirementDocsItemResponse(
 
 	@SerialName("id")
 	val id: Int,
@@ -123,7 +123,7 @@ data class RequirementDocsItemResponse(
 )
 
 @Serializable
-data class SignatoryResponse(
+internal data class SignatoryResponse(
 
 	@SerialName("camat")
 	val camat: String? = null,
@@ -151,7 +151,7 @@ data class SignatoryResponse(
 )
 
 @Serializable
-data class LinksItem(
+internal data class LinksItem(
 
 	@SerialName("active")
 	val active: Boolean,

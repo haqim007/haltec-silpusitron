@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.requirementdocs.ui
+package com.haltec.silpusitron.feature.requirementdocs.simple.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -6,8 +6,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,75 +22,56 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.component.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.EmptyView
-import com.haltec.silpusitron.core.ui.parts.ErrorView
+import com.haltec.silpusitron.core.ui.parts.PagerView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.feature.requirementdocs.R
-import com.haltec.silpusitron.feature.requirementdocs.di.requirementDocModule
-import com.haltec.silpusitron.feature.requirementdocs.domain.RequirementDoc
-import com.haltec.silpusitron.feature.requirementdocs.domain.requirementDocDummies
+import com.haltec.silpusitron.feature.requirementdocs.common.di.requirementDocModule
+import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
+import com.haltec.silpusitron.feature.requirementdocs.common.domain.requirementDocDummies
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import com.haltec.silpusitron.core.ui.R as CoreR
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleReqDocList(
     modifier: Modifier = Modifier,
     data: Flow<PagingData<RequirementDoc>>,
-    action: (action: ReqDocUiAction) -> Unit,
+    action: (action: SimpleReqDocUiAction) -> Unit,
     onClose: () -> Unit
 ){
-    val pullToRefreshState = rememberPullToRefreshState()
+
     val pagingItems: LazyPagingItems<RequirementDoc> =
         data.collectAsLazyPagingItems()
-    if(pullToRefreshState.isRefreshing){
-        pagingItems.refresh()
-    }
-    LaunchedEffect(pagingItems.loadState) {
-        when (pagingItems.loadState.refresh) {
-            is LoadState.Loading -> Unit
-            is LoadState.Error, is LoadState.NotLoading -> {
-                pullToRefreshState.endRefresh()
-            }
-        }
-    }
 
     LaunchedEffect(key1 = Unit) {
-        action(ReqDocUiAction.LoadData)
+        action(SimpleReqDocUiAction.LoadData)
     }
 
     Column(
@@ -105,7 +84,8 @@ fun SimpleReqDocList(
                 text = stringResource(R.string.requirement_docs_info),
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
             )
 
@@ -115,7 +95,7 @@ fun SimpleReqDocList(
                     contentColor = MaterialTheme.colorScheme.error
                 ),
                 modifier = Modifier
-                    .size(30.dp),
+                    .size(20.dp),
                 onClick = onClose
             ) {
                 Icon(
@@ -125,43 +105,13 @@ fun SimpleReqDocList(
             }
         }
 
-        Box(
-            modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection)
-        ){
-            if (pagingItems.loadState.refresh is LoadState.Loading) {
-                if (pagingItems.itemCount < 1) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(8.dp),
-                            text = stringResource(id = CoreR.string.refresh_loading)
-                        )
-
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-            } else if (pagingItems.loadState.refresh is LoadState.Error) {
-                ErrorView(
-                    message = stringResource(id = CoreR.string.failed_to_load_data),
-                    onTryAgain = { action(ReqDocUiAction.LoadData) }
-                )
-            } else if (
-                pagingItems.loadState.refresh is LoadState.NotLoading &&
-                pagingItems.itemCount == 0
-            ) { // empty?
-                EmptyView(
-                    message = stringResource(R.string.there_is_no_data),
-                    onTryAgain = { action(ReqDocUiAction.LoadData) }
-                )
-
+        PagerView(
+            modifier = modifier,
+            pagingItems = pagingItems,
+            onLoadData = {
+                action(SimpleReqDocUiAction.LoadData)
             }
+        ){
             LazyColumn(
                 contentPadding = PaddingValues(all = 12.dp)
             ) {

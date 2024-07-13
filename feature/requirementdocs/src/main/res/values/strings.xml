@@ -2,5 +2,6 @@
 <resources>
     <string name="requirement_docs_info">Informasi Berkas Persyaratan</string>
     <string name="requirements">Persyaratan</string>
-    <string name="there_is_no_data">Belum ada data yang kamu cari. Silahkan coba lagi nanti</string>
+    <string name="letter_type_title">Jenis Surat</string>
+    <string name="letter_level_type">Level Surat</string>
 </resources>

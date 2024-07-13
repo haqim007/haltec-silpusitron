@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.requirementdocs.domain
+package com.haltec.silpusitron.feature.requirementdocs.common.domain
 
 import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData

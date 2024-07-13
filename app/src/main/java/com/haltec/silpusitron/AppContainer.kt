@@ -9,9 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,11 +18,10 @@ import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.login.ui.LoginScreen
 import com.haltec.silpusitron.feature.auth.otp.ui.OTPScreen
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedScreen
-import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedUiAction
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.haltec.silpusitron.feature.landingpage.ui.splash.MySplashScreen
-import com.haltec.silpusitron.feature.requirementdocs.ui.ReqDocViewModel
-import com.haltec.silpusitron.feature.requirementdocs.ui.SimpleReqDocList
+import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
+import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocList
 import com.haltec.silpusitron.home.HomeScreen
 import com.haltec.silpusitron.ui.nav.ConfirmProfileDataRoute
 import com.haltec.silpusitron.ui.nav.HomeRoute
@@ -36,7 +32,6 @@ import com.haltec.silpusitron.ui.nav.SimpleRequirementFilesRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
 import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import com.haltec.silpusitron.user.profile.ui.ProfileDataScreen
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -127,7 +122,7 @@ fun AppContainer(
                         )
                     }
                     composable<SimpleRequirementFilesRoute> {
-                        val reqDocsViewModel: ReqDocViewModel = koinViewModel()
+                        val reqDocsViewModel: SimpleReqDocViewModel = koinViewModel()
                         //val reqDocsState by reqDocsViewModel.state.collectAsState()
 
                         SimpleReqDocList(

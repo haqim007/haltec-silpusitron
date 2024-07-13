@@ -52,4 +52,5 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(libs.androidx.navigation.compose)
     implementation(project(":feature:dashboard"))
+    implementation(project(":feature:requirementdocs"))
 }

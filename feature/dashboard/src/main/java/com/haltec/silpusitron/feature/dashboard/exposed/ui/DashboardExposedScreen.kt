@@ -1,14 +1,6 @@
 package com.haltec.silpusitron.feature.dashboard.exposed.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
@@ -24,11 +16,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRightAlt
-import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,8 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.canopas.lib.showcase.IntroShowcase
-import com.canopas.lib.showcase.IntroShowcaseScope
-import com.canopas.lib.showcase.component.IntroShowcaseState
 import com.canopas.lib.showcase.component.ShowcaseStyle
 import com.canopas.lib.showcase.component.rememberIntroShowcaseState
 import com.haltec.silpusitron.common.di.commonModule
@@ -92,7 +80,7 @@ fun DashboardExposedScreen(
         skipPartiallyExpanded = true
     )
     var showAllFloatingButton by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -120,21 +108,17 @@ fun DashboardExposedScreen(
         )
     }
 
-    val introShowcaseState = rememberIntroShowcaseState()
-
 
     Scaffold(
         floatingActionButton = {
             DashboardFloatingButton(
                 state,
                 action,
-                introShowcaseState,
                 showAllFloatingButton,
                 onShowAllFloatingButton = {show ->
                     showAllFloatingButton = show
                 },
                 onOpenRequirementFiles,
-                showFilterSheet,
                 onShowFilterSheet = {show ->
                     showFilterSheet = show
                 }
@@ -227,18 +211,20 @@ fun DashboardExposedScreen(
 private fun DashboardFloatingButton(
     state: DashboardExposedUiState,
     action: (action: DashboardExposedUiAction) -> Unit,
-    introShowcaseState: IntroShowcaseState,
     showAllFloatingButton: Boolean,
     onShowAllFloatingButton: (show: Boolean) -> Unit,
     onOpenRequirementFiles: () -> Unit,
-    showFilterSheet: Boolean,
     onShowFilterSheet: (show: Boolean) -> Unit,
 ) {
+
+    val introShowcaseState = rememberIntroShowcaseState()
+
     IntroShowcase(
         showIntroShowCase = state.showAppIntro,
         dismissOnClickOutside = true,
         onShowCaseCompleted = {
             //App Intro finished!!
+            onShowAllFloatingButton(false)
             action(DashboardExposedUiAction.ShowAppIntro(false))
         },
         state = introShowcaseState,
@@ -247,12 +233,14 @@ private fun DashboardFloatingButton(
         AnimatedVisibility(
             visible = showAllFloatingButton,
             enter = slideInVertically(
-                initialOffsetY = { it },
-                animationSpec = tween(durationMillis = 500)
+                initialOffsetY = {
+                    it
+                }
             ),
             exit = slideOutVertically(
-                targetOffsetY = { it },
-                animationSpec = tween(durationMillis = 500)
+                targetOffsetY = {
+                    it
+                }
             )
         ) {
             Column {
@@ -312,7 +300,7 @@ private fun DashboardFloatingButton(
                     modifier = Modifier
                         .padding(bottom = 16.dp)
                         .introShowCaseTarget(
-                            index = 2,
+                            index = 0,
                             style = ShowcaseStyle.Default.copy(
                                 backgroundColor = MaterialTheme.colorScheme.primary,
                                 backgroundAlpha = 0.98f, // specify transparency of background
@@ -355,39 +343,6 @@ private fun DashboardFloatingButton(
                     },
                     modifier = Modifier
                         .padding(bottom = 16.dp)
-                        .introShowCaseTarget(
-                            index = 1,
-                            style = ShowcaseStyle.Default.copy(
-                                backgroundColor = MaterialTheme.colorScheme.primary,
-                                backgroundAlpha = 0.98f, // specify transparency of background
-                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
-                            ),
-                            // specify the content to show to introduce app feature
-                            content = {
-                                Column {
-                                    Text(
-                                        text = stringResource(R.string.doc_requirements),
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = stringResource(CoreR.string.click_to_see_doc_requirements),
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                        fontSize = 16.sp
-                                    )
-                                    Spacer(modifier = Modifier.height(10.dp))
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(80.dp)
-                                            .align(Alignment.End),
-                                        tint = MaterialTheme.colorScheme.onPrimary
-                                    )
-                                }
-                            }
-                        )
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -399,59 +354,33 @@ private fun DashboardFloatingButton(
 
         AnimatedVisibility(
             visible = !showAllFloatingButton,
-            enter = expandIn(),
-            exit = shrinkOut()
-        ){
-            Column{
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    onClick = {
-                        onShowAllFloatingButton(true)
-                    },
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .introShowCaseTarget(
-                            index = 0,
-                            style = ShowcaseStyle.Default.copy(
-                                backgroundColor = MaterialTheme.colorScheme.primary,
-                                backgroundAlpha = 0.98f, // specify transparency of background
-                                targetCircleColor = MaterialTheme.colorScheme.onPrimary // specify color of target circle
-                            ),
-                            // specify the content to show to introduce app feature
-                            content = {
-                                Column {
-                                    Text(
-                                        text = stringResource(R.string.more_menu),
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = stringResource(CoreR.string.click_to_see_more_options),
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                        fontSize = 16.sp
-                                    )
-                                    Spacer(modifier = Modifier.height(10.dp))
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowRightAlt,
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(80.dp)
-                                            .align(Alignment.End),
-                                        tint = MaterialTheme.colorScheme.onPrimary
-                                    )
-                                }
-                            }
-                        )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreHoriz,
-                        contentDescription = stringResource(id = CoreR.string.more)
-                    )
+            enter = slideInVertically(
+                initialOffsetY = {
+                    -it
                 }
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = {
+                    -it
+                }
+            )
+        ) {
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                onClick = {
+                    onShowAllFloatingButton(true)
+                },
+                modifier = Modifier
+                    .height(75.dp)
+                    .padding(bottom = 16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.MoreHoriz,
+                    contentDescription = stringResource(id = CoreR.string.more)
+                )
             }
-
         }
+
     }
 }
 

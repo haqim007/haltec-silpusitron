@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,9 @@ fun SmallTopBar(
     horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceBetween,
     verticalAlignment: Alignment. Vertical = Alignment.CenterVertically,
     horizontalPadding: Dp = 16.dp,
+    shape: Shape = RoundedCornerShape(
+        bottomEnd = 20.dp, bottomStart = 20.dp
+    ),
     content: @Composable () -> Unit
 ){
     Row(
@@ -43,9 +47,7 @@ fun SmallTopBar(
                     start = Offset(0f, Float.POSITIVE_INFINITY),
                     end = Offset(Float.POSITIVE_INFINITY, 1000f),
                 ),
-                shape = RoundedCornerShape(
-                    bottomEnd = 20.dp, bottomStart = 20.dp
-                )
+                shape = shape
             )
             .fillMaxWidth()
             .height(80.dp)
