@@ -1,7 +1,11 @@
 package com.haltec.silpusitron.shared.form.domain.model
 
+import androidx.core.net.toUri
+import com.haltec.silpusitron.common.util.FileHelper
 import java.io.File
 
+
+typealias FileAbsolutePath = String
 
 data class InputTextData<ValidationType, ValueType>(
     val inputName: String,
@@ -15,7 +19,7 @@ data class InputTextData<ValidationType, ValueType>(
 ){
     val isValid get() = message == null && validationError == null
 
-    fun setValue(newValue: ValueType) = this.copy(
+    fun setValue(newValue: ValueType?) = this.copy(
         value = newValue,
         everChanged = if (!everChanged) {
             true
@@ -35,6 +39,10 @@ fun InputTextData<TextValidationType, String>.isRequired(): Boolean{
     return validations.firstOrNull { it is TextValidationType.Required } != null
 }
 
+fun InputTextData<FileValidationType, FileAbsolutePath>.isRequiredFile(): Boolean{
+    return validations.firstOrNull { it is FileValidationType.Required } != null
+}
+
 fun InputTextData<TextValidationType, String>.getMaxLength(): Int{
     val maxLength = this.validations.firstOrNull {
         it is TextValidationType.MaxLength
@@ -50,8 +58,53 @@ fun InputTextData<TextValidationType, String>.getMaxLength(): Int{
     return 0
 }
 
-// TODO()
-//fun InputTextData<FileValidationType, File>.validate(){}
+fun InputTextData<FileValidationType, FileAbsolutePath>.getFilename() =
+    this.value?.let { FileHelper.getFileNameFromAbsolutePath(it) } ?: ""
+
+fun InputTextData<FileValidationType, FileAbsolutePath>.validateFile():
+        InputTextData<FileValidationType, FileAbsolutePath>
+{
+    var foundError = false
+    var whichValidationError: FileValidationType? = null
+    validations.forEach { validation ->
+        if (foundError) return@forEach
+
+        val fileSize =
+            this.value?.let {
+                File(it).toUri()
+            }?.let {
+                FileHelper.getFileSizeInMB(it)
+            } ?: 0.0
+        when(validation){
+            is FileValidationType.Required -> {
+                if (value.isNullOrBlank()){
+                    whichValidationError = validation
+                    foundError = true
+                }
+                else{
+                    if (fileSize <= 0){
+                        whichValidationError = validation
+                        foundError = true
+                    }
+                }
+            }
+            is FileValidationType.MaxSize -> {
+                if (fileSize > validation.limitInMB){
+                    whichValidationError = validation
+                    foundError = true
+                }
+            }
+        }
+    }
+
+    return if (!foundError){
+        this.copy(
+            validationError = null, message = null
+        )
+    }else{
+        this.copy(validationError = whichValidationError)
+    }
+}
 
 fun InputTextData<TextValidationType, String>.valueOrEmpty() = this.value ?: ""
 fun InputTextData<TextValidationType, String>.validate(): InputTextData<TextValidationType, String> {

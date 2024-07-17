@@ -10,3 +10,4 @@ sealed class TextValidationType {
     data class MaxValue(val maxValue: Number) : TextValidationType()
     data object Invalid: TextValidationType()
 }
+

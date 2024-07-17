@@ -1,7 +1,8 @@
 [versions]
-accompanistPager = "0.12.0"
+accompanist = "0.34.0"
 coilCompose = "2.6.0"
 firebaseBom = "33.1.1"
+googlePlayServicesMaps = "19.0.0"
 introshowcaseview = "2.0.1"
 kotlinxDatetime = "0.6.0"
 agp = "8.5.0"
@@ -17,6 +18,7 @@ activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 appcompat = "1.7.0"
 lottieCompose = "4.0.0"
+mapsCompose = "6.1.0"
 material = "1.12.0"
 materialIconsExtended = "1.6.8"
 navigation = "2.8.0-beta04"
@@ -46,12 +48,15 @@ koin_version = "3.5.6"
 # Preference
 dataStore = "1.1.1"
 # Animation
-composeAnimation = "1.7.0-beta04"
+composeAnimation = "1.7.0-beta05"
 gmsGoogleService = "4.4.2"
 ycharts = "2.1.0"
+googleMapsSecret = "2.0.1"
+playServicesLocation = "21.3.0"
 
 [libraries]
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -75,6 +80,9 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+maps-compose-utils = { module = "com.google.maps.android:maps-compose-utils", version.ref = "mapsCompose" }
+maps-compose-widgets = { module = "com.google.maps.android:maps-compose-widgets", version.ref = "mapsCompose" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 # Viewmodel
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewModelCompose" }
@@ -93,6 +101,7 @@ koin-android = {group = "io.insert-koin", name = "koin-android", version.ref = "
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin_version" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin_version" }
 #Network
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "googlePlayServicesMaps" }
 recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptcha" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
@@ -117,6 +126,7 @@ datastore-preferences = {group= "androidx.datastore", name = "datastore-preferen
 # Animation
 androidx-compose-animation = {group = "androidx.compose.animation", name="animation", version.ref="composeAnimation"}
 ycharts = { module = "co.yml:ycharts", version.ref = "ycharts" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -128,4 +138,5 @@ dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hi
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref="kotlin" }
 gms-google-service = { id = "com.google.gms.google-services", version.ref="gmsGoogleService"}
+google-maps-secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "googleMapsSecret"}
 

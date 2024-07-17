@@ -36,4 +36,16 @@
     <string name="there_is_no_data">Belum ada data yang kamu cari. Silahkan coba lagi nanti</string>
     <string name="all">Semua</string>
     <string name="reset">Reset</string>
+    <string name="create_new_submission">Buat Pengajuan Baru</string>
+    <string name="save">Simpan</string>
+    <string name="next">Selanjutnya</string>
+    <string name="your_location">Lokasi Anda</string>
+    <string name="choose_location">Pilih lokasi</string>
+    <string name="click_to_choose_location">Klik untuk memilih lokasi</string>
+    <string name="choose">Pilih</string>
+    <string name="back">Kembali</string>
+    <string name="max_file_size_n_mb">Max ukuran file: %1$sMB</string>
+    <string name="required_to_pick_file">Wajib memilih file</string>
+    <string name="account">Akun</string>
+    <string name="profile">Profile</string>
 </resources>

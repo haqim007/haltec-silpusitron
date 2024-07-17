@@ -15,7 +15,8 @@ import com.haltec.silpusitron.core.ui.R
 fun LottieLoader(
     modifier: Modifier = Modifier,
     @RawRes jsonRaw: Int,
-    iterations: Int = LottieConstants.IterateForever
+    iterations: Int = LottieConstants.IterateForever,
+    speed: Float = 1f
 ){
     val preloaderLottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
@@ -26,7 +27,8 @@ fun LottieLoader(
     val preloaderProgress by animateLottieCompositionAsState(
         preloaderLottieComposition,
         iterations = iterations,
-        isPlaying = true
+        isPlaying = true,
+        speed = speed
     )
 
 
