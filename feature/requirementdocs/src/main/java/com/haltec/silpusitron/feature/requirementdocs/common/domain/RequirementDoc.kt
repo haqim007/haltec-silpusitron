@@ -1,13 +1,14 @@
 package com.haltec.silpusitron.feature.requirementdocs.common.domain
 
+import com.haltec.silpusitron.shared.form.domain.model.FileAbsolutePath
 import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
-import java.io.File
 
 typealias DocName = String
 typealias FieldName = Int
 typealias DocId = Int
+
 data class RequirementDoc(
     val requirementDocs: List<DocName> = listOf(),
     val letterType: String,
@@ -19,7 +20,7 @@ data class RequirementDoc(
     val letterTypeId: Int,
     val title: String,
     val inputForms: Map<FieldName, InputTextData<TextValidationType, String>>,
-    val inputFiles: Map<DocId, InputTextData<FileValidationType, File>>
+    val inputFiles: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>
 )
 
 

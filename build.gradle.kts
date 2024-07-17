@@ -8,4 +8,5 @@ plugins {
     // alias(libs.plugins.dagger.hilt.android) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.gms.google.service) apply false
+    alias(libs.plugins.google.maps.secret) apply false
 }

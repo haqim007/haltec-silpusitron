@@ -16,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.haltec.silpusitron.feature.requirementdocs.R
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.requirementDocDummies
 import com.haltec.silpusitron.core.ui.R as CoreR
@@ -38,6 +40,9 @@ fun ReqDocView(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
         colors = CardDefaults.cardColors().copy(
             containerColor = BackgroundLight
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.5.dp
         )
     ) {
         Row(
@@ -55,18 +60,29 @@ fun ReqDocView(
             )
 
             Column(
-                modifier = Modifier.weight(4f)
+                modifier = Modifier
+                    .weight(4f)
             ) {
                 Text(
                     text = data.title,
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                Text(
+                    text = stringResource(R.string.letter_level_n, data.letterLevel),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp
                     )
                 )
-
-                Text(text = "Level Surat : ${data.letterLevel}")
-                Text(text = "Jenis Surat : ${data.letterType}")
+                Text(
+                    text = stringResource(R.string.letter_type_n, data.letterType),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp
+                    )
+                )
             }
         }
     }

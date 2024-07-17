@@ -2,14 +2,14 @@ package com.haltec.silpusitron.feature.requirementdocs.common.data
 
 import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.RequirementDocsResponse
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
+import com.haltec.silpusitron.shared.form.domain.model.FileAbsolutePath
 import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
-import java.io.File
 
 internal fun RequirementDocsResponse.toModel() = this.data.data.map {
     val requirementDocNames: MutableList<String> = mutableListOf()
-    val inputFiles: MutableMap<Int, InputTextData<FileValidationType, File>> = mutableMapOf()
+    val inputFiles: MutableMap<Int, InputTextData<FileValidationType, FileAbsolutePath>> = mutableMapOf()
     val inputForms: MutableMap<Int, InputTextData<TextValidationType, String>> = mutableMapOf()
 
     it.requirementDocs?.forEach { requirementDocsItem ->

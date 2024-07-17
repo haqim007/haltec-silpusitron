@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.core.ui.R
+import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 
@@ -39,6 +40,12 @@ fun <T, V> ErrorValidationText(
                     stringResource(id = R.string.max_value_n, "${validation.maxValue}")
                 is TextValidationType.MinValue ->
                     stringResource(id = R.string.min_value_n, "${validation.minValue}")
+                is FileValidationType.Required -> {
+                    stringResource(R.string.required_to_pick_file)
+                }
+                is FileValidationType.MaxSize -> {
+                    stringResource(R.string.max_file_size_n_mb, validation.limitInMB)
+                }
                 else -> null
             }
         Text(

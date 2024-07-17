@@ -62,4 +62,6 @@ dependencies {
     api(libs.lottie.compose)
     api(libs.introshowcaseview)
     api(libs.androidx.paging.compose)
+    api(libs.androidx.navigation.compose)
+    api(libs.accompanist.permissions)
 }

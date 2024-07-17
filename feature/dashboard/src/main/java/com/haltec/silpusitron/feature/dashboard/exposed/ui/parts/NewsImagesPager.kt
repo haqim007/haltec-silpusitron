@@ -1,11 +1,14 @@
 package com.haltec.silpusitron.feature.dashboard.exposed.ui.parts
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
@@ -34,15 +37,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NewsImagesPager(
     onDismissRequest: () -> Unit,
@@ -54,7 +54,7 @@ fun NewsImagesPager(
     }
 
     val pagerState = rememberPagerState(
-        pageCount = data.size
+        pageCount = {data.size}
     )
     LaunchedEffect(key1 = Unit, key2 = pagerState.pageCount) {
         while (runSlides) {
@@ -119,7 +119,10 @@ fun NewsImagesPager(
 
                 HorizontalPager(state = pagerState) { page ->
                     // Our page content
-                    Column {
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = data[page].title,
                             style = MaterialTheme.typography.bodyLarge.copy(

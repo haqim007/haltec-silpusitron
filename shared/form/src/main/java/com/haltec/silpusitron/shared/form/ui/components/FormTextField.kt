@@ -1,14 +1,18 @@
 package com.haltec.silpusitron.shared.form.ui.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 
 @Composable
 fun <T, V> FormTextField(
@@ -16,7 +20,7 @@ fun <T, V> FormTextField(
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit),
     inputLabel: String,
-    inputData: com.haltec.silpusitron.shared.form.domain.model.InputTextData<T, V>,
+    inputData: InputTextData<T, V>,
     modifier: Modifier = Modifier,
     singleLine: Boolean = false,
     colors: TextFieldColors = TextFieldDefaults.colors().copy(
@@ -32,6 +36,7 @@ fun <T, V> FormTextField(
     readOnly: Boolean = false,
     enabled: Boolean? = null,
     prefix: @Composable (() -> Unit)? = null,
+    placeholder: @Composable() (() -> Unit)? = null,
 ){
     TextField(
         value = value,
@@ -53,6 +58,7 @@ fun <T, V> FormTextField(
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         readOnly = readOnly,
-        prefix = prefix
+        prefix = prefix,
+        placeholder = placeholder
     )
 }

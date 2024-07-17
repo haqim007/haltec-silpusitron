@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="letter_level_n">Level Surat : %1$s</string>
+    <string name="letter_type_n">Jenis Surat : %1$s</string>
+    <string name="back">Kembali</string>
+    <string name="personal_data">Data Personal</string>
+    <string name="requirement_docs">Berkas Persyaratan</string>
+    <string name="form">Formulir</string>
+    <string name="doc_has_complete">Berkas persyaratan sudah lengkap</string>
+</resources>

@@ -20,8 +20,8 @@ import com.haltec.silpusitron.feature.auth.otp.ui.OTPScreen
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedScreen
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.haltec.silpusitron.feature.landingpage.ui.splash.MySplashScreen
-import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
 import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocList
+import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
 import com.haltec.silpusitron.home.HomeScreen
 import com.haltec.silpusitron.ui.nav.ConfirmProfileDataRoute
 import com.haltec.silpusitron.ui.nav.HomeRoute
@@ -30,8 +30,8 @@ import com.haltec.silpusitron.ui.nav.OTPRoute
 import com.haltec.silpusitron.ui.nav.PublicDashboardRoute
 import com.haltec.silpusitron.ui.nav.SimpleRequirementFilesRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
-import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import com.haltec.silpusitron.user.profile.ui.ProfileDataScreen
+import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -134,14 +134,8 @@ fun AppContainer(
                         )
                     }
                     composable<ConfirmProfileDataRoute> {
-                        val profileViewModel: ProfileDataViewModel = koinViewModel()
-                        val profileState by profileViewModel.state.collectAsState()
 
                         ProfileDataScreen(
-                            state = profileState,
-                            action = {
-                                profileViewModel.doAction(it)
-                            },
                             onTokenExpired = {
                                 navController.navigate(LoginRoute){
                                     popUpTo(navController.graph.id){

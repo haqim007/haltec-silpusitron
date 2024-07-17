@@ -1,6 +1,7 @@
 package com.haltec.silpusitron.feature.requirementdocs.submission.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,6 +84,7 @@ fun ReqDocList(
     data: Flow<PagingData<RequirementDoc>>,
     state: ReqDocUiState,
     action: (action: ReqDocUiAction) -> Unit,
+    onClick: (template: RequirementDoc) -> Unit
 ){
 
     val pagingItems: LazyPagingItems<RequirementDoc> =
@@ -219,10 +221,14 @@ fun ReqDocList(
 
                     ReqDocView(
                         data = doc,
-                        modifier = Modifier.padding(
-                            vertical = 8.dp,
-                            horizontal = 16.dp
-                        )
+                        modifier = Modifier
+                            .padding(
+                                vertical = 8.dp,
+                                horizontal = 16.dp
+                            )
+                            .clickable {
+                                onClick(doc)
+                            }
                     )
 
                 }
@@ -377,7 +383,8 @@ fun ReqDocList_Preview() {
                 state = ReqDocUiState(),
                 data = flowOf(
                     PagingData.from(requirementDocDummies)
-                )
+                ),
+                onClick = {}
             )
         }
     }

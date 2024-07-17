@@ -29,6 +29,7 @@
             <option value="$PROJECT_DIR$/shared/auth" />
             <option value="$PROJECT_DIR$/shared/district" />
             <option value="$PROJECT_DIR$/shared/form" />
+            <option value="$PROJECT_DIR$/shared/formprofile" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
