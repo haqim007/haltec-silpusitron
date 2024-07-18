@@ -48,4 +48,6 @@
     <string name="required_to_pick_file">Wajib memilih file</string>
     <string name="account">Akun</string>
     <string name="profile">Profile</string>
+    <string name="are_you_sure_wanna_leave_app">Anda yakin ingin keluar aplikasi?</string>
+    <string name="cancel_2">Tidak jadi</string>
 </resources>
