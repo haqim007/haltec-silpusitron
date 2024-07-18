@@ -1,7 +1,5 @@
 package com.haltec.silpusitron.data.mechanism
 
-import com.haltec.silpusitron.data.preference.AuthPreference
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -115,25 +113,6 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
     protected open fun loadResultOnError(responseData: JsonElement?): ResultType? = null
 
     fun asFlow(): Flow<Resource<ResultType>> = result
-
-}
-
-abstract class AuthorizedNetworkBoundResource<ResultType, ResponseType>(
-    private val authPreference: AuthPreference
-): NetworkBoundResource<ResultType, ResponseType>(){
-
-    final override suspend fun requestFromRemoteRunner(): Result<ResponseType> {
-//        return checkToken(authPreference, requestFromRemote = { requestFromRemote() })
-        return requestFromRemote()
-    }
-
-    protected abstract suspend fun getToken(): String?
-
-    override suspend fun onFailed(exceptionOrNull: CustomThrowable?) {
-        if(exceptionOrNull?.code == HttpStatusCode.Unauthorized){
-            authPreference.resetAuth()
-        }
-    }
 
 }
 

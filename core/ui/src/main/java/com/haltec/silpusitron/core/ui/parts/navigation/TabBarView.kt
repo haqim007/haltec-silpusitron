@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 
 @Composable
@@ -28,23 +30,29 @@ fun TabBarView(tabItems: List<TabBarItem>){
         mutableIntStateOf(0)
     }
 
-    NavigationBar {
-        tabItems.forEachIndexed { index, tab ->
-            NavigationBarItem(
-                selected = index == selectedIndex,
-                onClick = {
-                    selectedIndex = index
-                    tab.navigate()
-                },
-                icon = { TabBarIconView(tabBar = tab, isSelected = index == selectedIndex) },
-                label = { Text(text = tab.title) },
-                colors = NavigationBarItemDefaults.colors().copy(
-                    selectedIndicatorColor = MaterialTheme.colorScheme.primary.copy(
-                        alpha = 0.75F
-                    ),
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+    Surface(
+        shadowElevation = 10.dp
+    ) {
+        NavigationBar(
+            containerColor = MaterialTheme.colorScheme.background
+        ) {
+            tabItems.forEachIndexed { index, tab ->
+                NavigationBarItem(
+                    selected = index == selectedIndex,
+                    onClick = {
+                        selectedIndex = index
+                        tab.navigate()
+                    },
+                    icon = { TabBarIconView(tabBar = tab, isSelected = index == selectedIndex) },
+                    label = { Text(text = tab.title) },
+                    colors = NavigationBarItemDefaults.colors().copy(
+                        selectedIndicatorColor = MaterialTheme.colorScheme.primary.copy(
+                            alpha = 0.75F
+                        ),
+                        selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    )
                 )
-            )
+            }
         }
     }
 

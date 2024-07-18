@@ -1,12 +1,12 @@
 package com.haltec.silpusitron.feature.auth.login.domain.usecase
 
-import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.common.domain.IAuthRepository
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
-import com.haltec.silpusitron.core.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
-import com.haltec.silpusitron.core.domain.model.validate
+import com.haltec.silpusitron.shared.form.domain.model.validate
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

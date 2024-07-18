@@ -61,7 +61,7 @@ class AuthService(
         val message = json.jsonObject["message"]?.jsonPrimitive?.content
         if (response.status != HttpStatusCode.OK && (message != null || errors != null)) {
             throw CustomRequestException(
-                dataJson = errors,
+                dataJson = json,
                 statusCode = response.status,
                 errorMessage = message
             )

@@ -1,28 +1,26 @@
 package com.haltec.silpusitron.user.profile.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.domain.model.InputTextData
-import com.haltec.silpusitron.core.domain.model.TextValidationType
-import com.haltec.silpusitron.core.domain.model.validate
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
-import com.haltec.silpusitron.user.profile.domain.model.ProfileData
-import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
-import com.haltec.silpusitron.user.profile.domain.model.ProfileInputOptions
-import com.haltec.silpusitron.user.profile.domain.usecase.GetBloodTypeOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetDistrictsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetEducationOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetFamRelationStatusOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetGenderOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetMarriageStatusOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetProffesionOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetProfileUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetReligionOptionsUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.GetSubDistrictsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
+import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileData
+import com.haltec.silpusitron.shared.form.domain.model.InputOptions
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetBloodTypeOptionsUseCase
+import com.haltec.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase
+import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
+import com.haltec.silpusitron.shared.formprofile.data.dummy.formProfileInputDummy
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetEducationOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetFamRelationStatusOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetGenderOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetMarriageStatusOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProffesionOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProfileUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetReligionOptionsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetSubDistrictsUseCase
 import com.haltec.silpusitron.user.profile.domain.usecase.SubmitProfileUseCase
-import com.haltec.silpusitron.user.profile.domain.usecase.ValidateAllInputUseCase
-import kotlinx.coroutines.delay
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.ValidateAllInputUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -41,33 +39,36 @@ class ProfileDataViewModel(
     private val getSubDistrictsUseCase: GetSubDistrictsUseCase,
     private val validateAllInputUseCase: ValidateAllInputUseCase,
     private val submitProfileUseCase: SubmitProfileUseCase
-) : BaseViewModel<FormProfileUiState, FormProfileUiAction>() {
-    override val _state = MutableStateFlow(FormProfileUiState())
-    override fun doAction(action: FormProfileUiAction) {
+) : BaseFormViewModel<ProfileDataUiState, ProfileDataUiAction>() {
+    override val _state = MutableStateFlow(ProfileDataUiState())
+    override fun doAction(action: ProfileDataUiAction) {
         when(action){
-            FormProfileUiAction.GetProfileData -> {
+            ProfileDataUiAction.GetProfileData -> {
                 fetchProfileData()
             }
-            is FormProfileUiAction.SetInput -> {
+            is ProfileDataUiAction.SetInput -> {
                 setInput(action.input, action.value)
             }
 
-            FormProfileUiAction.GetBloodTypeOptions -> fetchBloodTypeOptions()
-            FormProfileUiAction.GetEducationOptions -> fetchEducationOptions()
-            FormProfileUiAction.GetFamRelationStatusOptions -> fetchFamRelationStatusOptions()
-            FormProfileUiAction.GetGenderOptions -> fetchGenderOptions()
-            FormProfileUiAction.GetMarriageStatusOptions -> fetchMarriageStatusOptions()
-            FormProfileUiAction.GetProfessionOptions -> fetchProfessionOptions()
-            FormProfileUiAction.GetReligionOptions -> fetchReligionOptions()
-            FormProfileUiAction.Submit -> submit()
-            FormProfileUiAction.GetDistrictOptions -> fetchDistrictOptions()
-            FormProfileUiAction.GetSubDistrictOptions -> fetchSubDistrictOptions()
-            is FormProfileUiAction.SaveInputViewCoordinateY -> saveInputViewCoordinateY(
+            ProfileDataUiAction.GetBloodTypeOptions -> fetchBloodTypeOptions()
+            ProfileDataUiAction.GetEducationOptions -> fetchEducationOptions()
+            ProfileDataUiAction.GetFamRelationStatusOptions -> fetchFamRelationStatusOptions()
+            ProfileDataUiAction.GetGenderOptions -> fetchGenderOptions()
+            ProfileDataUiAction.GetMarriageStatusOptions -> fetchMarriageStatusOptions()
+            ProfileDataUiAction.GetProfessionOptions -> fetchProfessionOptions()
+            ProfileDataUiAction.GetReligionOptions -> fetchReligionOptions()
+            ProfileDataUiAction.Submit -> submit()
+            ProfileDataUiAction.GetDistrictOptions -> fetchDistrictOptions()
+            ProfileDataUiAction.GetSubDistrictOptions -> fetchSubDistrictOptions()
+            is ProfileDataUiAction.SaveInputViewCoordinateY -> saveInputViewCoordinateY(
                 action.key,
                 action.coordinateY
             )
-            FormProfileUiAction.ResetFirstErrorInputKey -> resetFirstErrorKey()
-            FormProfileUiAction.ResetSubmitResult -> resetSubmitResult()
+            ProfileDataUiAction.ResetFirstErrorInputKey -> resetFirstErrorKey()
+            ProfileDataUiAction.ResetSubmitResult -> resetSubmitResult()
+            is ProfileDataUiAction.SetDummyState -> {
+                _state.update { action.state }
+            }
         }
     }
 
@@ -98,6 +99,7 @@ class ProfileDataViewModel(
                     firstErrorInputKey = validateInputs.firstErrorInputKey
                 )
             }
+            return
         }
 
         viewModelScope.launch {
@@ -477,22 +479,34 @@ class ProfileDataViewModel(
 
 }
 
-sealed class FormProfileUiAction{
-    data object GetProfileData: FormProfileUiAction()
-    data class SetInput(val input: FormProfileInputKey, val value: String): FormProfileUiAction()
-    data object GetGenderOptions: FormProfileUiAction()
-    data object GetReligionOptions: FormProfileUiAction()
-    data object GetBloodTypeOptions: FormProfileUiAction()
-    data object GetFamRelationStatusOptions: FormProfileUiAction()
-    data object GetEducationOptions: FormProfileUiAction()
-    data object GetProfessionOptions: FormProfileUiAction()
-    data object GetMarriageStatusOptions: FormProfileUiAction()
-    data object Submit: FormProfileUiAction()
-    data object GetDistrictOptions: FormProfileUiAction()
-    data object GetSubDistrictOptions: FormProfileUiAction()
-    data class SaveInputViewCoordinateY(val key: FormProfileInputKey, val coordinateY: Float): FormProfileUiAction()
-    data object ResetFirstErrorInputKey: FormProfileUiAction()
-    data object ResetSubmitResult: FormProfileUiAction()
+/**
+ * Profile data ui action
+ *
+ * @constructor Create empty Profile data ui action
+ */
+sealed class ProfileDataUiAction{
+    data object GetProfileData: ProfileDataUiAction()
+    data class SetInput(val input: FormProfileInputKey, val value: String): ProfileDataUiAction()
+    data object GetGenderOptions: ProfileDataUiAction()
+    data object GetReligionOptions: ProfileDataUiAction()
+    data object GetBloodTypeOptions: ProfileDataUiAction()
+    data object GetFamRelationStatusOptions: ProfileDataUiAction()
+    data object GetEducationOptions: ProfileDataUiAction()
+    data object GetProfessionOptions: ProfileDataUiAction()
+    data object GetMarriageStatusOptions: ProfileDataUiAction()
+    data object Submit: ProfileDataUiAction()
+    data object GetDistrictOptions: ProfileDataUiAction()
+    data object GetSubDistrictOptions: ProfileDataUiAction()
+    data class SaveInputViewCoordinateY(val key: FormProfileInputKey, val coordinateY: Float): ProfileDataUiAction()
+    data object ResetFirstErrorInputKey: ProfileDataUiAction()
+    data object ResetSubmitResult: ProfileDataUiAction()
+
+    /**
+     * Set dummy state for preview
+     *
+     * @constructor Create empty Profile data ui action
+     */
+    data class SetDummyState(val state: ProfileDataUiState): ProfileDataUiAction()
 }
 
 /**
@@ -514,244 +528,20 @@ sealed class FormProfileUiAction{
  * Used for scrolling to certain input on error when user click submit
  * @constructor Create empty Form profile ui state
  */
-data class FormProfileUiState(
+data class ProfileDataUiState(
     val profileData: Resource<ProfileData> = Resource.Idle(),
     val inputs: Map<FormProfileInputKey, InputTextData<TextValidationType, String>> = mapOf(),
-    val genderOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val religionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val bloodTypeOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val famRelationStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val educationOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val professionOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val marriageStatusOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val districtOptions: Resource<ProfileInputOptions> = Resource.Idle(),
-    val subDistrictOptions: Resource<ProfileInputOptions> = Resource.Idle(),
+    val genderOptions: Resource<InputOptions> = Resource.Idle(),
+    val religionOptions: Resource<InputOptions> = Resource.Idle(),
+    val bloodTypeOptions: Resource<InputOptions> = Resource.Idle(),
+    val famRelationStatusOptions: Resource<InputOptions> = Resource.Idle(),
+    val educationOptions: Resource<InputOptions> = Resource.Idle(),
+    val professionOptions: Resource<InputOptions> = Resource.Idle(),
+    val marriageStatusOptions: Resource<InputOptions> = Resource.Idle(),
+    val districtOptions: Resource<InputOptions> = Resource.Idle(),
+    val subDistrictOptions: Resource<InputOptions> = Resource.Idle(),
     val inputsCoordinateY: Map<FormProfileInputKey, Float> = mapOf(),
     val firstErrorInputKey: FormProfileInputKey? = null,
     val submitResult: Resource<ProfileData> = Resource.Idle()
 )
 
-val formProfileStateDummy = FormProfileUiState(
-    inputs = mapOf(
-        FormProfileInputKey.MOTHER_NAME to InputTextData(
-            inputName = FormProfileInputKey.MOTHER_NAME.toString(),
-            value = "",
-            validations = listOf(
-                TextValidationType.Required,
-            )
-        ),
-        FormProfileInputKey.SUB_DISTRICT to InputTextData(
-            inputName = FormProfileInputKey.SUB_DISTRICT.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    key = "desa",
-                    value = "1",
-                    label = "Bendo"
-                ),
-                InputTextData.Option(
-                    key = "desa",
-                    value = "2",
-                    label = "Bendogerit"
-                )
-            )
-        ),
-        FormProfileInputKey.RT to InputTextData(
-            inputName = FormProfileInputKey.RT.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = ""
-        ),
-        FormProfileInputKey.PHONE_NUMBER to InputTextData(
-            inputName = FormProfileInputKey.PHONE_NUMBER.toString(),
-            validations = listOf(TextValidationType.Required, TextValidationType.MaxLength(13)),
-            value = ""
-        ),
-        FormProfileInputKey.RW to InputTextData(
-            inputName = FormProfileInputKey.RW.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = ""
-        ),
-        FormProfileInputKey.BLOOD_TYPE to InputTextData(
-            inputName = FormProfileInputKey.BLOOD_TYPE.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "8",
-                    label = "A",
-                    key = "GOLONGAN_DARAH"
-                ),
-                InputTextData.Option(
-                    value = "9",
-                    label = "A-",
-                    key = "GOLONGAN_DARAH"
-                )
-            )
-        ),
-        FormProfileInputKey.FULL_NAME to InputTextData(
-            inputName = FormProfileInputKey.FULL_NAME.toString(),
-            validations = listOf(),
-            value = ""
-        ),
-        FormProfileInputKey.RELIGION to InputTextData(
-            inputName = FormProfileInputKey.RELIGION.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "1",
-                    label = "Islam",
-                    key = "agama"
-                ),
-                InputTextData.Option(
-                    value = "2",
-                    label = "Islam",
-                    key = "agama"
-                )
-            )
-        ),
-        FormProfileInputKey.LONGITUDE to InputTextData(
-            inputName = FormProfileInputKey.LONGITUDE.toString(),
-            validations = listOf(),
-            value = ""
-        ),
-        FormProfileInputKey.ID_NUMBER to InputTextData(
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            inputName = FormProfileInputKey.ID_NUMBER.toString()
-        ),
-        FormProfileInputKey.BIRTH_PLACE to InputTextData(
-            inputName = FormProfileInputKey.BIRTH_PLACE.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "tempatLahir"
-        ),
-        FormProfileInputKey.FAMILY_RELATION to InputTextData(
-            inputName = FormProfileInputKey.FAMILY_RELATION.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "118",
-                    label = "ANAK",
-                    key = "HUBUNGAN_KELUARGA"
-                ),
-                InputTextData.Option(
-                    value = "119",
-                    label = "CUCU",
-                    key = "HUBUNGAN_KELUARGA"
-                )
-            )
-        ),
-        FormProfileInputKey.FAM_CARD_NUMBER to InputTextData(
-            inputName = FormProfileInputKey.FAM_CARD_NUMBER.toString(),
-            validations = listOf(),
-            value = "noKk"
-        ),
-        FormProfileInputKey.GENDER to InputTextData(
-            inputName = FormProfileInputKey.GENDER.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    key = "JENIS_KELAMIN",
-                    value = "21",
-                    label = "Laki-Laki"
-                ),
-                InputTextData.Option(
-                    key = "JENIS_KELAMIN",
-                    value = "22",
-                    label = "Perempuan"
-                )
-            )
-        ),
-        FormProfileInputKey.BIRTH_DATE to InputTextData(
-            inputName = FormProfileInputKey.BIRTH_DATE.toString(),
-            validations = listOf(),
-            value = "09 September 2009"
-        ),
-        FormProfileInputKey.EDUCATION to InputTextData(
-            inputName = FormProfileInputKey.EDUCATION.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "98",
-                    label = "TIDAK/BELUM SEKOLAH",
-                    key = "PENDIDIKAN"
-                ),
-                InputTextData.Option(
-                    value = "99",
-                    label = "SD SEKOLAH",
-                    key = "PENDIDIKAN"
-                )
-            )
-        ),
-        FormProfileInputKey.LATITUDE to InputTextData(
-            inputName = FormProfileInputKey.LATITUDE.toString(),
-            validations = listOf(),
-            value = "lintang"
-        ),
-        FormProfileInputKey.DISTRICT to InputTextData(
-            inputName = FormProfileInputKey.DISTRICT.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    key = "kecamatan",
-                    value = "1",
-                    label = "Kepanjenkidul"
-                ),
-                InputTextData.Option(
-                    key = "desa",
-                    value = "2",
-                    label = "Sananwetan"
-                )
-            )
-        ),
-        FormProfileInputKey.ADDRESS to InputTextData(
-            inputName = FormProfileInputKey.ADDRESS.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = ""
-        ),
-        FormProfileInputKey.PROFESSION to InputTextData(
-            inputName = FormProfileInputKey.PROFESSION.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "23",
-                    label = "ANGGOTA DPRD KABUPATEN/KOTA",
-                    key = "PEKERJAAN"
-                ),
-                InputTextData.Option(
-                    value = "24",
-                    label = "AKUNTAN",
-                    key = "PEKERJAAN"
-                )
-            )
-        ),
-        FormProfileInputKey.FATHER_NAME to InputTextData(
-            inputName = FormProfileInputKey.FATHER_NAME.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = ""
-        ),
-        FormProfileInputKey.MARRIAGE_STATUS to InputTextData(
-            inputName = FormProfileInputKey.MARRIAGE_STATUS.toString(),
-            validations = listOf(TextValidationType.Required),
-            value = "",
-            options = listOf(
-                InputTextData.Option(
-                    value = "1",
-                    label = "Kawin",
-                    key = "status_kawin"
-                ),
-                InputTextData.Option(
-                    value = "2",
-                    label = "Kawin Lagi",
-                    key = "status_kawin"
-                )
-            )
-        )
-    )
-)

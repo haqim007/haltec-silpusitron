@@ -50,6 +50,8 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
-    implementation(libs.androidx.navigation.compose)
     implementation(project(":feature:dashboard"))
+    implementation(project(":feature:requirementdocs"))
+    implementation(project(":feature:submission"))
+    implementation(project(":feature:user"))
 }

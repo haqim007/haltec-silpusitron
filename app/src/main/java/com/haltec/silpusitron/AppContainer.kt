@@ -20,15 +20,18 @@ import com.haltec.silpusitron.feature.auth.otp.ui.OTPScreen
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedScreen
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.haltec.silpusitron.feature.landingpage.ui.splash.MySplashScreen
+import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocList
+import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
 import com.haltec.silpusitron.home.HomeScreen
 import com.haltec.silpusitron.ui.nav.ConfirmProfileDataRoute
 import com.haltec.silpusitron.ui.nav.HomeRoute
 import com.haltec.silpusitron.ui.nav.LoginRoute
 import com.haltec.silpusitron.ui.nav.OTPRoute
 import com.haltec.silpusitron.ui.nav.PublicDashboardRoute
+import com.haltec.silpusitron.ui.nav.SimpleRequirementFilesRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
-import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import com.haltec.silpusitron.user.profile.ui.ProfileDataScreen
+import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -102,9 +105,13 @@ fun AppContainer(
                     composable<PublicDashboardRoute> {
                         val dashboardViewModel: DashboardExposedViewModel = koinViewModel()
                         val dashboardState by dashboardViewModel.state.collectAsState()
+
                         DashboardExposedScreen(
                             state = dashboardState,
                             action = dashboardViewModel::doAction,
+                            onOpenRequirementFiles = {
+                                navController.navigate(SimpleRequirementFilesRoute)
+                            },
                             onLogin = {
                                 navController.navigate(LoginRoute) {
                                     popUpTo(navController.graph.id) {
@@ -114,15 +121,21 @@ fun AppContainer(
                             }
                         )
                     }
+                    composable<SimpleRequirementFilesRoute> {
+                        val reqDocsViewModel: SimpleReqDocViewModel = koinViewModel()
+                        //val reqDocsState by reqDocsViewModel.state.collectAsState()
+
+                        SimpleReqDocList(
+                            data = reqDocsViewModel.pagingFlow,
+                            action = {action -> reqDocsViewModel.doAction(action)},
+                            onClose = {
+                                navController.navigateUp()
+                            }
+                        )
+                    }
                     composable<ConfirmProfileDataRoute> {
-                        val profileViewModel: ProfileDataViewModel = koinViewModel()
-                        val profileState by profileViewModel.state.collectAsState()
 
                         ProfileDataScreen(
-                            state = profileState,
-                            action = {
-                                profileViewModel.doAction(it)
-                            },
                             onTokenExpired = {
                                 navController.navigate(LoginRoute){
                                     popUpTo(navController.graph.id){

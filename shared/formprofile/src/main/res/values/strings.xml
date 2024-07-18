@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="phone_number">NO HP</string>
+    <string name="plus_62">+62</string>
+    <string name="district">Kecamatan</string>
+    <string name="sub_district">Kelurahan</string>
+    <string name="address">Alamat</string>
+    <string name="neighborhood">RT</string>
+    <string name="citizenhood">RW</string>
+    <string name="birth_place">Tempat Lahir</string>
+    <string name="religion">Agama</string>
+    <string name="marriage_status">Status Pernikahan</string>
+    <string name="profession">Pekerjaan</string>
+    <string name="education">Pendidikan</string>
+    <string name="family_relation_status">Status Hubungan Keluarga</string>
+    <string name="blood_type">Golongan Darah</string>
+    <string name="father_name">Nama Ayah</string>
+    <string name="mother_name">Nama Ibu</string>
+    <string name="name">Nama</string>
+    <string name="family_card_number">No KK</string>
+    <string name="id_number">NIK</string>
+    <string name="birth_date">Tanggal Lahir</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+</resources>

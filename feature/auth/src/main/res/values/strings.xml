@@ -4,9 +4,6 @@
     <string name="hide_password">Hide password</string>
     <string name="i_am_not_robot">Saya Bukan Robot</string>
     <string name="login">LOGIN</string>
-    <string name="close_app">Tutup Aplikasi</string>
-    <string name="ok">OK</string>
-    <string name="attention_">Perhatian!</string>
     <string name="recaptcha_has_failed_to_initiate_please_try_again_later">Recaptcha gagal dimuat. Silahkan coba lagi</string>
     <string name="please_check_otp_code">Silahkan periksa kode OTP yang telah dikirim</string>
     <string name="input_otp_code">Masukkan Kode OTP</string>

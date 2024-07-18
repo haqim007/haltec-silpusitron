@@ -46,5 +46,22 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:domain"))
+    api(libs.androidx.core.ktx)
+    // implementation(libs.hilt.navigation.compose)
+    api(libs.koin.androidx.compose)
+    api(libs.androidx.lifecycle.runtime.ktx)
+    api(libs.androidx.activity.compose)
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.ui)
+    api(libs.androidx.ui.graphics)
+    api(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.material3)
+    api(libs.androidx.ui.text.google.fonts)
+    api(libs.androidx.material.icons.extended)
+    api(libs.androidx.compose.animation)
+    api(libs.lottie.compose)
+    api(libs.introshowcaseview)
+    api(libs.androidx.paging.compose)
+    api(libs.androidx.navigation.compose)
+    api(libs.accompanist.permissions)
 }

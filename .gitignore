@@ -18,3 +18,4 @@ secret.properties
 .kotlin
 
 /.idea
+/shared/formprofile/build

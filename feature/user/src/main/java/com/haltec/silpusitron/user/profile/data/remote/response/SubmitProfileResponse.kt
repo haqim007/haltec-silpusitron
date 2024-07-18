@@ -1,6 +1,6 @@
 package com.haltec.silpusitron.user.profile.data.remote.response
 
-import kotlinx.serialization.SerialName
+import com.haltec.silpusitron.shared.formprofile.data.remote.response.ProfileFieldsErrorResponse
 import kotlinx.serialization.Serializable
 
 @Serializable

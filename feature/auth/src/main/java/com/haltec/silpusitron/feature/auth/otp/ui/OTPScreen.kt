@@ -44,7 +44,7 @@ import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
-import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
+import com.haltec.silpusitron.shared.form.ui.components.ErrorValidationText
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.auth.R
 import com.haltec.silpusitron.feature.auth.di.authModule
@@ -112,14 +112,14 @@ private fun OTPForm(
             onDismissRequest = { action(OTPUiAction.Retry) },
             confirmButton = {
                 TextButton(onClick = { action(OTPUiAction.Retry) }) {
-                    Text(stringResource(R.string.ok))
+                    Text(stringResource(CoreR.string.ok))
                 }
             },
             icon = {
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
                 Text(text = state.value.otpVerificationResult.message ?: stringResource(R.string.failed_to_verify_otp))
@@ -143,7 +143,7 @@ private fun OTPForm(
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
                 Text(text = state.value.requestOTPResult.message ?: stringResource(R.string.failed_to_retreive_otp))

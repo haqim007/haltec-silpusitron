@@ -50,7 +50,10 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
-    implementation(project(":core:domain"))
-
-    implementation("co.yml:ycharts:2.1.0")
+    implementation(project(":shared:auth"))
+    implementation(project(":shared:district"))
+    implementation(project(":shared:form"))
+    implementation(libs.coil.compose)
+    implementation(libs.ycharts)
+    implementation (libs.accompanist.pager)
 }

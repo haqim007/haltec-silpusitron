@@ -1,9 +1,9 @@
 package com.haltec.silpusitron.feature.auth.common.data
 
-import com.haltec.silpusitron.core.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.login.data.remote.LoginResponse
-import com.haltec.silpusitron.core.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginInputData
 import com.haltec.silpusitron.feature.auth.login.domain.model.LoginResult
 

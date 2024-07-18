@@ -66,10 +66,7 @@ import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.domain.model.isRequired
-import com.haltec.silpusitron.core.ui.component.FormTextField
 import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.parts.ErrorValidationText
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.data.mechanism.Resource
@@ -77,6 +74,8 @@ import com.haltec.silpusitron.feature.auth.BuildConfig
 import com.haltec.silpusitron.feature.auth.R
 import com.haltec.silpusitron.feature.auth.common.domain.UserType
 import com.haltec.silpusitron.feature.auth.di.authModule
+import com.haltec.silpusitron.shared.form.domain.model.isRequired
+import com.haltec.silpusitron.shared.form.ui.components.FormTextField
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -118,7 +117,7 @@ fun LoginForm(
                     }
                     .onFailure {
                         initRecaptcha = false
-                        Log.d("recaptchaClient", it.localizedMessage ?: "error")
+                        Log.e("recaptchaClient", it.stackTraceToString())
                     }
             }
         }
@@ -149,14 +148,14 @@ fun LoginForm(
                         showLoginErrorAlert = false
                     }
                 ) {
-                    Text(stringResource(R.string.ok))
+                    Text(stringResource(CoreR.string.ok))
                 }
             },
             icon = {
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
                 Text(text = state.value.loginResult.message ?: stringResource(CoreR.string.please_solve_form_input_issue))
@@ -182,17 +181,21 @@ fun LoginForm(
                         (context as? Activity)?.finish()
                     }
                 ) {
-                    Text(stringResource(R.string.close_app))
+                    Text(stringResource(CoreR.string.close_app))
                 }
             },
             icon = {
                 Icon(Icons.Default.Warning, contentDescription = null)
             },
             title = {
-                Text(text = stringResource(R.string.attention_))
+                Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
-                Text(text = stringResource(R.string.recaptcha_has_failed_to_initiate_please_try_again_later))
+                Text(
+                    text = stringResource(
+                        R.string.recaptcha_has_failed_to_initiate_please_try_again_later
+                    )
+                )
             }
         )
     }
@@ -218,7 +221,6 @@ fun LoginForm(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-
                 FormTextField(
                     value = state.value.username,
                     onValueChange = {
@@ -243,7 +245,7 @@ fun LoginForm(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                
+
                 FormTextField(
                     value = state.value.password,
                     onValueChange = { action(LoginUiAction.SetPassword(it)) },
@@ -351,7 +353,7 @@ fun LoginForm(
                 }
 
                 if(!state.value.captchaInput.isValid){
-                    ErrorValidationText(
+                    com.haltec.silpusitron.shared.form.ui.components.ErrorValidationText(
                         state.value.captchaInput,
                         labelName = "Captcha"
                     )

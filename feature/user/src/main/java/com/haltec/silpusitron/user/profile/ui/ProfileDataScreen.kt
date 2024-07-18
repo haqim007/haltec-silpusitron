@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,9 +25,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,44 +44,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.domain.model.isRequired
-import com.haltec.silpusitron.core.ui.component.FormDropDown
-import com.haltec.silpusitron.core.ui.component.FormTextField
 import com.haltec.silpusitron.core.ui.component.InputLabel
 import com.haltec.silpusitron.core.ui.component.LottieLoader
 import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
 import com.haltec.silpusitron.core.ui.parts.ErrorView
 import com.haltec.silpusitron.core.ui.parts.LoadingView
-import com.haltec.silpusitron.core.ui.theme.DialogBackgroundColor
+import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.SuccessColor
+import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.user.R
+import com.haltec.silpusitron.shared.form.domain.model.isRequired
+import com.haltec.silpusitron.shared.form.domain.model.valueOrEmpty
+import com.haltec.silpusitron.shared.form.ui.components.FormDropDown
+import com.haltec.silpusitron.shared.form.ui.components.FormTextField
+import com.haltec.silpusitron.shared.formprofile.data.dummy.formProfileInputDummy
+import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
+import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileDataDummy
 import com.haltec.silpusitron.user.profile.di.profileModule
-import com.haltec.silpusitron.user.profile.domain.model.FormProfileInputKey
-import com.haltec.silpusitron.user.profile.domain.model.ProfileDataDummy
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.delay
-import org.koin.compose.KoinApplication
-import org.koin.compose.KoinContext
-import org.koin.core.module.Module
-import org.koin.mp.KoinPlatformTools
+import org.koin.androidx.compose.koinViewModel
 import com.haltec.silpusitron.core.ui.R as CoreR
+import com.haltec.silpusitron.shared.formprofile.R as FormProfileR
 
 
 @Composable
 fun ProfileDataScreen(
     modifier: Modifier = Modifier,
-    state: FormProfileUiState,
-    action: (action: FormProfileUiAction) -> Unit,
+    viewModel: ProfileDataViewModel = koinViewModel(),
     onTokenExpired: () -> Unit,
     onComplete: () -> Unit
 ){
+    val state by viewModel.state.collectAsState()
+    val action = { action: ProfileDataUiAction -> viewModel.doAction(action) }
 
     LaunchedEffect(key1 = Unit) {
-        action(FormProfileUiAction.GetProfileData)
+        action(ProfileDataUiAction.GetProfileData)
     }
 
     Box(
@@ -111,7 +110,7 @@ fun ProfileDataScreen(
                 is Resource.Error -> {
                     ErrorView(
                         state.profileData.message,
-                        onTryAgain = { action(FormProfileUiAction.GetProfileData) }
+                        onTryAgain = { action(ProfileDataUiAction.GetProfileData) }
                     )
                 }
 
@@ -131,7 +130,7 @@ fun ProfileDataScreen(
                     SubmitErrorView(
                         state.submitResult.message,
                         onTryAgain = {
-                            action(FormProfileUiAction.ResetSubmitResult)
+                            action(ProfileDataUiAction.ResetSubmitResult)
                         }
                     )
                 }
@@ -141,7 +140,7 @@ fun ProfileDataScreen(
                 SubmitLoadingView()
             }
             is Resource.Success ->{
-                SubmitSuccessView(onComplete)
+                SubmitSuccessView(onComplete = onComplete)
             }
         }
 
@@ -233,60 +232,13 @@ private fun SubmitLoadingView() {
     }
 }
 
-@Composable
-private fun SubmitSuccessView(onComplete: () -> Unit) {
-    LaunchedEffect(key1 = Unit) {
-        delay(1000)
-        onComplete()
-    }
-
-    Box(
-        modifier = Modifier
-            .wrapContentHeight()
-            .width(250.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(
-                MaterialTheme.colorScheme.background
-            )
-            .border(
-                BorderStroke(
-                    width = 2.dp,
-                    color = SuccessColor.copy(
-                        alpha = 0.5f
-                    )
-                ),
-                RoundedCornerShape(10.dp)
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LottieLoader(
-                jsonRaw = CoreR.raw.lottie_success_sparkle,
-                modifier = Modifier
-                    .size(200.dp),
-                iterations = 10
-            )
-            Text(
-                text = stringResource(CoreR.string.successfully_saved),
-                style = TextStyle.Default.copy(
-                    color = SuccessColor,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-    }
-}
 
 
 @Composable
 fun ProfileDataForm(
     modifier: Modifier = Modifier,
-    state: FormProfileUiState,
-    action: (action: FormProfileUiAction) -> Unit
+    state: ProfileDataUiState,
+    action: (action: ProfileDataUiAction) -> Unit
 ){
 
     val fullNameInput = state.inputs[FormProfileInputKey.FULL_NAME]
@@ -314,26 +266,26 @@ fun ProfileDataForm(
 
     // Load all options after composition completed
     LaunchedEffect(key1 = Unit) {
-        action(FormProfileUiAction.GetBloodTypeOptions)
-        action(FormProfileUiAction.GetEducationOptions)
-        action(FormProfileUiAction.GetFamRelationStatusOptions)
-        action(FormProfileUiAction.GetGenderOptions)
-        action(FormProfileUiAction.GetMarriageStatusOptions)
-        action(FormProfileUiAction.GetProfessionOptions)
-        action(FormProfileUiAction.GetReligionOptions)
-        action(FormProfileUiAction.GetDistrictOptions)
+        action(ProfileDataUiAction.GetBloodTypeOptions)
+        action(ProfileDataUiAction.GetEducationOptions)
+        action(ProfileDataUiAction.GetFamRelationStatusOptions)
+        action(ProfileDataUiAction.GetGenderOptions)
+        action(ProfileDataUiAction.GetMarriageStatusOptions)
+        action(ProfileDataUiAction.GetProfessionOptions)
+        action(ProfileDataUiAction.GetReligionOptions)
+        action(ProfileDataUiAction.GetDistrictOptions)
     }
 
     // load subdistricts when districtInput changes
     LaunchedEffect(key1 = districtInput) {
-        action(FormProfileUiAction.GetSubDistrictOptions)
+        action(ProfileDataUiAction.GetSubDistrictOptions)
     }
 
     // Auto scroll whenever firstErrorInputKey changes
     LaunchedEffect(key1 = state.firstErrorInputKey) {
         state.inputsCoordinateY[state.firstErrorInputKey]?.let {
             scrollState.animateScrollBy(it)
-            action(FormProfileUiAction.ResetFirstErrorInputKey)
+            action(ProfileDataUiAction.ResetFirstErrorInputKey)
         }
     }
     
@@ -347,12 +299,12 @@ fun ProfileDataForm(
 
         if(fullNameInput != null) {
             FormTextField(
-                value = fullNameInput.value,
+                value = fullNameInput.valueOrEmpty(),
                 onValueChange = {},
-                inputLabel = stringResource(R.string.name),
+                inputLabel = stringResource(FormProfileR.string.name),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.name),
+                        label = stringResource(FormProfileR.string.name),
                         isRequired = fullNameInput.isRequired()
                     )
                 },
@@ -365,12 +317,12 @@ fun ProfileDataForm(
 
         famCardNumberInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
-                inputLabel = stringResource(R.string.family_card_number),
+                inputLabel = stringResource(FormProfileR.string.family_card_number),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.family_card_number),
+                        label = stringResource(FormProfileR.string.family_card_number),
                         isRequired = it.isRequired()
                     )
                 },
@@ -383,12 +335,12 @@ fun ProfileDataForm(
 
         idNumberInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
-                inputLabel = stringResource(R.string.id_number),
+                inputLabel = stringResource(FormProfileR.string.id_number),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.id_number),
+                        label = stringResource(FormProfileR.string.id_number),
                         isRequired = it.isRequired()
                     )
                 },
@@ -401,12 +353,12 @@ fun ProfileDataForm(
 
         birthDateInput?.let {
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = {},
-                inputLabel = stringResource(R.string.birth_date),
+                inputLabel = stringResource(FormProfileR.string.birth_date),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.birth_date),
+                        label = stringResource(FormProfileR.string.birth_date),
                         isRequired = it.isRequired()
                     )
                 },
@@ -419,17 +371,17 @@ fun ProfileDataForm(
 
         genderInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.gender),
+                inputLabel = stringResource(FormProfileR.string.gender),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.gender),
+                        label = stringResource(FormProfileR.string.gender),
                         isRequired = genderInput.isRequired()
                     )
                 },
-                value = genderInput.value,
+                value = genderInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(genderInput.inputName),
                                 it.value
@@ -444,20 +396,20 @@ fun ProfileDataForm(
         phoneNumberInput?.let {
             val inputName = FormProfileInputKey.fromString(it.inputName)
             FormTextField(
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = { newValue ->
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 inputName,
                                 newValue
                             )
                     )
                 },
-                inputLabel = stringResource(R.string.phone_number),
+                inputLabel = stringResource(FormProfileR.string.phone_number),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.phone_number),
+                        label = stringResource(FormProfileR.string.phone_number),
                         isRequired = it.isRequired()
                     )
                 },
@@ -466,7 +418,7 @@ fun ProfileDataForm(
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         action(
-                            FormProfileUiAction.SaveInputViewCoordinateY(
+                            ProfileDataUiAction.SaveInputViewCoordinateY(
                                 inputName,
                                 coordinates.positionInRoot().y
                             )
@@ -480,7 +432,7 @@ fun ProfileDataForm(
                             .background(color = DisabledInputContainer)
                             .padding(start = 3.dp, top = 1.dp, bottom = 1.dp, end = 5.dp)
                     ){
-                        Text(text = stringResource(R.string.plus_62), fontSize = 14.sp)
+                        Text(text = stringResource(FormProfileR.string.plus_62), fontSize = 14.sp)
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
@@ -490,17 +442,17 @@ fun ProfileDataForm(
 
         districtInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.district),
+                inputLabel = stringResource(FormProfileR.string.district),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.district),
+                        label = stringResource(FormProfileR.string.district),
                         isRequired = it.isRequired()
                     )
                 },
-                value = it.value,
+                value = it.valueOrEmpty(),
                 onValueChange = { newValue ->
                     action(
-                        FormProfileUiAction.SetInput(
+                        ProfileDataUiAction.SetInput(
                             FormProfileInputKey.DISTRICT,
                             newValue.value
                         )
@@ -510,24 +462,24 @@ fun ProfileDataForm(
                 isLoading = state.districtOptions is Resource.Loading,
                 loadNetworkError = state.districtOptions is Resource.Error,
                 reloadNetwork = {
-                    action(FormProfileUiAction.GetDistrictOptions)
+                    action(ProfileDataUiAction.GetDistrictOptions)
                 }
             )
         }
 
         subDistrictInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.sub_district),
+                inputLabel = stringResource(FormProfileR.string.sub_district),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.sub_district),
+                        label = stringResource(FormProfileR.string.sub_district),
                         isRequired = subDistrictInput.isRequired()
                     )
                 },
-                value = subDistrictInput.value,
+                value = subDistrictInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction.SetInput(
+                        ProfileDataUiAction.SetInput(
                             FormProfileInputKey.fromString(subDistrictInput.inputName),
                             it.value
                         )
@@ -536,10 +488,10 @@ fun ProfileDataForm(
                 inputData = subDistrictInput,
                 isLoading = state.subDistrictOptions is Resource.Loading,
                 enabled = districtInput?.options?.isNotEmpty() == true &&
-                        districtInput.value.isNotEmpty(),
+                        districtInput.value?.isNotEmpty() == true,
                 loadNetworkError = state.subDistrictOptions is Resource.Error,
                 reloadNetwork = {
-                    action(FormProfileUiAction.GetSubDistrictOptions)
+                    action(ProfileDataUiAction.GetSubDistrictOptions)
                 }
             )
         }
@@ -547,20 +499,20 @@ fun ProfileDataForm(
         addressInput?.let {
             val inputName = FormProfileInputKey.fromString(addressInput.inputName)
             FormTextField(
-                value = addressInput.value,
+                value = addressInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 inputName,
                                 it
                             )
                     )
                 },
-                inputLabel = stringResource(R.string.address),
+                inputLabel = stringResource(FormProfileR.string.address),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.address),
+                        label = stringResource(FormProfileR.string.address),
                         isRequired = addressInput.isRequired()
                     )
                 },
@@ -570,7 +522,7 @@ fun ProfileDataForm(
                     .fillMaxWidth()
                     .onGloballyPositioned {
                         action(
-                            FormProfileUiAction.SaveInputViewCoordinateY(
+                            ProfileDataUiAction.SaveInputViewCoordinateY(
                                 inputName,
                                 it.positionInRoot().y
                             )
@@ -584,20 +536,20 @@ fun ProfileDataForm(
             rtInput?.let {
                 val inputName = FormProfileInputKey.fromString(rtInput.inputName)
                 FormTextField(
-                    value = rtInput.value,
+                    value = rtInput.valueOrEmpty(),
                     onValueChange = {
                         action(
-                            FormProfileUiAction
+                            ProfileDataUiAction
                                 .SetInput(
                                     inputName,
                                     it
                                 )
                         )
                     },
-                    inputLabel = stringResource(R.string.neighborhood),
+                    inputLabel = stringResource(FormProfileR.string.neighborhood),
                     label = {
                         InputLabel(
-                            label = stringResource(R.string.neighborhood),
+                            label = stringResource(FormProfileR.string.neighborhood),
                             isRequired = rtInput.isRequired()
                         )
                     },
@@ -607,7 +559,7 @@ fun ProfileDataForm(
                         .weight(1f)
                         .onGloballyPositioned {
                             action(
-                                FormProfileUiAction.SaveInputViewCoordinateY(
+                                ProfileDataUiAction.SaveInputViewCoordinateY(
                                     inputName,
                                     it.positionInRoot().y
                                 )
@@ -622,20 +574,20 @@ fun ProfileDataForm(
             rwInput?.let {
                 val inputName = FormProfileInputKey.fromString(rwInput.inputName)
                 FormTextField(
-                    value = rwInput.value,
+                    value = rwInput.valueOrEmpty(),
                     onValueChange = {
                         action(
-                            FormProfileUiAction
+                            ProfileDataUiAction
                                 .SetInput(
                                     inputName,
                                     it
                                 )
                         )
                     },
-                    inputLabel = stringResource(R.string.citizenhood),
+                    inputLabel = stringResource(FormProfileR.string.citizenhood),
                     label = {
                         InputLabel(
-                            label = stringResource(R.string.citizenhood),
+                            label = stringResource(FormProfileR.string.citizenhood),
                             isRequired = rwInput.isRequired()
                         )
                     },
@@ -644,7 +596,7 @@ fun ProfileDataForm(
                         .weight(1f)
                         .onGloballyPositioned {
                             action(
-                                FormProfileUiAction.SaveInputViewCoordinateY(
+                                ProfileDataUiAction.SaveInputViewCoordinateY(
                                     inputName,
                                     it.positionInRoot().y
                                 )
@@ -661,20 +613,20 @@ fun ProfileDataForm(
         birthPlaceInput?.let {
             val inputName = FormProfileInputKey.fromString(birthPlaceInput.inputName)
             FormTextField(
-                value = birthPlaceInput.value,
+                value = birthPlaceInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 inputName,
                                 it
                             )
                     )
                 },
-                inputLabel = stringResource(R.string.birth_place),
+                inputLabel = stringResource(FormProfileR.string.birth_place),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.birth_place),
+                        label = stringResource(FormProfileR.string.birth_place),
                         isRequired = birthPlaceInput.isRequired()
                     )
                 },
@@ -683,7 +635,7 @@ fun ProfileDataForm(
                     .fillMaxWidth()
                     .onGloballyPositioned {
                         action(
-                            FormProfileUiAction.SaveInputViewCoordinateY(
+                            ProfileDataUiAction.SaveInputViewCoordinateY(
                                 inputName,
                                 it.positionInRoot().y
                             )
@@ -695,17 +647,17 @@ fun ProfileDataForm(
 
         religionInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.religion),
+                inputLabel = stringResource(FormProfileR.string.religion),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.religion),
+                        label = stringResource(FormProfileR.string.religion),
                         isRequired = religionInput.isRequired()
                     )
                 },
-                value = religionInput.value,
+                value = religionInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(religionInput.inputName),
                                 it.value
@@ -719,17 +671,17 @@ fun ProfileDataForm(
 
         marriageStatusInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.marriage_status),
+                inputLabel = stringResource(FormProfileR.string.marriage_status),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.marriage_status),
+                        label = stringResource(FormProfileR.string.marriage_status),
                         isRequired = marriageStatusInput.isRequired()
                     )
                 },
-                value = marriageStatusInput.value,
+                value = marriageStatusInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(marriageStatusInput.inputName),
                                 it.value
@@ -743,17 +695,17 @@ fun ProfileDataForm(
 
         professionInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.profession),
+                inputLabel = stringResource(FormProfileR.string.profession),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.profession),
+                        label = stringResource(FormProfileR.string.profession),
                         isRequired = professionInput.isRequired()
                     )
                 },
-                value = professionInput.value,
+                value = professionInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(professionInput.inputName),
                                 it.value
@@ -767,17 +719,17 @@ fun ProfileDataForm(
 
         educationInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.education),
+                inputLabel = stringResource(FormProfileR.string.education),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.education),
+                        label = stringResource(FormProfileR.string.education),
                         isRequired = educationInput.isRequired()
                     )
                 },
-                value = educationInput.value,
+                value = educationInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(educationInput.inputName),
                                 it.value
@@ -791,17 +743,17 @@ fun ProfileDataForm(
 
         famRelationInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.family_relation_status),
+                inputLabel = stringResource(FormProfileR.string.family_relation_status),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.family_relation_status),
+                        label = stringResource(FormProfileR.string.family_relation_status),
                         isRequired = famRelationInput.isRequired()
                     )
                 },
-                value = famRelationInput.value,
+                value = famRelationInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(famRelationInput.inputName),
                                 it.value
@@ -815,17 +767,17 @@ fun ProfileDataForm(
 
         bloodTypeInput?.let {
             FormDropDown(
-                inputLabel = stringResource(R.string.blood_type),
+                inputLabel = stringResource(FormProfileR.string.blood_type),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.blood_type),
+                        label = stringResource(FormProfileR.string.blood_type),
                         isRequired = bloodTypeInput.isRequired()
                     )
                 },
-                value = bloodTypeInput.value,
+                value = bloodTypeInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 FormProfileInputKey.fromString(bloodTypeInput.inputName),
                                 it.value
@@ -840,20 +792,20 @@ fun ProfileDataForm(
         fatherNameInput?.let {
             val inputName = FormProfileInputKey.fromString(fatherNameInput.inputName)
             FormTextField(
-                value = fatherNameInput.value,
+                value = fatherNameInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 inputName,
                                 it
                             )
                     )
                 },
-                inputLabel = stringResource(R.string.father_name),
+                inputLabel = stringResource(FormProfileR.string.father_name),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.father_name),
+                        label = stringResource(FormProfileR.string.father_name),
                         isRequired = fatherNameInput.isRequired()
                     )
                 },
@@ -862,7 +814,7 @@ fun ProfileDataForm(
                     .fillMaxWidth()
                     .onGloballyPositioned {
                         action(
-                            FormProfileUiAction.SaveInputViewCoordinateY(
+                            ProfileDataUiAction.SaveInputViewCoordinateY(
                                 inputName,
                                 it.positionInRoot().y
                             )
@@ -875,20 +827,20 @@ fun ProfileDataForm(
         motherNameInput?.let {
             val inputName = FormProfileInputKey.fromString(motherNameInput.inputName)
             FormTextField(
-                value = motherNameInput.value,
+                value = motherNameInput.valueOrEmpty(),
                 onValueChange = {
                     action(
-                        FormProfileUiAction
+                        ProfileDataUiAction
                             .SetInput(
                                 inputName,
                                 it
                             )
                     )
                 },
-                inputLabel = stringResource(R.string.mother_name),
+                inputLabel = stringResource(FormProfileR.string.mother_name),
                 label = {
                     InputLabel(
-                        label = stringResource(R.string.mother_name),
+                        label = stringResource(FormProfileR.string.mother_name),
                         isRequired = motherNameInput.isRequired()
                     )
                 },
@@ -898,7 +850,7 @@ fun ProfileDataForm(
                     .fillMaxWidth()
                     .onGloballyPositioned {
                         action(
-                            FormProfileUiAction.SaveInputViewCoordinateY(
+                            ProfileDataUiAction.SaveInputViewCoordinateY(
                                 inputName,
                                 it.positionInRoot().y
                             )
@@ -914,7 +866,7 @@ fun ProfileDataForm(
                 .wrapContentWidth()
                 .align(Alignment.CenterHorizontally)
             ,
-            onClick = { action(FormProfileUiAction.Submit) },
+            onClick = { action(ProfileDataUiAction.Submit) },
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = MaterialTheme.colorScheme.primary
             ),
@@ -922,7 +874,7 @@ fun ProfileDataForm(
             enabled = true //state.value.enableLogin && !isLoading
         ) {
             Text(
-                text = stringResource(R.string.save),
+                text = stringResource(CoreR.string.save),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -931,24 +883,9 @@ fun ProfileDataForm(
     }
 }
 
-@Composable
-fun KoinPreviewWrapper(
-    modules: List<Module>,
-    content: @Composable () -> Unit
-){
-    val alreadyExists = KoinPlatformTools.defaultContext().getOrNull() != null
-    if (!alreadyExists){
-        KoinApplication(application = {
-            modules(modules)
-        }) {
-            content()
-        }
-    }else{
-        KoinContext {
-            content()
-        }
-    }
-}
+private val formProfileStateDummy = ProfileDataUiState(
+    inputs = formProfileInputDummy
+)
 
 @Preview(showBackground = true, name = "Loading")
 @Composable
@@ -959,8 +896,6 @@ fun FormProfileScreenPreview(){
     ){
         SILPUSITRONTheme {
             ProfileDataScreen(
-                state = formProfileStateDummy,
-                action = {action -> },
                 onComplete = {}, 
                 onTokenExpired = {},
             )
@@ -975,16 +910,23 @@ fun FormProfileScreenPreviewError(){
     KoinPreviewWrapper(
         modules = listOf(commonModule, dataModule, profileModule)
     ){
-//        val viewModel: FormProfileViewModel = koinViewModel()
-//        val state by viewModel.state.collectAsState()
+        val viewModel: ProfileDataViewModel = koinViewModel()
+        LaunchedEffect(key1 = Unit) {
+            viewModel.doAction(
+                ProfileDataUiAction.SetDummyState(
+                    formProfileStateDummy.copy(
+                        profileData = Resource.Error(
+                            message = "Error occured here but it is just dummy"
+                        )
+                    )
+                )
+            )
+        }
         SILPUSITRONTheme {
             ProfileDataScreen(
-                state = formProfileStateDummy.copy(
-                    profileData = Resource.Error(message = "Error occured here but it is just dummy")
-                ),
-                action = {action -> },
+                viewModel = viewModel,
                 onComplete = {}, 
-                                onTokenExpired = {}
+                onTokenExpired = {}
             )
         }
     }
@@ -998,16 +940,21 @@ fun FormProfileScreenPreviewSuccess(){
     KoinPreviewWrapper(
         modules = listOf(commonModule, dataModule, profileModule)
     ){
-//        val viewModel: FormProfileViewModel = koinViewModel()
-//        val state by viewModel.state.collectAsState()
+        val viewModel: ProfileDataViewModel = koinViewModel()
+        LaunchedEffect(key1 = Unit) {
+            viewModel.doAction(
+                ProfileDataUiAction.SetDummyState(
+                    formProfileStateDummy.copy(
+                        profileData = Resource.Success(
+                            data = ProfileDataDummy
+                        ),
+                    )
+                )
+            )
+        }
         SILPUSITRONTheme {
             ProfileDataScreen(
-                state = formProfileStateDummy.copy(
-                    profileData = Resource.Success(
-                        data = ProfileDataDummy
-                    ),
-                ),
-                action = {action -> },
+                viewModel = viewModel,
                 onComplete = {}, 
                 onTokenExpired = {}
             )
@@ -1025,14 +972,19 @@ fun FormProfileScreenPreviewSubmitSuccess(){
         modules = listOf(commonModule, dataModule, profileModule)
     ){
         SILPUSITRONTheme {
+            val viewModel: ProfileDataViewModel = koinViewModel()
+            LaunchedEffect(key1 = Unit) {
+                viewModel.doAction(ProfileDataUiAction.SetDummyState(
+                    formProfileStateDummy.copy(
+                        profileData = Resource.Success(
+                            data = ProfileDataDummy
+                        ),
+                        submitResult = Resource.Success(ProfileDataDummy)
+                    )
+                ))
+            }
             ProfileDataScreen(
-                state = formProfileStateDummy.copy(
-                    profileData = Resource.Success(
-                        data = ProfileDataDummy
-                    ),
-                    submitResult = Resource.Success(ProfileDataDummy)
-                ),
-                action = {action -> },
+                viewModel = viewModel,
                 onComplete = {}, 
                 onTokenExpired = {}
             )
@@ -1050,14 +1002,19 @@ fun FormProfileScreenPreviewSubmitLoading(){
         modules = listOf(commonModule, dataModule, profileModule)
     ){
         SILPUSITRONTheme {
+            val viewModel: ProfileDataViewModel = koinViewModel()
+            LaunchedEffect(key1 = Unit) {
+                viewModel.doAction(ProfileDataUiAction.SetDummyState(
+                    formProfileStateDummy.copy(
+                        profileData = Resource.Success(
+                            data = ProfileDataDummy
+                        ),
+                        submitResult = Resource.Loading()
+                    )
+                ))
+            }
             ProfileDataScreen(
-                state = formProfileStateDummy.copy(
-                    profileData = Resource.Success(
-                        data = ProfileDataDummy
-                    ),
-                    submitResult = Resource.Loading()
-                ),
-                action = {action -> },
+                viewModel = viewModel,
                 onComplete = {}, 
                 onTokenExpired = {}
             )
@@ -1075,14 +1032,26 @@ fun FormProfileScreenPreviewSubmitError(){
         modules = listOf(commonModule, dataModule, profileModule)
     ){
         SILPUSITRONTheme {
+            val viewModel: ProfileDataViewModel = koinViewModel()
+            LaunchedEffect(key1 = Unit) {
+                viewModel.doAction(ProfileDataUiAction.SetDummyState(
+                    formProfileStateDummy.copy(
+                        profileData = Resource.Success(
+                            data = ProfileDataDummy
+                        ),
+                        submitResult = Resource.Error(message = "Error disini")
+                    )
+                ))
+            }
             ProfileDataScreen(
-                state = formProfileStateDummy.copy(
-                    profileData = Resource.Success(
-                        data = ProfileDataDummy
-                    ),
-                    submitResult = Resource.Error(message = "Error disini")
-                ),
-                action = {action -> },
+                viewModel = viewModel,
+//                state = formProfileStateDummy.copy(
+//                    profileData = Resource.Success(
+//                        data = ProfileDataDummy
+//                    ),
+//                    submitResult = Resource.Error(message = "Error disini")
+//                ),
+//                action = {action -> },
                 onComplete = {}, 
                 onTokenExpired = {}
             )
