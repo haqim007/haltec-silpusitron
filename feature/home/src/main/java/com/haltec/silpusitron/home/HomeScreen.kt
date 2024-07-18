@@ -183,7 +183,6 @@ fun HomeScreen(
                     }
                 )
             }
-
             composable<FormSubmission>(
                 typeMap = mapOf(typeOf<SubmissionDocFormArgs>() to SubmissionDocFormArgsType)
             ) { backStackEntry ->
@@ -192,6 +191,9 @@ fun HomeScreen(
                 SubmissionDocScreen(
                     args = param.args,
                     onNavigateBack = {
+                        navController.navigateUp()
+                    },
+                    onSucceed = {
                         navController.navigateUp()
                     }
                 )

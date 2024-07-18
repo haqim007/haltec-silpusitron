@@ -4,8 +4,9 @@ import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.feature.submission.data.remote.SubmissionDocRemoteDatasource
 import com.haltec.silpusitron.feature.submission.data.remote.SubmissionDocService
 import com.haltec.silpusitron.feature.submission.data.repository.SubmissionDocRepository
-import com.haltec.silpusitron.feature.submission.domain.GetTemplateUseCase
+import com.haltec.silpusitron.feature.submission.domain.usecase.GetTemplateUseCase
 import com.haltec.silpusitron.feature.submission.domain.ISubmissionDocRepository
+import com.haltec.silpusitron.feature.submission.domain.usecase.SubmitSubmissionUseCase
 import com.haltec.silpusitron.feature.submission.ui.SubmissionDocViewModel
 import com.haltec.silpusitron.shared.auth.di.authSharedModule
 import com.haltec.silpusitron.shared.formprofile.di.formProfileModule
@@ -18,5 +19,6 @@ val submissionDocModule = module {
     factory { SubmissionDocRemoteDatasource(get()) }
     factory<ISubmissionDocRepository> { SubmissionDocRepository(get(), get(), get()) }
     factory { GetTemplateUseCase() }
-    viewModel { SubmissionDocViewModel(get()) }
+    factory { SubmitSubmissionUseCase() }
+    viewModel { SubmissionDocViewModel(get(), get()) }
 }

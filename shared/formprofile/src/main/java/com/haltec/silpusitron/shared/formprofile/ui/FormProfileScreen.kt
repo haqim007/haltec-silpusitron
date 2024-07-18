@@ -92,7 +92,7 @@ fun FormProfileScreen(
 
             is Resource.Error -> {
                 ErrorView(
-                    state.profileData.message,
+                    message = state.profileData.message,
                     onTryAgain = { action(FormProfileUiAction.GetProfileData) }
                 )
             }

@@ -218,6 +218,10 @@ object FileHelper {
 
     fun getMimeType(absolutePath: String): String? {
         val file = File(absolutePath)
+        return getMimeType(file)
+    }
+
+    fun getMimeType(file: File): String? {
         val extension = MimeTypeMap.getFileExtensionFromUrl(file.toURI().toString())
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.lowercase())
     }

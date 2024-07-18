@@ -53,6 +53,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -100,6 +101,13 @@ fun ReqDocList(
     LaunchedEffect(key1 = Unit) {
         action(ReqDocUiAction.LoadLetterLevel)
         action(ReqDocUiAction.LoadLetterType)
+        if (
+                pagingItems.itemCount > 0 &&
+                (pagingItems.loadState.refresh != LoadState.Loading ||
+                        pagingItems.loadState.append != LoadState.Loading)
+            ){
+            pagingItems.refresh()
+        }
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -202,7 +210,6 @@ fun ReqDocList(
             }
 
         }
-
         PagerView(
             modifier = modifier,
             pagingItems = pagingItems,

@@ -5,95 +5,140 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SubmitSubmissionRequest(
+	@SerialName("desa_id")
+	val subDistrictId: String,
 
-	@SerialName("data")
-	val data: Data
+	@SerialName("rt")
+	val rt: String,
+
+	@SerialName("no_hp")
+	val phoneNumber: String,
+
+	@SerialName("pendidikan")
+	val educationId: String,
+
+	@SerialName("rw")
+	val rw: String,
+
+	@SerialName("nama_ibu")
+	val motherName: String,
+
+	@SerialName("golongan_darah")
+	val bloodTypeId: String,
+
+	@SerialName("nama_lengkap")
+	val fullname: String,
+
+	@SerialName("agama")
+	val religionId: String,
+
+	@SerialName("kecamatan_id")
+	val districtId: String,
+
+	@SerialName("alamat")
+	val address: String,
+
+	@SerialName("nik")
+	val idNumber: String,
+
+	@SerialName("tempat_lahir")
+	val birthPlace: String,
+
+	@SerialName("pekerjaan")
+	val profession: String,
+
+	@SerialName("status_hubkel")
+	val famRelationId: String,
+
+	@SerialName("nama_ayah")
+	val fatherName: String,
+
+	@SerialName("no_kk")
+	val famCardNumber: String,
+
+	@SerialName("jenis_kelamin")
+	val genderId: String,
+
+	@SerialName("tanggal_lahir")
+	val birthDate: String,
+
+	@SerialName("status_pernikahan")
+	val marriageStatus: String,
+
+	@SerialName("lintang")
+	val latitude: String,
+
+	@SerialName("bujur")
+	val longitude: String,
+
+	@SerialName("berkas_persyaratan")
+	val docs: List<BerkasPersyaratanItem>,
+
+	@SerialName("formulir")
+	val forms: List<FormulirItem>
 ){
 	@Serializable
 	data class FormulirItem(
-
-		@SerialName("id")
 		val id: Int,
-
-		@SerialName("value")
 		val value: String
 	)
 
 	@Serializable
 	data class BerkasPersyaratanItem(
-
-		@SerialName("id")
 		val id: Int,
-
-		@SerialName("value")
-		val value: String
+		val value: ByteArray
+		//val file: FileRequest
 	)
 
-	@Serializable
-	data class Data(
+	data class FileRequest(
+		val filename: String,
+		val mimeType: String,
+		val binary: ByteArray
+	) {
+		override fun equals(other: Any?): Boolean {
+			if (this === other) return true
+			if (javaClass != other?.javaClass) return false
 
-		@SerialName("desa_id")
-		val desaId: Int,
+			other as FileRequest
 
-		@SerialName("rt")
+			if (filename != other.filename) return false
+			if (mimeType != other.mimeType) return false
+			if (!binary.contentEquals(other.binary)) return false
+
+			return true
+		}
+
+		override fun hashCode(): Int {
+			var result = filename.hashCode()
+			result = 31 * result + mimeType.hashCode()
+			result = 31 * result + binary.contentHashCode()
+			return result
+		}
+	}
+
+	data class Profile(
+		val subDistrictId: String,
 		val rt: String,
-
-		@SerialName("no_hp")
-		val noHp: String,
-
-		@SerialName("rw")
+		val phoneNumber: String,
+		val educationId: String,
 		val rw: String,
-
-		@SerialName("nama_ibu")
-		val namaIbu: String,
-
-		@SerialName("lintang")
-		val lintang: String,
-
-		@SerialName("status_pernikahan_id")
-		val statusPernikahanId: Int,
-
-		@SerialName("jenis_kelamin_id")
-		val jenisKelaminId: Int,
-
-		@SerialName("agama_id")
-		val agamaId: String,
-
-		@SerialName("kecamatan_id")
-		val kecamatanId: Int,
-
-		@SerialName("berkas_persyaratan")
-		val berkasPersyaratan: List<BerkasPersyaratanItem>,
-
-		@SerialName("formulir")
-		val formulir: List<FormulirItem>,
-
-		@SerialName("alamat")
-		val alamat: String,
-
-		@SerialName("bujur")
-		val bujur: String,
-
-		@SerialName("pendidikan_id")
-		val pendidikanId: Int,
-
-		@SerialName("tempat_lahir")
-		val tempatLahir: String,
-
-		@SerialName("hubungan_keluarga_id")
-		val hubunganKeluargaId: Int,
-
-		@SerialName("nama_ayah")
-		val namaAyah: String,
-
-		@SerialName("template_surat_id")
-		val templateSuratId: Int,
-
-		@SerialName("golongan_darah_id")
-		val golonganDarahId: Int,
-
-		@SerialName("pekerjaan_id")
-		val pekerjaanId: Int
+		val motherName: String,
+		val bloodTypeId: String,
+		val fullname: String,
+		val religionId: String,
+		val districtId: String,
+		val address: String,
+		val idNumber: String,
+		val birthPlace: String,
+		val profession: String,
+		val famRelationId: String,
+		val fatherName: String,
+		val famCardNumber: String,
+		val genderId: String,
+		val birthDate: String,
+		val marriageStatus: String,
+		val latitude: String,
+		val longitude: String
 	)
 
 }

@@ -7,4 +7,5 @@
     <string name="requirement_docs">Berkas Persyaratan</string>
     <string name="form">Formulir</string>
     <string name="doc_has_complete">Berkas persyaratan sudah lengkap</string>
+    <string name="permission_to_access_file_location_needed">Izin mengakses lokasi dan dokumen dibutuhkan!</string>
 </resources>

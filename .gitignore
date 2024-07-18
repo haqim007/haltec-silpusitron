@@ -19,3 +19,4 @@ secret.properties
 
 /.idea
 /shared/formprofile/build
+.idea/misc.xml

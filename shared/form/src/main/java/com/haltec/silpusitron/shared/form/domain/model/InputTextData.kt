@@ -76,7 +76,7 @@ fun InputTextData<FileValidationType, FileAbsolutePath>.validateFile():
                 FileHelper.getFileSizeInMB(it)
             } ?: 0.0
         when(validation){
-            is FileValidationType.Required -> {
+            FileValidationType.Required -> {
                 if (value.isNullOrBlank()){
                     whichValidationError = validation
                     foundError = true
