@@ -202,15 +202,18 @@ fun SubmissionDocForm(
         }
 
         LaunchedEffect(key1 = formProfileState.isAllValid) {
-            if (formProfileState.isAllValid) {
+            if (formProfileState.isAllValid == true) {
                 action(SubmissionDocUiAction.ToNextStepper)
+                action(SubmissionDocUiAction.SetProfileData(formProfileState.inputs))
+                formProfileViewModel.doAction(FormProfileUiAction.ResetIsAllValidState)
             }
         }
 
         var permissionState: MultiplePermissionsState? = null
         val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
              permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
@@ -240,7 +243,7 @@ fun SubmissionDocForm(
                         Text(text = stringResource(CoreR.string.attention_))
                     },
                     text = {
-                        Text(text = "Izin mengakses lokasi dan dokumen dibutuhkan!")
+                        Text(text = stringResource(R.string.permission_to_access_file_location_needed))
                     }
                 )
             }
@@ -258,7 +261,8 @@ fun SubmissionDocForm(
                         style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
-                        )
+                        ),
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
                 },
                 state = formProfileState,
@@ -269,9 +273,6 @@ fun SubmissionDocForm(
                         ButtonNext(
                             onClick = {
                                 formProfileViewModel.doAction(FormProfileUiAction.Submit)
-                                if (formProfileState.isAllValid) {
-                                    action(SubmissionDocUiAction.ToNextStepper)
-                                }
                             }
                         )
                     }

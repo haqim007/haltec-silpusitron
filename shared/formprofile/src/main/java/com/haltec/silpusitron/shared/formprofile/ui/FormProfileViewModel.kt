@@ -62,6 +62,9 @@ class FormProfileViewModel(
                 action.coordinateY
             )
             FormProfileUiAction.ResetFirstErrorInputKey -> resetFirstErrorKey()
+            FormProfileUiAction.ResetIsAllValidState -> _state.update { state ->
+                state.copy(isAllValid = null)
+            }
         }
     }
 
@@ -442,8 +445,12 @@ sealed class FormProfileUiAction{
     data object Submit: FormProfileUiAction()
     data object GetDistrictOptions: FormProfileUiAction()
     data object GetSubDistrictOptions: FormProfileUiAction()
-    data class SaveInputViewCoordinateY(val key: FormProfileInputKey, val coordinateY: Float): FormProfileUiAction()
+    data class SaveInputViewCoordinateY(
+        val key: FormProfileInputKey,
+        val coordinateY: Float
+    ): FormProfileUiAction()
     data object ResetFirstErrorInputKey: FormProfileUiAction()
+    data object ResetIsAllValidState: FormProfileUiAction()
 }
 
 /**
@@ -479,6 +486,6 @@ data class FormProfileUiState(
     val subDistrictOptions: Resource<InputOptions> = Resource.Idle(),
     val inputsCoordinateY: Map<FormProfileInputKey, Float> = mapOf(),
     val firstErrorInputKey: FormProfileInputKey? = null,
-    val isAllValid: Boolean = false
+    val isAllValid: Boolean? = null
 )
 

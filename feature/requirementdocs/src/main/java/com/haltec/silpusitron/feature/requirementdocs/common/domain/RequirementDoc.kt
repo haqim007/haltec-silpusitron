@@ -1,13 +1,6 @@
 package com.haltec.silpusitron.feature.requirementdocs.common.domain
 
-import com.haltec.silpusitron.shared.form.domain.model.FileAbsolutePath
-import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
-import com.haltec.silpusitron.shared.form.domain.model.InputTextData
-import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
-
 typealias DocName = String
-typealias FieldName = Int
-typealias DocId = Int
 
 data class RequirementDoc(
     val requirementDocs: List<DocName> = listOf(),
@@ -18,9 +11,7 @@ data class RequirementDoc(
     val letterLevel: String,
     val id: Int,
     val letterTypeId: Int,
-    val title: String,
-    val inputForms: Map<FieldName, InputTextData<TextValidationType, String>>,
-    val inputFiles: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>
+    val title: String
 )
 
 
@@ -37,46 +28,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     ),
@@ -92,46 +43,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     ),
@@ -147,46 +58,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     ),
@@ -202,46 +73,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     ),
@@ -257,46 +88,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     ),
@@ -312,46 +103,6 @@ val requirementDocDummies = listOf(
         level = "level_1_kelurahan",
         letterType = "Resmi",
         letterTypeId = 9,
-        inputFiles = mapOf(
-            7 to InputTextData(
-                inputName = "7",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas AKTE TANAH"
-            ),
-            6 to InputTextData(
-                inputName = "6",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KK"
-            ),
-            5 to InputTextData(
-                inputName = "5",
-                validations = listOf(FileValidationType.Required),
-                value = null,
-                inputLabel = "berkas KTP"
-            )
-        ),
-        inputForms = mapOf(
-            15 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "alamat usaha"
-            ),
-            16 to InputTextData(
-                inputName = "15",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "jenis usaha kegiatan"
-            ),
-            17 to InputTextData(
-                inputName = "17",
-                validations = listOf(TextValidationType.Required),
-                value = "",
-                inputLabel = "data sample"
-            )
-        ),
         isTt1 = 1,
         isTt2 = 0,
     )

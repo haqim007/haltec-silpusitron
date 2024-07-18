@@ -2,12 +2,14 @@ package com.haltec.silpusitron.feature.submission.ui
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.submission.domain.DocId
-import com.haltec.silpusitron.feature.submission.domain.GetTemplateUseCase
+import com.haltec.silpusitron.feature.submission.domain.usecase.GetTemplateUseCase
 import com.haltec.silpusitron.feature.submission.domain.TemplateForm
 import com.haltec.silpusitron.feature.submission.domain.VariableId
 import com.haltec.silpusitron.feature.submission.domain.templateFormDummy
+import com.haltec.silpusitron.feature.submission.domain.usecase.SubmitSubmissionUseCase
 import com.haltec.silpusitron.shared.form.domain.model.FileAbsolutePath
 import com.haltec.silpusitron.shared.form.domain.model.FileValidationType
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
@@ -16,12 +18,17 @@ import com.haltec.silpusitron.shared.form.domain.model.validate
 import com.haltec.silpusitron.shared.form.domain.model.validateFile
 import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
+import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileDataDummy
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SubmissionDocViewModel(
-    private val getTemplateUseCase: GetTemplateUseCase
+    private val getTemplateUseCase: GetTemplateUseCase,
+    private val submitSubmissionUseCase: SubmitSubmissionUseCase
 ): BaseFormViewModel<SubmissionDocUiState, SubmissionDocUiAction>() {
     override val _state = MutableStateFlow(SubmissionDocUiState())
 
@@ -48,6 +55,14 @@ class SubmissionDocViewModel(
             SubmissionDocUiAction.ValidateAllDocs -> validateAllDocs()
             is SubmissionDocUiAction.SetInput -> setInput(action.input, action.value)
             SubmissionDocUiAction.ValidateForms -> validateForms()
+            SubmissionDocUiAction.Submit -> submit()
+            is SubmissionDocUiAction.SetProfileData -> _state.update { state ->
+                state.copy(profile = action.input)
+            }
+
+            SubmissionDocUiAction.ResetSubmitState -> _state.update { state ->
+                state.copy(submitResult = Resource.Idle())
+            }
         }
     }
 
@@ -89,13 +104,28 @@ class SubmissionDocViewModel(
             }
         }
 
-        if (!isAllValid) return
+        if (!isAllValid) {
+            return
+        }
 
-
+        submit()
     }
 
     private fun submit(){
+        viewModelScope.launch {
 
+            submitSubmissionUseCase(
+                state.value.profile,
+                state.value.forms,
+                state.value.requirementDocs,
+            ).collectLatest {
+                _state.update { state ->
+                    state.copy(
+                        submitResult = it
+                    )
+                }
+            }
+        }
     }
 
     private fun validateAllDocs() {
@@ -178,7 +208,8 @@ class SubmissionDocViewModel(
 internal val submissionDocUiStateDummy = SubmissionDocUiState(
     template = Resource.Success(templateFormDummy),
     requirementDocs = templateFormDummy.requirementDocs,
-    forms = templateFormDummy.forms
+    forms = templateFormDummy.forms,
+    profile = ProfileDataDummy.input
 )
 
 data class SubmissionDocUiState(
@@ -186,7 +217,9 @@ data class SubmissionDocUiState(
     val template: Resource<TemplateForm> = Resource.Idle(),
     val requirementDocs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>> = mapOf(),
     val forms: Map<VariableId, InputTextData<TextValidationType, String>> = mapOf(),
-    val stepperIndex: Int = 0
+    val profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>> = mapOf(),
+    val stepperIndex: Int = 0,
+    val submitResult: Resource<String> = Resource.Idle()
 )
 
 sealed class SubmissionDocUiAction{
@@ -202,6 +235,11 @@ sealed class SubmissionDocUiAction{
     data object ValidateAllDocs: SubmissionDocUiAction()
     data class SetInput(val input: VariableId, val value: String): SubmissionDocUiAction()
     data object ValidateForms: SubmissionDocUiAction()
+    data class SetProfileData(
+        val input: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>
+    ): SubmissionDocUiAction()
+    data object Submit: SubmissionDocUiAction()
+    data object ResetSubmitState: SubmissionDocUiAction()
 
     /*For preview only*/
     data class SetState(val state: SubmissionDocUiState) : SubmissionDocUiAction()

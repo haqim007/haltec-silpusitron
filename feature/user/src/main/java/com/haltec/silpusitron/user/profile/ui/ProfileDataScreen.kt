@@ -109,7 +109,7 @@ fun ProfileDataScreen(
 
                 is Resource.Error -> {
                     ErrorView(
-                        state.profileData.message,
+                        message = state.profileData.message,
                         onTryAgain = { action(ProfileDataUiAction.GetProfileData) }
                     )
                 }
