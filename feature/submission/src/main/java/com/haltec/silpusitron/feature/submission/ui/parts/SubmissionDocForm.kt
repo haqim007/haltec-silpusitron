@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ArrowCircleLeft
 import androidx.compose.material.icons.outlined.ArrowCircleRight
@@ -28,6 +29,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -59,6 +62,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.component.LottieLoader
+import com.haltec.silpusitron.core.ui.parts.ErrorView
 import com.haltec.silpusitron.core.ui.parts.LoadingView
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.core.ui.util.PermissionRequester
@@ -362,9 +366,11 @@ fun SubmissionDocForm(
                     icon = Icons.AutoMirrored.Outlined.Send
                 ) {
                     action(SubmissionDocUiAction.ValidateForms)
-                    showDialogAgree = !state.hasAgree
                     if (state.hasAgree && state.allFormSubmissionValid){
                         action(SubmissionDocUiAction.Submit)
+                    }
+                    else if (!state.hasAgree && state.allFormSubmissionValid){
+                        showDialogAgree = true
                     }
                 }
             }
@@ -380,35 +386,37 @@ fun SubmissionDocForm(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(300.dp)
+                            .height(450.dp)
                             .padding(2.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors().copy(
                             containerColor = MaterialTheme.colorScheme.background
                         )
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            LottieLoader(
-                                modifier = Modifier.size(200.dp),
-                                jsonRaw = CoreR.raw.lottie_questioning
+                        Box {
+                            ErrorView(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                message = stringResource(id = R.string.agreement_required),
+                                onTryAgain = { action(SubmissionDocUiAction.Submit) },
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    textAlign = TextAlign.Center
+                                )
                             )
 
-                            Text(text = stringResource(id = R.string.agreement_required))
-
-                            TextButton(
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(top = 16.dp),
-                                onClick = {showDialogAgree = false}
-                            ){
-                                Text(
-                                    textAlign = TextAlign.End,
-                                    text = stringResource(id = CoreR.string.ok))
+                            IconButton(
+                                onClick = {
+                                    showDialogAgree = false
+                                },
+                                modifier = Modifier.align(Alignment.TopEnd),
+                                colors = IconButtonDefaults.iconButtonColors().copy(
+                                    contentColor = MaterialTheme.colorScheme.error
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = stringResource(id = CoreR.string.close))
                             }
                         }
                     }

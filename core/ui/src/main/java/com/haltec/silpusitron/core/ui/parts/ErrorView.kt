@@ -55,6 +55,7 @@ fun ErrorView(
             )
         )
         Text(
+            modifier = Modifier.padding(top = 8.dp),
             text = message ?: stringResource(R.string.unknown_error),
             style = textStyle
         )
