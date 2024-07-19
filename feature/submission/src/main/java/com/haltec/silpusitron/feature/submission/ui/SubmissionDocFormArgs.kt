@@ -18,6 +18,13 @@ data class SubmissionDocFormArgs(
     val letterType: String
 ): Parcelable
 
+val submissionDocFormArgsDummy = SubmissionDocFormArgs(
+    id = 1,
+    title = "Test",
+    letterLevel = "Kecamatan",
+    letterType = "Resmi"
+)
+
 
 val SubmissionDocFormArgsType = object : NavType<SubmissionDocFormArgs>(
     isNullableAllowed = false

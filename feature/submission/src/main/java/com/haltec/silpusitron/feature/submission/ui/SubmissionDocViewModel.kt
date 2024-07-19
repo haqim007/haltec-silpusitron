@@ -63,6 +63,10 @@ class SubmissionDocViewModel(
             SubmissionDocUiAction.ResetSubmitState -> _state.update { state ->
                 state.copy(submitResult = Resource.Idle())
             }
+
+            is SubmissionDocUiAction.AgreeToTheTerm -> _state.update { state ->
+                state.copy(hasAgree = action.agree)
+            }
         }
     }
 
@@ -103,18 +107,18 @@ class SubmissionDocViewModel(
                 )
             }
         }
-
+        _state.update { state -> state.copy(allFormSubmissionValid = isAllValid) }
         if (!isAllValid) {
             return
         }
 
-        submit()
     }
 
     private fun submit(){
         viewModelScope.launch {
 
             submitSubmissionUseCase(
+                state.value.templateId!!,
                 state.value.profile,
                 state.value.forms,
                 state.value.requirementDocs,
@@ -219,6 +223,8 @@ data class SubmissionDocUiState(
     val forms: Map<VariableId, InputTextData<TextValidationType, String>> = mapOf(),
     val profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>> = mapOf(),
     val stepperIndex: Int = 0,
+    val hasAgree: Boolean = false,
+    val allFormSubmissionValid: Boolean = false,
     val submitResult: Resource<String> = Resource.Idle()
 )
 
@@ -240,6 +246,7 @@ sealed class SubmissionDocUiAction{
     ): SubmissionDocUiAction()
     data object Submit: SubmissionDocUiAction()
     data object ResetSubmitState: SubmissionDocUiAction()
+    data class AgreeToTheTerm(val agree: Boolean = true): SubmissionDocUiAction()
 
     /*For preview only*/
     data class SetState(val state: SubmissionDocUiState) : SubmissionDocUiAction()

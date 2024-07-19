@@ -17,10 +17,11 @@ class SubmitSubmissionUseCase: KoinComponent {
     private val repository: ISubmissionDocRepository by inject()
 
     operator fun invoke(
+        templateId: Int,
         profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>,
         forms: Map<VariableId, InputTextData<TextValidationType, String>>,
         docs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>
     ): Flow<Resource<String>>{
-        return repository.submit(profile, docs, forms)
+        return repository.submit(templateId, profile, docs, forms)
     }
 }

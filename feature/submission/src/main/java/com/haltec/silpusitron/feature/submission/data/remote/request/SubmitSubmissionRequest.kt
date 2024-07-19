@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SubmitSubmissionRequest(
+	@SerialName("template_surat_id")
+	val tempalateSuratId: Int,
+
 	@SerialName("desa_id")
 	val subDistrictId: String,
 

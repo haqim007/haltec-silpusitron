@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,16 +47,30 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import com.haltec.silpusitron.common.di.commonModule
+import com.haltec.silpusitron.core.ui.component.LottieLoader
+import com.haltec.silpusitron.core.ui.parts.LoadingView
+import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.core.ui.util.PermissionRequester
 import com.haltec.silpusitron.feature.submission.R
+import com.haltec.silpusitron.feature.submission.di.submissionDocModule
 import com.haltec.silpusitron.feature.submission.ui.SubmissionDocFormArgs
 import com.haltec.silpusitron.feature.submission.ui.SubmissionDocUiAction
 import com.haltec.silpusitron.feature.submission.ui.SubmissionDocUiState
+import com.haltec.silpusitron.feature.submission.ui.submissionDocFormArgsDummy
+import com.haltec.silpusitron.feature.submission.ui.submissionDocUiStateDummy
+import com.haltec.silpusitron.shared.auth.di.authSharedModule
+import com.haltec.silpusitron.shared.formprofile.di.formProfileModule
 import com.haltec.silpusitron.shared.formprofile.ui.FormProfileScreen
 import com.haltec.silpusitron.shared.formprofile.ui.FormProfileUiAction
 import com.haltec.silpusitron.shared.formprofile.ui.FormProfileViewModel
@@ -64,11 +80,11 @@ import com.haltec.silpusitron.core.ui.R as CoreR
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SubmissionDocForm(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     args: SubmissionDocFormArgs,
     state: SubmissionDocUiState,
     action: (SubmissionDocUiAction) -> Unit,
-    onPermissionDenied: () -> Unit
+    onPermissionDenied: () -> Unit = {}
 ) {
 
     Card(
@@ -308,6 +324,28 @@ fun SubmissionDocForm(
         else{
 
             FormSubmission(modifier, state, action)
+            var showDialogAgree by remember {
+                mutableStateOf(false)
+            }
+            
+            Row(
+                modifier = Modifier.clickable {
+                    action(SubmissionDocUiAction.AgreeToTheTerm(!state.hasAgree))
+                }
+            ) {
+                Checkbox(
+                    checked = state.hasAgree,
+                    onCheckedChange = {
+                        action(SubmissionDocUiAction.AgreeToTheTerm(it))
+                    }
+                )
+                Text(
+                    text = stringResource(R.string.privacy_term),
+                    style = TextStyle.Default.copy(
+                        fontSize = 12.sp
+                    )
+                )
+            }
 
             Row (
                 modifier = Modifier
@@ -324,11 +362,63 @@ fun SubmissionDocForm(
                     icon = Icons.AutoMirrored.Outlined.Send
                 ) {
                     action(SubmissionDocUiAction.ValidateForms)
+                    showDialogAgree = !state.hasAgree
+                    if (state.hasAgree && state.allFormSubmissionValid){
+                        action(SubmissionDocUiAction.Submit)
+                    }
+                }
+            }
+
+            if (showDialogAgree){
+                Dialog(
+                    onDismissRequest = { showDialogAgree = false },
+                    properties = DialogProperties(
+                        dismissOnClickOutside = true,
+                        dismissOnBackPress = true
+                    )
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors().copy(
+                            containerColor = MaterialTheme.colorScheme.background
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            LottieLoader(
+                                modifier = Modifier.size(200.dp),
+                                jsonRaw = CoreR.raw.lottie_questioning
+                            )
+
+                            Text(text = stringResource(id = R.string.agreement_required))
+
+                            TextButton(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                onClick = {showDialogAgree = false}
+                            ){
+                                Text(
+                                    textAlign = TextAlign.End,
+                                    text = stringResource(id = CoreR.string.ok))
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 private fun ButtonPrev(
@@ -384,5 +474,17 @@ private fun ButtonNext(
                 contentDescription = null
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun SubmissionDocForm_Preview(){
+    KoinPreviewWrapper(modules = listOf(commonModule, formProfileModule, authSharedModule, submissionDocModule)) {
+        SubmissionDocForm(
+            args = submissionDocFormArgsDummy,
+            state = submissionDocUiStateDummy,
+            action = { _ ->}
+        )
     }
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface ISubmissionDocRepository {
     fun getTemplate(id: Int): Flow<Resource<TemplateForm>>
     fun submit(
+        templateId: Int,
         profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>,
         docs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>,
         forms: Map<VariableId, InputTextData<TextValidationType, String>>

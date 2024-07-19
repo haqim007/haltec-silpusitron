@@ -50,6 +50,7 @@ internal class SubmissionDocRepository(
     }
 
     override fun submit(
+        templateId: Int,
         profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>,
         docs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>,
         forms: Map<VariableId, InputTextData<TextValidationType, String>>
@@ -61,6 +62,7 @@ internal class SubmissionDocRepository(
 
             override suspend fun requestFromRemote(): Result<SubmitResponse> {
                 val request = SubmitSubmissionRequest(
+                    tempalateSuratId = templateId,
                     subDistrictId = profile[FormProfileInputKey.SUB_DISTRICT]?.value ?: "",
                     rt = profile[FormProfileInputKey.RT]?.value ?: "",
                     phoneNumber = profile[FormProfileInputKey.PHONE_NUMBER]?.value ?: "",
