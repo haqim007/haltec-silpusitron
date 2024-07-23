@@ -30,8 +30,7 @@ import com.haltec.silpusitron.ui.nav.OTPRoute
 import com.haltec.silpusitron.ui.nav.PublicDashboardRoute
 import com.haltec.silpusitron.ui.nav.SimpleRequirementFilesRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
-import com.haltec.silpusitron.user.profile.ui.ProfileDataScreen
-import com.haltec.silpusitron.user.profile.ui.ProfileDataViewModel
+import com.haltec.silpusitron.user.profileold.ui.ProfileDataScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -134,7 +133,6 @@ fun AppContainer(
                         )
                     }
                     composable<ConfirmProfileDataRoute> {
-
                         ProfileDataScreen(
                             onTokenExpired = {
                                 navController.navigate(LoginRoute){

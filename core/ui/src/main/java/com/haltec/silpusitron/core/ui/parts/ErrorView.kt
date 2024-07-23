@@ -33,7 +33,8 @@ fun ErrorView(
         fontSize = 14.sp,
         fontWeight = FontWeight.SemiBold
     ),
-    onTryAgain: () -> Unit
+    tryAgain: Boolean = true,
+    onTryAgain: (() -> Unit) ? = null
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -59,20 +60,22 @@ fun ErrorView(
             text = message ?: stringResource(R.string.unknown_error),
             style = textStyle
         )
-        Button(
-            modifier = Modifier
-                .padding(top = 25.dp, bottom = 6.dp)
-                .wrapContentWidth(),
-            onClick = { onTryAgain() },
-            colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            shape = RoundedCornerShape(5.dp),
-        ) {
-            Text(
-                text = stringResource(R.string.try_again),
-                fontWeight = FontWeight.Bold
-            )
+        if (tryAgain){
+            Button(
+                modifier = Modifier
+                    .padding(top = 25.dp, bottom = 6.dp)
+                    .wrapContentWidth(),
+                onClick = { onTryAgain?.let { it() } },
+                colors = ButtonDefaults.buttonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                shape = RoundedCornerShape(5.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.try_again),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

@@ -6,10 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.text.TextUtils
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,11 +40,16 @@ object FileHelper {
                 }
 
             } else if (isDownloadsDocument(uri)) {
-                val id = DocumentsContract.getDocumentId(uri)
-                val contentUri =
-                    ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                        java.lang.Long.valueOf(id))
-                return getDataColumn(context, contentUri, null, null)
+                try {
+                    val id = DocumentsContract.getDocumentId(uri)
+                    val contentUri =
+                        ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                            java.lang.Long.valueOf(id))
+                    return getDataColumn(context, contentUri, null, null)
+                }catch (e: NumberFormatException) {
+                    return uri.path
+                }
+
             } else if (isMediaDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).toTypedArray()
@@ -239,24 +246,7 @@ object FileHelper {
     }
 
     fun getFileNameFromUri(context: Context, uri: Uri): String? {
-        return when (uri.scheme) {
-            "content" -> {
-                val cursor = context.contentResolver.query(
-                    uri, null, null,
-                    null, null
-                )
-                cursor?.use {
-                    if (it.moveToFirst()) {
-                        val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        it.getString(nameIndex)
-                    } else {
-                        null
-                    }
-                }
-            }
-            "file" -> uri.lastPathSegment
-            else -> null
-        }
+        return uri.lastPathSegment
     }
 
     fun getFileNameFromAbsolutePath(filePath: String): String {

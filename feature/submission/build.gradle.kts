@@ -55,5 +55,5 @@ dependencies {
     implementation(project(":shared:auth"))
     implementation(project(":shared:district"))
     implementation(project(":shared:formprofile"))
-    implementation(project(":feature:requirementdocs"))
+    //implementation(project(":feature:requirementdocs"))
 }

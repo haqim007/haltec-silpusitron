@@ -1,5 +1,6 @@
 package com.haltec.silpusitron.feature.auth.otp.ui
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -127,6 +129,7 @@ private fun OTPForm(
         )
     }
 
+    val context = LocalContext.current
     if (state.value.requestOTPResult is Resource.Error){
         AlertDialog(
             onDismissRequest = { action(OTPUiAction.RequestOTP) },
@@ -137,6 +140,15 @@ private fun OTPForm(
                     }
                 ) {
                     Text(stringResource(CoreR.string.try_again))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        (context as? Activity)?.finish()
+                    }
+                ) {
+                    Text(stringResource(CoreR.string.close_app))
                 }
             },
             icon = {

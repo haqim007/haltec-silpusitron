@@ -6,17 +6,23 @@ import com.haltec.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResour
 import com.haltec.silpusitron.shared.auth.preference.AuthPreference
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
+import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
 import com.haltec.silpusitron.shared.formprofile.data.remote.FormOptionPath
 import com.haltec.silpusitron.shared.formprofile.data.remote.FormProfileRemoteDataSource
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.ProfileInputOptionsResponse
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.ProfileResponse
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.SubDistrictsResponse
+import com.haltec.silpusitron.shared.formprofile.data.remote.response.SubmitProfileResponse
+import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.shared.formprofile.domain.repository.IFormProfileRepository
 import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
 
 internal class FormProfileRepository(
     private val remoteDataSource: FormProfileRemoteDataSource,
@@ -98,6 +104,38 @@ internal class FormProfileRepository(
                 )
             }
 
+        }
+            .asFlow()
+            .flowOn(dispatcher.io)
+    }
+
+    override fun submitProfile(
+        data: ProfileData,
+        input: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>
+    ): Flow<Resource<ProfileData>> {
+        return object : AuthorizedNetworkBoundResource<ProfileData, SubmitProfileResponse>(
+            authPreference
+        ) {
+
+            override suspend fun getToken(): String {
+                return authPreference.getToken().first()
+            }
+
+            override suspend fun requestFromRemote(): Result<SubmitProfileResponse> {
+                return remoteDataSource.submitProfile(getToken(), input.toProfileRequest())
+            }
+
+            override fun loadResult(responseData: SubmitProfileResponse): Flow<ProfileData> {
+                return flowOf(responseData.toProfileData(data))
+            }
+
+            override fun loadResultOnError(responseData: JsonElement?): ProfileData? {
+                if (responseData == null) return null
+
+                return Json
+                    .decodeFromJsonElement<SubmitProfileResponse>(responseData)
+                    .toProfileData(data)
+            }
         }
             .asFlow()
             .flowOn(dispatcher.io)

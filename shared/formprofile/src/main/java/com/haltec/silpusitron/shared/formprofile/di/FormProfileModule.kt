@@ -15,6 +15,7 @@ import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProffesionOpt
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProfileUseCase
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetReligionOptionsUseCase
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetSubDistrictsUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.SubmitProfileUseCase
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.ValidateAllInputUseCase
 import com.haltec.silpusitron.shared.formprofile.ui.FormProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -37,6 +38,7 @@ val formProfileModule = module {
     includes(districtModule)
     factory { GetSubDistrictsUseCase() }
     factory { ValidateAllInputUseCase() }
+    factory { SubmitProfileUseCase() }
     viewModel {
         FormProfileViewModel(
             get(), get(), get(),

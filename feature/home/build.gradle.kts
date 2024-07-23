@@ -54,4 +54,5 @@ dependencies {
     implementation(project(":feature:requirementdocs"))
     implementation(project(":feature:submission"))
     implementation(project(":feature:user"))
+    implementation(project(":shared:formprofile"))
 }

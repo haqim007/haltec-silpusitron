@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,8 +50,9 @@ import com.haltec.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun AccountScreen(
+    modifier: Modifier = Modifier,
     viewModel: AccountViewModel = koinViewModel(),
-    modifier: Modifier = Modifier
+    navigateToAccountProfileScreen: () -> Unit
 ){
     val action = {action: AccountUiAction -> viewModel.doAction(action)}
     Column(
@@ -75,8 +77,11 @@ fun AccountScreen(
             Card(
                 modifier = modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
-                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.secondary),
+                    .wrapContentHeight()
+                    .clickable {
+                        navigateToAccountProfileScreen()
+                    },
+                border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.secondary),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = BackgroundLight
                 ),
@@ -124,7 +129,7 @@ fun AccountScreen(
                     .clickable {
                         showDialog = true
                     },
-                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.secondary),
+                border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.secondary),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = BackgroundLight
                 ),
@@ -200,7 +205,7 @@ private fun DialogLogout(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp),
+                        .padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -209,15 +214,19 @@ private fun DialogLogout(
                         jsonRaw = CoreR.raw.lottie_questioning
                     )
 
-                    Text(text = stringResource(id = R.string.are_you_sure_wanna_leave_app))
+                    Text(
+                        text = stringResource(id = R.string.are_you_sure_wanna_leave_app),
+                        textAlign = TextAlign.Center
+                    )
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 50.dp),
-                        horizontalArrangement = Arrangement.SpaceAround,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Button(
+                            modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors().copy(
                                 contentColor = MaterialTheme.colorScheme.primary,
                                 containerColor = Color.Transparent
@@ -229,6 +238,7 @@ private fun DialogLogout(
                         }
 
                         Button(
+                            modifier = Modifier.weight(1f),
                             onClick = { onShow(false) },
                             colors = ButtonDefaults.buttonColors().copy(
                                 contentColor = MaterialTheme.colorScheme.onError,
@@ -251,7 +261,7 @@ private fun DialogLogout(
 fun AccountScreen_Preview(){
     KoinPreviewWrapper(modules = listOf(accountModule)) {
         SILPUSITRONTheme {
-            AccountScreen()
+            AccountScreen(navigateToAccountProfileScreen = {})
         }
     }
 }

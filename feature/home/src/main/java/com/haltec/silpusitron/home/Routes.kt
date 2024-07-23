@@ -1,6 +1,6 @@
 package com.haltec.silpusitron.home
 
-import com.haltec.silpusitron.feature.submission.ui.SubmissionDocFormArgs
+import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgs
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +13,10 @@ object InquiryRoute
 object HistoriesRoute
 
 @Serializable
-object ProfileRoute
+object AccountRoute
+
+@Serializable
+object ProfileAccountRoute
 
 @Serializable
 data class FormSubmission(

@@ -33,7 +33,7 @@ fun SubmitSuccessView(
     onComplete: () -> Unit = {}
 ) {
     LaunchedEffect(key1 = Unit) {
-        delay(1000)
+        delay(3000)
         onComplete()
     }
 
@@ -78,7 +78,6 @@ fun SubmitSuccessView(
     message: String = stringResource(R.string.successfully_saved),
     onComplete: () -> Unit = {}
 ) {
-
     SubmitSuccessView(
         onComplete = onComplete,
         text = {

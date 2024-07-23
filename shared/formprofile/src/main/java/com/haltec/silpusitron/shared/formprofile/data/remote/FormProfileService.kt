@@ -4,9 +4,12 @@ import com.haltec.silpusitron.data.remote.base.KtorService
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.ProfileInputOptionsResponse
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.ProfileResponse
 import com.haltec.silpusitron.shared.formprofile.data.remote.response.SubDistrictsResponse
+import com.haltec.silpusitron.shared.formprofile.data.remote.response.SubmitProfileResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
 
 enum class FormOptionPath(private val path: String){
     GENDER("jenis_kelamin"),
@@ -56,6 +59,18 @@ internal class FormProfileService(
                 endpoint("desa/kecamatan/$districtId")
             }
             bearerAuth(token)
+        }
+
+        checkOrThrowError(response)
+
+        return response.body()
+    }
+
+    suspend fun submitProfile(token: String, data: ProfileRequest): SubmitProfileResponse {
+        val response = client.put{
+            endpoint("users/profile")
+            bearerAuth(token)
+            setBody(data)
         }
 
         checkOrThrowError(response)

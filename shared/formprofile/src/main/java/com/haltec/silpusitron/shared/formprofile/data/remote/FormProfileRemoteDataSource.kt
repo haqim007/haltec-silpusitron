@@ -16,4 +16,8 @@ internal class FormProfileRemoteDataSource(
     suspend fun getSubDistricts(token: String, districtId: String?) = getResult {
         service.getSubDistricts(token, districtId)
     }
+
+    suspend fun submitProfile(token: String, data: ProfileRequest) = getResult {
+        service.submitProfile(token, data)
+    }
 }

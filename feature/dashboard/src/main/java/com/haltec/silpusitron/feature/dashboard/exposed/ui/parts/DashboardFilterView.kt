@@ -40,6 +40,7 @@ import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.dashboard.R
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.shared.form.domain.model.getValue
+import com.haltec.silpusitron.shared.form.ui.parts.InputDatePicker
 import kotlinx.datetime.LocalDateTime
 import com.haltec.silpusitron.core.ui.R as CoreR
 
@@ -158,7 +159,7 @@ fun DashboardFilterView(
         InputDatePicker(
             value = startDateState,
             placeholder = {
-                Text(text = stringResource(R.string.start_date))
+                Text(text = stringResource(CoreR.string.start_date))
             },
             setDate = {
                 startDateState = it
@@ -169,7 +170,7 @@ fun DashboardFilterView(
         InputDatePicker(
             value = endDateState,
             placeholder = {
-                Text(text = stringResource(R.string.end_date))
+                Text(text = stringResource(CoreR.string.end_date))
             },
             setDate = {
                 endDateState = it

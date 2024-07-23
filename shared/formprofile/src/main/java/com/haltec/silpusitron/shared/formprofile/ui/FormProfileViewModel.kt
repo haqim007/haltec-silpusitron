@@ -6,6 +6,7 @@ import com.haltec.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
 import com.haltec.silpusitron.shared.form.domain.model.TextValidationType
+import com.haltec.silpusitron.shared.form.domain.model.validate
 import com.haltec.silpusitron.shared.form.ui.BaseFormViewModel
 import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileData
@@ -18,7 +19,7 @@ import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProffesionOpt
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetProfileUseCase
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetReligionOptionsUseCase
 import com.haltec.silpusitron.shared.formprofile.domain.usecase.GetSubDistrictsUseCase
-import com.haltec.silpusitron.shared.formprofile.domain.usecase.ValidateAllInputUseCase
+import com.haltec.silpusitron.shared.formprofile.domain.usecase.SubmitProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -35,18 +36,13 @@ class FormProfileViewModel(
     private val getEducationOptionsUseCase: GetEducationOptionsUseCase,
     private val getDistrictsUseCase: GetDistrictsUseCase,
     private val getSubDistrictsUseCase: GetSubDistrictsUseCase,
-    private val validateAllInputUseCase: ValidateAllInputUseCase
+    private val submitUseCase: SubmitProfileUseCase
 ) : BaseFormViewModel<FormProfileUiState, FormProfileUiAction>() {
     override val _state = MutableStateFlow(FormProfileUiState())
     override fun doAction(action: FormProfileUiAction) {
         when(action){
-            FormProfileUiAction.GetProfileData -> {
-                fetchProfileData()
-            }
-            is FormProfileUiAction.SetInput -> {
-                setInput(action.input, action.value)
-            }
-
+            FormProfileUiAction.GetProfileData -> fetchProfileData()
+            is FormProfileUiAction.SetInput -> setInput(action.input, action.value)
             FormProfileUiAction.GetBloodTypeOptions -> fetchBloodTypeOptions()
             FormProfileUiAction.GetEducationOptions -> fetchEducationOptions()
             FormProfileUiAction.GetFamRelationStatusOptions -> fetchFamRelationStatusOptions()
@@ -54,7 +50,7 @@ class FormProfileViewModel(
             FormProfileUiAction.GetMarriageStatusOptions -> fetchMarriageStatusOptions()
             FormProfileUiAction.GetProfessionOptions -> fetchProfessionOptions()
             FormProfileUiAction.GetReligionOptions -> fetchReligionOptions()
-            FormProfileUiAction.Submit -> submit()
+            FormProfileUiAction.ValidateAll -> validateAll()
             FormProfileUiAction.GetDistrictOptions -> fetchDistrictOptions()
             FormProfileUiAction.GetSubDistrictOptions -> fetchSubDistrictOptions()
             is FormProfileUiAction.SaveInputViewCoordinateY -> saveInputViewCoordinateY(
@@ -64,6 +60,56 @@ class FormProfileViewModel(
             FormProfileUiAction.ResetFirstErrorInputKey -> resetFirstErrorKey()
             FormProfileUiAction.ResetIsAllValidState -> _state.update { state ->
                 state.copy(isAllValid = null)
+            }
+            FormProfileUiAction.Submit -> submit()
+            FormProfileUiAction.ResetSubmitState -> _state.update { state ->
+                state.copy(submitResult = Resource.Idle())
+            }
+
+            is FormProfileUiAction.SetDummyState -> _state.update { action.state }
+        }
+    }
+
+    private fun submit() {
+        if(!validateAll()) return
+        viewModelScope.launch {
+            submitUseCase(
+                state.value.profileData.data!!,
+                state.value.inputs
+            ).collectLatest {
+                if (it is Resource.Success){
+                    _state.update { state ->
+                        state.copy(
+                            submitResult = it,
+                            inputs = it.data!!.input
+                        )
+                    }
+                }
+                else if(it is Resource.Error){
+                    val errorInputs = it.data?.input
+                    val currentInput = state.value.inputs.toMutableMap()
+                    errorInputs?.forEach { (key, input) ->
+                        currentInput[key]?.let { currentInputItem ->
+                            currentInput[key] = currentInputItem.copy(
+                                message = input.message
+                            )
+                        }
+                    }
+                    _state.update { state ->
+                        state.copy(
+                            submitResult = it,
+                            inputs = currentInput,
+                            firstErrorInputKey = currentInput.entries.find { !it.value.isValid }?.key,
+                        )
+                    }
+                }
+                else{
+                    _state.update { state ->
+                        state.copy(
+                            submitResult = it,
+                        )
+                    }
+                }
             }
         }
     }
@@ -82,19 +128,36 @@ class FormProfileViewModel(
         }
     }
 
-    private fun submit(){
-        val validateInputs = validateAllInputUseCase(state.value.inputs)
-        _state.update { state -> state.copy(isAllValid = validateInputs.isAllValid) }
-        if (!validateInputs.isAllValid){
-            _state.update { state ->
-                state.copy(
-                    inputs = validateInputs.input,
-                    firstErrorInputKey = validateInputs.firstErrorInputKey
-                )
+    private fun validateAll(): Boolean{
+
+        var isAllValid = true
+        var firstErrorInputKey: FormProfileInputKey? = null
+
+        val newInputs = state.value.inputs.toMutableMap()
+        newInputs.forEach {
+            newInputs[it.key] = it.value.validate()
+
+            if (isAllValid && newInputs[it.key]?.isValid == false) {
+                isAllValid = false
+                if (firstErrorInputKey == null){
+                    firstErrorInputKey = it.key
+                }
             }
 
-            return
+            _state.update { state ->
+                state.copy(
+                    inputs = newInputs,
+                )
+            }
         }
+
+        _state.update { state ->
+            state.copy(
+                firstErrorInputKey = firstErrorInputKey
+            )
+        }
+
+        return isAllValid
     }
 
     private fun fetchProfileData(){
@@ -415,7 +478,17 @@ class FormProfileViewModel(
 
             val newInput = updateStateInputText(
                 inputState,
-                value
+                if (key == FormProfileInputKey.PHONE_NUMBER){
+                    if (value.startsWith("62")){
+                        value.replaceFirst("^62".toRegex(), "")
+                    }
+                    else if (value.startsWith("08")){
+                        value.replaceFirst("^08".toRegex(), "8")
+                    }
+                    else value
+                }else{
+                    value
+                }
             )
 
             val newInputs = state.value.inputs.toMutableMap()
@@ -442,6 +515,7 @@ sealed class FormProfileUiAction{
     data object GetEducationOptions: FormProfileUiAction()
     data object GetProfessionOptions: FormProfileUiAction()
     data object GetMarriageStatusOptions: FormProfileUiAction()
+    data object ValidateAll: FormProfileUiAction()
     data object Submit: FormProfileUiAction()
     data object GetDistrictOptions: FormProfileUiAction()
     data object GetSubDistrictOptions: FormProfileUiAction()
@@ -449,8 +523,12 @@ sealed class FormProfileUiAction{
         val key: FormProfileInputKey,
         val coordinateY: Float
     ): FormProfileUiAction()
+
+    data class SetDummyState(val state: FormProfileUiState) : FormProfileUiAction()
+
     data object ResetFirstErrorInputKey: FormProfileUiAction()
     data object ResetIsAllValidState: FormProfileUiAction()
+    data object ResetSubmitState: FormProfileUiAction()
 }
 
 /**
@@ -486,6 +564,7 @@ data class FormProfileUiState(
     val subDistrictOptions: Resource<InputOptions> = Resource.Idle(),
     val inputsCoordinateY: Map<FormProfileInputKey, Float> = mapOf(),
     val firstErrorInputKey: FormProfileInputKey? = null,
-    val isAllValid: Boolean? = null
+    val isAllValid: Boolean? = null,
+    val submitResult: Resource<ProfileData> = Resource.Idle()
 )
 

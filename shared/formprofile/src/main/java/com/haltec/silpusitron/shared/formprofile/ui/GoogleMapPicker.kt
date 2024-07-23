@@ -1,13 +1,12 @@
 package com.haltec.silpusitron.shared.formprofile.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,8 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.isGranted
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -48,7 +45,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.haltec.silpusitron.core.ui.R
-import com.haltec.silpusitron.core.ui.util.PermissionRequester
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -67,7 +63,7 @@ fun GoogleMapPicker(
     modifier: Modifier = Modifier,
     latitude: Double?,
     longitude: Double?,
-    mapPermissionState: MultiplePermissionsState?,
+    isMapPermissionGranted: Boolean,
     onChange: (latitude: String, longitude: String) -> Unit
 ) {
     val context = LocalContext.current
@@ -116,11 +112,8 @@ fun GoogleMapPicker(
         }
     }
 
-    LaunchedEffect(key1 = mapPermissionState) {
-        val isGranted = mapPermissionState
-            ?.permissions
-            ?.firstOrNull { !it.status.isGranted } == null
-        if (isGranted){
+    LaunchedEffect(key1 = isMapPermissionGranted) {
+        if (isMapPermissionGranted){
             // Retrieve the current location asynchronously
             fusedLocationProviderClient.getCurrentLocation(
                 Priority.PRIORITY_BALANCED_POWER_ACCURACY,
@@ -130,7 +123,7 @@ fun GoogleMapPicker(
                     currentLocation = LatLng(it.latitude, it.longitude)
                 }
             }.addOnFailureListener { exception ->
-                Toast.makeText(context, exception.message, Toast.LENGTH_LONG).show()
+                Log.e("GoogleMapPicker", exception.message ?: "")
             }
         }
     }
@@ -203,10 +196,10 @@ fun GoogleMapPicker(
                     uiSettings = uiSettings.copy(
                         scrollGesturesEnabled = true,
                         rotationGesturesEnabled = true,
-                        myLocationButtonEnabled = true
+                        myLocationButtonEnabled = isMapPermissionGranted
                     ),
                     properties = properties.copy(
-                        isMyLocationEnabled = true
+                        isMyLocationEnabled = isMapPermissionGranted
                     )
                 ) {
                     Marker(

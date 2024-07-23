@@ -39,9 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -73,7 +70,6 @@ import com.haltec.silpusitron.feature.requirementdocs.common.di.requirementDocMo
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.requirementDocDummies
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.parts.ReqDocView
-import com.haltec.silpusitron.shared.form.domain.model.getValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import com.haltec.silpusitron.core.ui.R as CoreR
@@ -304,7 +300,7 @@ fun ReqDocList(
                         AppExposedDropdownModel(it.label, it.value)
                     } ?: listOf(),
                     label = {
-                        Text(text = stringResource(R.string.letter_level_type))
+                        Text(text = stringResource(R.string.letter_level_title))
                     },
                     trailingIcon = { setExpand, defaultIcon ->
                         when(state.letterLevelOptions){

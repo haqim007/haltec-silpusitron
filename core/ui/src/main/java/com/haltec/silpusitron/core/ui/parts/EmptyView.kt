@@ -26,11 +26,12 @@ import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 
 @Composable
 fun EmptyView(
+    modifier: Modifier = Modifier,
     message: String?,
     onTryAgain: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -38,7 +39,7 @@ fun EmptyView(
             jsonRaw = R.raw.lottie_empty,
             modifier = Modifier
                 .padding(bottom = 14.dp)
-                .size(350.dp)
+                .size(250.dp)
         )
 
         Text(

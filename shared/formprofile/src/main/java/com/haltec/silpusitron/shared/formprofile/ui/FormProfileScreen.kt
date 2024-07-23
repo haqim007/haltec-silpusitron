@@ -27,12 +27,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.component.InputLabel
+import com.haltec.silpusitron.core.ui.parts.DialogError
+import com.haltec.silpusitron.core.ui.parts.DialogLoadingDocView
 import com.haltec.silpusitron.core.ui.parts.ErrorView
 import com.haltec.silpusitron.core.ui.parts.LoadingView
+import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
@@ -47,20 +50,40 @@ import com.haltec.silpusitron.shared.formprofile.data.dummy.formProfileInputDumm
 import com.haltec.silpusitron.shared.formprofile.di.formProfileModule
 import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
 import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileDataDummy
+import io.ktor.http.HttpStatusCode
 
 
-@OptIn(ExperimentalPermissionsApi::class)
+/**
+ * Form profile screen
+ *
+ * @param modifier
+ * @param state
+ * @param action
+ * @param withMap flags to use map picker
+ * @param isMapPermissionGranted state indicate that location permission already handled by upper view and allowed by user
+ * @param title Content on top of the main content
+ * @param additionalContent additional views below the main contents inside Column scope
+ * @param hasLoadForm state that can be controlled by upper view to flags whether the form already loaded or not
+ * @param setHasLoadForm callback to let upper view knows that the form has been loaded
+ * @param onSuccessSubmit To do anything when submitting the form (if it is used) succeed
+ * @param onTokenExpired In case when submit expired, because when getting the profile data without token, call this to reset preference
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun FormProfileScreen(
     modifier: Modifier = Modifier,
     state: FormProfileUiState,
     action: (action: FormProfileUiAction) -> Unit,
     withMap: Boolean = false,
-    mapPermissionState: MultiplePermissionsState? = null,
+    isMapPermissionGranted: Boolean = false,
     title: @Composable (ColumnScope.() -> Unit)? = null,
     additionalContent: @Composable (ColumnScope.() -> Unit)? = null,
     hasLoadForm: Boolean = false,
     setHasLoadForm: () -> Unit = {},
+    onSuccessSubmit: () -> Unit = {},
+    onTokenExpired: () -> Unit = {},
 ){
 
     LaunchedEffect(key1 = Unit) {
@@ -83,7 +106,7 @@ fun FormProfileScreen(
                     state = state,
                     action = action,
                     withMap = withMap,
-                    mapPermissionState = mapPermissionState,
+                    isMapPermissionGranted = isMapPermissionGranted,
                     title = title,
                     setHasLoadForm = setHasLoadForm,
                     additionalContent = additionalContent
@@ -91,10 +114,15 @@ fun FormProfileScreen(
             }
 
             is Resource.Error -> {
-                ErrorView(
-                    message = state.profileData.message,
-                    onTryAgain = { action(FormProfileUiAction.GetProfileData) }
-                )
+                if (state.profileData.httpCode == HttpStatusCode.Unauthorized.value){
+                    onTokenExpired()
+                }else{
+                    ErrorView(
+                        message = state.profileData.message,
+                        onTryAgain = { action(FormProfileUiAction.GetProfileData) }
+                    )
+                }
+
             }
 
             else -> {
@@ -102,17 +130,43 @@ fun FormProfileScreen(
             }
         }
 
+        when(state.submitResult){
+            is Resource.Error -> {
+                DialogError(
+                    message = state.submitResult.message,
+                    onDismissRequest = {
+                        action(FormProfileUiAction.ResetSubmitState)
+                    },
+                    onTryAgain = {
+                        action(FormProfileUiAction.Submit)
+                    }
+                )
+
+            }
+            is Resource.Idle -> Unit
+            is Resource.Loading -> {
+                DialogLoadingDocView(
+                    onDismissRequest = {},
+                    properties = DialogProperties(
+                        dismissOnClickOutside = false,
+                        dismissOnBackPress = false
+                    )
+                )
+            }
+            is Resource.Success ->{
+                SubmitSuccessView(onComplete = onSuccessSubmit)
+            }
+        }
+
     }
 }
 
-
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileDataForm(
     modifier: Modifier = Modifier,
     state: FormProfileUiState,
     withMap: Boolean = false,
-    mapPermissionState: MultiplePermissionsState? = null,
+    isMapPermissionGranted: Boolean = false,
     setHasLoadForm: () -> Unit = {},
     title: @Composable() (ColumnScope.() -> Unit)?,
     action: (action: FormProfileUiAction) -> Unit,
@@ -704,7 +758,7 @@ fun ProfileDataForm(
             GoogleMapPicker(
                 latitude = latitude?.value?.toDoubleOrNull(),
                 longitude = longitude?.value?.toDoubleOrNull(),
-                mapPermissionState = mapPermissionState,
+                isMapPermissionGranted = isMapPermissionGranted,
                 onChange = { latitudeValue, longitudeValue ->
                     if (latitude != null && longitude != null){
                         action(

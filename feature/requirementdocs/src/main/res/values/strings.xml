@@ -3,7 +3,7 @@
     <string name="requirement_docs_info">Informasi Berkas Persyaratan</string>
     <string name="requirements">Persyaratan</string>
     <string name="letter_type_title">Jenis Surat</string>
-    <string name="letter_level_type">Level Surat</string>
+    <string name="letter_level_title">Level Surat</string>
     <string name="letter_level_n">Level Surat : %1$s</string>
     <string name="letter_type_n">Jenis Surat : %1$s</string>
 </resources>

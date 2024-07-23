@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 
 @Composable
-fun TabBarView(tabItems: List<TabBarItem>){
-    var selectedIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-
+fun TabBarView(
+    selectedIndex: Int,
+    tabItems: List<TabBarItem>,
+    selectIndex: (Int) -> Unit
+){
     Surface(
         shadowElevation = 10.dp
     ) {
@@ -40,7 +40,7 @@ fun TabBarView(tabItems: List<TabBarItem>){
                 NavigationBarItem(
                     selected = index == selectedIndex,
                     onClick = {
-                        selectedIndex = index
+                        selectIndex(index)
                         tab.navigate()
                     },
                     icon = { TabBarIconView(tabBar = tab, isSelected = index == selectedIndex) },
@@ -73,6 +73,6 @@ val tabBarItems = listOf(homeTab, alertsTab, settingsTab, moreTab)
 @Composable
 fun TabBarViewPreview(){
     SILPUSITRONTheme {
-        TabBarView(tabBarItems)
+        TabBarView(0, tabBarItems){_ ->}
     }
 }

@@ -37,7 +37,7 @@ fun ReqDocView(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary),
+        border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.secondary),
         colors = CardDefaults.cardColors().copy(
             containerColor = BackgroundLight
         ),

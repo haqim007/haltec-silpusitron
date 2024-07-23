@@ -97,13 +97,13 @@ internal data class RequirementDocDataResponse(
 	val lastPageUrl: String,
 
 	@SerialName("from")
-	val from: Int,
+	val from: Int ? = null,
 
 	@SerialName("links")
 	val links: List<LinksItem>,
 
 	@SerialName("to")
-	val to: Int,
+	val to: Int? = null,
 
 	@SerialName("current_page")
 	val currentPage: Int
