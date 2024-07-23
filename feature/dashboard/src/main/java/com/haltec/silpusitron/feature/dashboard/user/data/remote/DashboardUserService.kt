@@ -7,7 +7,7 @@ import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.http.ParametersBuilder
 
-class DashboardUserService(
+internal class DashboardUserService(
     override val BASE_URL: String,
     override val API_VERSION: String
 ) : KtorService() {

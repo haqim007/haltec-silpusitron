@@ -3,6 +3,8 @@ package com.haltec.silpusitron.feature.dashboard.common.ui.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.MarqueeDefaults.Iterations
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -116,6 +118,10 @@ fun SummaryCard(
                                     fontSize = 12.sp,
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold
+                                ),
+                                maxLines = 1,
+                                modifier = Modifier.basicMarquee(
+                                    iterations = Int.MAX_VALUE
                                 )
                             )
 

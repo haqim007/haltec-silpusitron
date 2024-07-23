@@ -38,10 +38,8 @@ import com.haltec.silpusitron.core.ui.parts.navigation.TabBarItem
 import com.haltec.silpusitron.core.ui.parts.navigation.TabBarView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
-import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
+import com.haltec.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
-import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserViewModel
-import com.haltec.silpusitron.feature.dashboard.user.ui.dashboardUiStateDummy
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocList
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocViewModel
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgs
@@ -111,7 +109,6 @@ fun HomeScreen(
         }
     }
 
-
     var selectedIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
@@ -130,10 +127,7 @@ fun HomeScreen(
     ) { paddingInner ->
         NavHost(navController = navController, startDestination = DashboardRoute){
             composable<DashboardRoute>{
-                val dashboardViewModel: DashboardUserViewModel = koinViewModel()
-                val state by remember {
-                    mutableStateOf(dashboardUiStateDummy)
-                }
+
                 DisposableEffect(Unit) {
                     // Clean up resources if needed
                     // E.g., unsubscribe from listeners, close connections, etc.
@@ -145,9 +139,7 @@ fun HomeScreen(
                 }
                DashboardUserScreen(
                    sharedModifier = sharedModifier,
-                   state = state, /*viewModel.state.collectAsState()*/
                    animateWelcome = firstTimeLogin,
-                   action = dashboardViewModel::doAction
                )
             }
             composable<InquiryRoute>{
@@ -217,7 +209,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview(){
     KoinPreviewWrapper(
-        modules = listOf(dashboardModule)
+        modules = listOf(dashboardUserModule)
     ) {
         SILPUSITRONTheme {
             HomeScreen(

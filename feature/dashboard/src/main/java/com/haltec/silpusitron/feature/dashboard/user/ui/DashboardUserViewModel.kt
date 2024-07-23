@@ -8,7 +8,7 @@ import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardCha
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardData
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.PiesData
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.Summaries
-import com.haltec.silpusitron.feature.dashboard.common.domain.usecase.GetDashboardUserUseCase
+import com.haltec.silpusitron.feature.dashboard.user.domain.usecase.GetDashboardUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -21,6 +21,7 @@ class DashboardUserViewModel(
     override fun doAction(action: DashboardUserUiAction) {
         when(action){
             DashboardUserUiAction.GetData -> getDashboardData()
+            is DashboardUserUiAction.SetDummyState -> _state.update { action.state }
         }
     }
 
@@ -39,6 +40,8 @@ data class DashboardUserUiState(
 
 sealed class DashboardUserUiAction{
     data object GetData: DashboardUserUiAction()
+
+    data class SetDummyState(val state: DashboardUserUiState): DashboardUserUiAction()
 }
 
 
@@ -49,7 +52,7 @@ val dashboardUiStateDummy = DashboardUserUiState(
                     type = DashboardChart.SUMMARY,
                     data = listOf(
                         Summaries.Summary(
-                            label = "Total Pengajuan Surat",
+                            label = "Total Pengajuan Surat Total Pengajuan Surat ",
                             value = 10
                         ),
                         Summaries.Summary(

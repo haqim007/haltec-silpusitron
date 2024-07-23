@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.dashboard.common.domain.usecase
+package com.haltec.silpusitron.feature.dashboard.user.domain.usecase
 
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.dashboard.common.domain.model.DashboardData
@@ -10,7 +10,8 @@ import org.koin.core.component.inject
 
 class GetDashboardUserUseCase: KoinComponent{
 
-    private val repository: IDashboardUserRepository by inject<IDashboardUserRepository>()
+    private val repository: IDashboardUserRepository by inject()
+
     operator fun invoke(): Flow<Resource<List<DashboardData>>>{
         return repository.getData()
     }

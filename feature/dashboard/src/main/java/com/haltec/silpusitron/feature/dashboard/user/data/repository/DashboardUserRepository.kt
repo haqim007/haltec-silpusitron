@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 
-class DashboardUserRepository(
+internal class DashboardUserRepository(
     private val dispatcher: DispatcherProvider,
     private val remoteDataSource: DashboardUserRemoteDataSource,
     private val preferences: AuthPreference

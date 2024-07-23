@@ -5,7 +5,7 @@ import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.di.appModule
 import com.haltec.silpusitron.feature.auth.di.authModule
-import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
+import com.haltec.silpusitron.feature.dashboard.exposed.di.dashboardExposedModule
 import com.haltec.silpusitron.feature.requirementdocs.common.di.requirementDocModule
 import com.haltec.silpusitron.home.homeModule
 import com.haltec.silpusitron.user.profileold.di.profileModule
@@ -26,7 +26,7 @@ class MainApplication : Application() {
             // Load modules
              modules(
                  commonModule, dataModule, authModule, appModule,
-                 dashboardModule, requirementDocModule, profileModule,
+                 dashboardExposedModule, requirementDocModule, profileModule,
                  homeModule
              )
         }

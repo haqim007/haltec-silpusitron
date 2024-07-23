@@ -12,18 +12,6 @@ class DashboardExposedService(
     override val API_VERSION: String
 ) : KtorService() {
 
-    private val path = "dashboard"
-    suspend fun getDashboard(token: String): DashboardResponse {
-        val response = client.get {
-            bearerAuth(token)
-            endpoint(path)
-        }
-
-        checkOrThrowError(response)
-
-        return response.body<DashboardResponse>()
-    }
-
     suspend fun getDashboard(
         districtId: String? = null,
         startDate: String? = null,

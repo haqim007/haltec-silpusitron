@@ -54,8 +54,8 @@ import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.dashboard.R
-import com.haltec.silpusitron.feature.dashboard.common.di.dashboardModule
 import com.haltec.silpusitron.feature.dashboard.common.ui.parts.DashboardContent
+import com.haltec.silpusitron.feature.dashboard.exposed.di.dashboardExposedModule
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.DashboardFilterView
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.NewsImagesPager
 import kotlinx.coroutines.delay
@@ -389,7 +389,7 @@ private fun DashboardFloatingButton(
 @Composable
 private fun DashboardExposedScreenPreview(){
     KoinPreviewWrapper(
-        modules = listOf(commonModule, dataModule, dashboardModule)
+        modules = listOf(commonModule, dataModule, dashboardExposedModule)
     ) {
         val state by remember {
             mutableStateOf(
@@ -411,7 +411,7 @@ private fun DashboardExposedScreenPreview(){
 @Composable
 private fun DashboardExposedScreenLoadingPreview(){
     KoinPreviewWrapper(
-        modules = listOf(commonModule, dataModule, dashboardModule)
+        modules = listOf(commonModule, dataModule, dashboardExposedModule)
     ) {
         val state by remember {
             mutableStateOf(
