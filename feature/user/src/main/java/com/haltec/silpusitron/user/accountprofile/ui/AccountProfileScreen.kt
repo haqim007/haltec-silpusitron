@@ -2,21 +2,16 @@ package com.haltec.silpusitron.user.accountprofile.ui
 
 import android.Manifest
 import android.app.Activity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.SaveAs
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,18 +23,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.parts.SimpleTopAppBar
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.gradientColors
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.core.ui.util.PermissionRequester
 import com.haltec.silpusitron.core.ui.util.isPermissionGranted
@@ -67,43 +58,10 @@ fun AccountProfileScreen(
 
     Scaffold(
         topBar = {
-            Row(
-                Modifier
-                    .background(
-                        brush = Brush.linearGradient(
-                            gradientColors,
-                            start = Offset(0f, Float.POSITIVE_INFINITY),
-                            end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                        ),
-                        shape = RoundedCornerShape(
-                            bottomEnd = 20.dp, bottomStart = 20.dp
-                        )
-                    )
-            ) {
-                IconButton(
-                    onClick = { onNavigateBack() },
-                    colors = IconButtonDefaults.iconButtonColors()
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(id = CoreR.string.back),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-                SmallTopBar(
-                    shape = RoundedCornerShape(0.dp),
-                    modifier = Modifier.height(50.dp),
-                ) {
-                    Text(
-                        text = stringResource(CoreR.string.profile),
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                    )
-                }
-            }
+            SimpleTopAppBar(
+                title = stringResource(CoreR.string.profile),
+                onNavigateBack = onNavigateBack
+            )
         }
     ) { innerPadding ->
 

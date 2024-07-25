@@ -34,8 +34,14 @@ data class SubmissionHistoriesResponse(
 		@SerialName("template_surat")
 		val templateSurat: String,
 
-		@SerialName("status")
-		val status: String
+		@SerialName("status_label")
+		val status: String,
+
+		@SerialName("url")
+		val fileUrl: String? = null,
+
+		@SerialName("is_finish")
+		val isFinish: Boolean,
 	)
 
 	@Serializable

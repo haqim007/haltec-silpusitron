@@ -32,9 +32,6 @@ internal class SubmissionDocRepository(
 ): ISubmissionDocRepository {
     override fun getTemplate(id: Int): Flow<Resource<TemplateForm>> {
         return object : AuthorizedNetworkBoundResource<TemplateForm, TemplateResponse>(preferences) {
-            override suspend fun getToken(): String {
-                return preferences.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<TemplateResponse> {
                 return remoteDatasource.getTemplate(id, getToken())
@@ -56,9 +53,6 @@ internal class SubmissionDocRepository(
         forms: Map<VariableId, InputTextData<TextValidationType, String>>
     ): Flow<Resource<String>> {
         return object : AuthorizedNetworkBoundResource<String, SubmitResponse>(preferences) {
-            override suspend fun getToken(): String {
-                return preferences.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<SubmitResponse> {
                 val request = SubmitSubmissionRequest(

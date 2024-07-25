@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.loading
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

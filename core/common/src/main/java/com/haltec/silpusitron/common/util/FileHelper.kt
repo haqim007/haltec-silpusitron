@@ -1,7 +1,9 @@
 package com.haltec.silpusitron.common.util
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -11,13 +13,15 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.text.TextUtils
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
+import androidx.core.net.toUri
+import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.UUID
@@ -25,6 +29,32 @@ import java.util.UUID
 object FileHelper {
 
     var FALLBACK_COPY_FOLDER: String = "upload_part"
+
+    fun copyFileToDownloads(context: Context, downloadedFile: File): Uri? {
+        val resolver = context.contentResolver
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, getFileName(downloadedFile.toUri()))
+                put(MediaStore.MediaColumns.MIME_TYPE, getMimeType(downloadedFile.toString()))
+                put(MediaStore.MediaColumns.SIZE, downloadedFile.length())
+            }
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        } else {
+//          No need to copy because there is same file path to destination path
+            null
+        }?.also { downloadedUri ->
+            resolver.openOutputStream(downloadedUri).use { outputStream ->
+                val brr = ByteArray(1024)
+                var len: Int
+                val bufferedInputStream = BufferedInputStream(FileInputStream(downloadedFile.absoluteFile))
+                while ((bufferedInputStream.read(brr, 0, brr.size).also { len = it }) != -1) {
+                    outputStream?.write(brr, 0, len)
+                }
+                outputStream?.flush()
+                bufferedInputStream.close()
+            }
+        }
+    }
 
     fun getPath(context: Context, uri: Uri): String? {
 
@@ -233,20 +263,51 @@ object FileHelper {
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.lowercase())
     }
 
-    fun absolutePathToUri(
-        context: Context,
-        applicationId: String,
-        absolutePath: String): Uri? {
-        val file = File(absolutePath)
+    fun getInternalFileUri(context: Context, file: File): Uri? {
         return FileProvider.getUriForFile(
             context,
-            "$applicationId.fileprovider", // Replace with your FileProvider authority
+            "${context.packageName}.fileprovider", // Use the same authority as in the manifest
             file
         )
     }
 
-    fun getFileNameFromUri(context: Context, uri: Uri): String? {
+    fun absolutePathToUri(
+        context: Context,
+        absolutePath: String): Uri? {
+        val file = File(absolutePath)
+        return FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider", // Replace with your FileProvider authority
+            file
+        )
+    }
+
+    fun getFileName(uri: Uri): String? {
         return uri.lastPathSegment
+    }
+
+    @SuppressLint("Range")
+    fun getFileName(context: Context, uri: Uri): String? {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+            cursor.use {
+                if (it != null && it.moveToFirst()) {
+                    if (it.getColumnIndex(OpenableColumns.DISPLAY_NAME)>= 0){
+                        result = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    }
+
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result!!.substring(cut + 1)
+            }
+        }
+        return result
     }
 
     fun getFileNameFromAbsolutePath(filePath: String): String {

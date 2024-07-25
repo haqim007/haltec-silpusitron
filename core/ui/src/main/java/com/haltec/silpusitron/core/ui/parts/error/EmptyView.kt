@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.error
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

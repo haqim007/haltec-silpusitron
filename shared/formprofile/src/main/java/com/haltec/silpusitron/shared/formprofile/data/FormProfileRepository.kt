@@ -33,10 +33,6 @@ internal class FormProfileRepository(
     override fun getProfile(): Flow<Resource<ProfileData>> {
         return object : AuthorizedNetworkBoundResource<ProfileData, ProfileResponse>(authPreference) {
 
-            override suspend fun getToken(): String {
-                return authPreference.getToken().first()
-            }
-
             override suspend fun requestFromRemote(): Result<ProfileResponse> {
                 return remoteDataSource.getProfile(getToken())
             }
@@ -51,10 +47,6 @@ internal class FormProfileRepository(
 
     override fun getOptions(optionPath: FormOptionPath): Flow<Resource<InputOptions>> {
         return object : AuthorizedNetworkBoundResource<InputOptions, ProfileInputOptionsResponse>(authPreference) {
-
-            override suspend fun getToken(): String {
-                return authPreference.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<ProfileInputOptionsResponse> {
                 return remoteDataSource.getOptions(getToken(), optionPath)
@@ -81,10 +73,6 @@ internal class FormProfileRepository(
 
     override fun getSubDistricts(districtId: String?): Flow<Resource<InputOptions>> {
         return object : AuthorizedNetworkBoundResource<InputOptions, SubDistrictsResponse>(authPreference) {
-
-            override suspend fun getToken(): String {
-                return authPreference.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<SubDistrictsResponse> {
                 return remoteDataSource.getSubDistricts(getToken(), districtId)
@@ -116,10 +104,6 @@ internal class FormProfileRepository(
         return object : AuthorizedNetworkBoundResource<ProfileData, SubmitProfileResponse>(
             authPreference
         ) {
-
-            override suspend fun getToken(): String {
-                return authPreference.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<SubmitProfileResponse> {
                 return remoteDataSource.submitProfile(getToken(), input.toProfileRequest())

@@ -34,17 +34,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.haltec.silpusitron.core.ui.parts.navigation.TabBarItem
-import com.haltec.silpusitron.core.ui.parts.navigation.TabBarView
+import com.haltec.silpusitron.core.ui.parts.tab.TabBarItem
+import com.haltec.silpusitron.core.ui.parts.tab.TabBarView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocList
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocViewModel
+import com.haltec.silpusitron.feature.submission.docpreview.DocPreviewScreen
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgs
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgsType
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocScreen
+import com.haltec.silpusitron.feature.submission.history.domain.SubmissionHistory
+import com.haltec.silpusitron.feature.submission.history.domain.submissionHistoryType
 import com.haltec.silpusitron.feature.submission.history.ui.SubmissionHistoriesScreen
 import com.haltec.silpusitron.user.account.ui.AccountScreen
 import com.haltec.silpusitron.user.accountprofile.ui.AccountProfileScreen
@@ -183,7 +186,23 @@ fun HomeScreen(
             composable<HistoriesRoute>{
                 SubmissionHistoriesScreen(
                     modifier = Modifier.padding(paddingInner),
-                    onClick = {}
+                    onClick = { history ->
+                        navController.navigate(
+                            DocPreviewRoute(history)
+                        )
+                    }
+                )
+            }
+            composable<DocPreviewRoute>(
+                typeMap = mapOf(typeOf<SubmissionHistory>() to submissionHistoryType)
+            ) { backStackEntry ->
+                val history: SubmissionHistory by remember {
+                    mutableStateOf(backStackEntry.toRoute<DocPreviewRoute>().history)
+                }
+                DocPreviewScreen(
+                    modifier = Modifier.padding(paddingInner),
+                    history = history,
+                    onNavigateBack = navController::navigateUp,
                 )
             }
             composable<AccountRoute>{

@@ -46,6 +46,7 @@ fun PermissionRequester(
     onPermissionDenied: () -> Unit
 ) {
     if (LocalInspectionMode.current) return
+    if (permissions.isEmpty()) return
 
     val context = LocalContext.current as Activity
 
@@ -60,19 +61,25 @@ fun PermissionRequester(
         )
     }
 
-    var showSettingsDialog by remember { mutableStateOf(false) }
+    var showDeniedDialog by remember { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissionsResult ->
             val granted = permissionsResult.values.all { it }
             if (granted) {
-                // Permission granted, do location-related tasks
                 onPermissionGranted()
             } else {
-                if (!shouldShowRationale){
-                    showSettingsDialog = true
-                }
+//                 shouldShowRationale = permissionsResult.keys.any {
+//                    ActivityCompat.shouldShowRequestPermissionRationale(
+//                        context,
+//                        it,
+//                    )
+//                }
+//                if (!shouldShowRationale){
+//                    showDeniedDialog = true
+//                }
+                shouldShowRationale = true
 //                else{
 //                    shouldShowRationale = permissionsResult.keys.any {
 //                        ActivityCompat.shouldShowRequestPermissionRationale(
@@ -91,7 +98,7 @@ fun PermissionRequester(
         )
     }
 
-    if (shouldShowRationale) {
+    if (showDeniedDialog) {
         AlertDialog(
             properties = DialogProperties(
                 dismissOnClickOutside = false,
@@ -104,7 +111,7 @@ fun PermissionRequester(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    shouldShowRationale = false
+                    showDeniedDialog = false
                     permissionLauncher.launch(permissions.toTypedArray())
 
                 }) {
@@ -114,7 +121,7 @@ fun PermissionRequester(
             dismissButton = {
                 TextButton(onClick = {
                     onPermissionDenied()
-                    shouldShowRationale = false
+                    showDeniedDialog = false
                 }) {
                     Text(stringResource(id = CoreR.string.cancel))
                 }
@@ -122,7 +129,7 @@ fun PermissionRequester(
         )
     }
 
-    if (showSettingsDialog) {
+    if (shouldShowRationale) {
         AlertDialog(
             properties = DialogProperties(
                 dismissOnClickOutside = false,
@@ -142,14 +149,14 @@ fun PermissionRequester(
                                     .fromParts("package", context.packageName, null)
                             }
                     )
-                    showSettingsDialog = false
+                    shouldShowRationale = false
                 }) {
                     Text(stringResource(R.string.open_settings))
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
-                    showSettingsDialog = false
+                    shouldShowRationale = false
                     onPermissionDenied()
                 }) {
                     Text(stringResource(R.string.cancel))

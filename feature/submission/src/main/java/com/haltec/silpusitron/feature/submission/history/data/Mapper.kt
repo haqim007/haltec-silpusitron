@@ -10,6 +10,8 @@ fun SubmissionHistoriesResponse.toModels() = this.data.data.map {
         number = it.noSurat,
         proceedBy = it.diprosesOleh,
         status = it.status,
-        submissionDate = it.tanggalPengajuan
+        submissionDate = it.tanggalPengajuan,
+        isFinish = it.isFinish,
+        fileUrl = it.fileUrl
     )
 }

@@ -46,7 +46,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
 import com.haltec.silpusitron.core.ui.parts.PagerView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper

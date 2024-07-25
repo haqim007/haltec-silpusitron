@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.loading
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -23,10 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.core.ui.component.LottieLoader
 

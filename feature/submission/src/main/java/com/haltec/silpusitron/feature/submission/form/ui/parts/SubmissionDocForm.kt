@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.parts.ErrorView
+import com.haltec.silpusitron.core.ui.parts.error.ErrorView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.core.ui.util.PermissionRequester
@@ -381,7 +381,6 @@ fun SubmissionDocForm(
                                 ErrorView(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     message = stringResource(id = R.string.agreement_required),
-                                    tryAgain = false,
                                     textStyle = MaterialTheme.typography.bodyLarge.copy(
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.SemiBold,

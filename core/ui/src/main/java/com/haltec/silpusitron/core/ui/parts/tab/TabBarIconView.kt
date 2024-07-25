@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts.navigation
+package com.haltec.silpusitron.core.ui.parts.tab
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

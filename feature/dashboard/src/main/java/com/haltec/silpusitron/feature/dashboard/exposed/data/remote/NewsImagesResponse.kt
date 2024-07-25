@@ -19,7 +19,7 @@ data class NewsImagesResponse(
 		val updatedAt: String,
 
 		@SerialName("updated_by")
-		val updatedBy: String,
+		val updatedBy: String? = null,
 
 		@SerialName("created_at")
 		val createdAt: String,

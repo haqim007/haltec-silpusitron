@@ -193,7 +193,7 @@ private fun FileInputActionButton(
             fileUri = uri
             mimeType = uri?.let { FileHelper.getMimeType(context, it) }
 
-            onResult(uri, uri?.let { FileHelper.getFileNameFromUri(context, it) } ?: "")
+            onResult(uri, uri?.let { FileHelper.getFileName(it) } ?: "")
         }
     )
 

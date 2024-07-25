@@ -1,7 +1,7 @@
 package com.haltec.silpusitron.feature.submission.history.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,8 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -54,14 +52,14 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.backgroundGradient
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
 import com.haltec.silpusitron.core.ui.parts.AppExposedDropdown
 import com.haltec.silpusitron.core.ui.parts.AppExposedDropdownModel
 import com.haltec.silpusitron.core.ui.parts.PagerView
 import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.gradientColors
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.submission.R
@@ -109,6 +107,10 @@ fun SubmissionHistoriesScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
+    val fileLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { action(HistoryListUiAction.ResetDownloadFileResult) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -131,13 +133,7 @@ fun SubmissionHistoriesScreen(
                 .defaultMinSize(minHeight = 100.dp)
         ){
             Box(modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(
-                        gradientColors,
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                    )
-                )
+                .backgroundGradient()
                 .fillMaxWidth()
                 .height(50.dp)
             )
@@ -228,14 +224,12 @@ fun SubmissionHistoriesScreen(
                     val item = pagingItems[index] ?: return@items
                     HistoryItemView(
                         data = item,
+                        onClick = onClick,
                         modifier = Modifier
                             .padding(
                                 vertical = 8.dp,
                                 horizontal = 16.dp
                             )
-                            .clickable {
-                                onClick(item)
-                            }
                     )
                 }
             }
@@ -420,7 +414,7 @@ fun SubmissionHistoriesScreen(
 
 @Preview
 @Composable
-fun ReqDocList_Preview() {
+fun SubmissionHistoriesScreen_Preview() {
     KoinPreviewWrapper(modules = listOf(submissionDocModule)) {
         SILPUSITRONTheme {
             val viewModel: SubmissionHistoriesViewModel = koinViewModel()
@@ -429,10 +423,7 @@ fun ReqDocList_Preview() {
                     HistoryListUiAction.SetDummyPagingData(SubmissionHistoryDummies)
                 )
             }
-            SubmissionHistoriesScreen(
-                viewModel = viewModel,
-                onClick = {}
-            )
+            SubmissionHistoriesScreen(viewModel = viewModel, onClick = {})
         }
     }
 }

@@ -31,10 +31,10 @@ import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.haltec.silpusitron.common.di.commonModule
 import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.parts.DialogError
-import com.haltec.silpusitron.core.ui.parts.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.ErrorView
-import com.haltec.silpusitron.core.ui.parts.LoadingView
+import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
+import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.haltec.silpusitron.core.ui.parts.error.ErrorView
+import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
 import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme

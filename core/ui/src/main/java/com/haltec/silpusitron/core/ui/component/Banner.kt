@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.haltec.silpusitron.core.ui.R
+import com.haltec.silpusitron.core.ui.backgroundGradient
 import com.haltec.silpusitron.core.ui.theme.PrimaryLight
 import com.haltec.silpusitron.core.ui.theme.PrimaryVariantLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
@@ -36,13 +37,7 @@ fun Banner(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        gradientColors,
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                    )
-                )
+                .backgroundGradient()
         ){
             content()
         }

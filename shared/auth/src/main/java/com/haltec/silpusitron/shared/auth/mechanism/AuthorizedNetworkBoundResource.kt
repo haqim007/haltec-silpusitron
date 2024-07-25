@@ -4,6 +4,7 @@ import com.haltec.silpusitron.data.mechanism.CustomThrowable
 import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.shared.auth.preference.AuthPreference
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.first
 
 abstract class AuthorizedNetworkBoundResource<ResultType, ResponseType>(
     private val authPreference: AuthPreference
@@ -14,7 +15,9 @@ abstract class AuthorizedNetworkBoundResource<ResultType, ResponseType>(
         return requestFromRemote()
     }
 
-    protected abstract suspend fun getToken(): String?
+    open suspend fun getToken(): String{
+        return authPreference.getToken().first() ?: ""
+    }
 
     override suspend fun onFailed(exceptionOrNull: CustomThrowable?) {
         if(exceptionOrNull?.code == HttpStatusCode.Unauthorized){

@@ -1,9 +1,10 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.haltec.silpusitron.core.ui.parts.loading.LoadingDocView
 
 @Composable
 fun DialogLoadingDocView(
@@ -14,10 +15,6 @@ fun DialogLoadingDocView(
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = properties
-//        properties = DialogProperties(
-//            dismissOnClickOutside = false,
-//            dismissOnBackPress = false
-//        )
     ) {
         LoadingDocView(modifier)
     }

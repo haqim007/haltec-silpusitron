@@ -12,6 +12,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.haltec.silpusitron.core.ui.R
+import com.haltec.silpusitron.core.ui.parts.error.EmptyView
+import com.haltec.silpusitron.core.ui.parts.error.ErrorView
+import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

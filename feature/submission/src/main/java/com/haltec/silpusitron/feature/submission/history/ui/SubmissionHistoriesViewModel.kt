@@ -5,9 +5,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.haltec.silpusitron.core.ui.ui.BaseViewModel
 import com.haltec.silpusitron.data.mechanism.Resource
-import com.haltec.silpusitron.feature.submission.history.domain.usecase.GetSubmissionHistoriesUseCase
 import com.haltec.silpusitron.feature.submission.history.domain.SubmissionHistory
+import com.haltec.silpusitron.feature.submission.history.domain.usecase.GetLetterStatusOptionsUseCase
 import com.haltec.silpusitron.feature.submission.history.domain.usecase.GetLetterTypeOptionsUseCase
+import com.haltec.silpusitron.feature.submission.history.domain.usecase.GetSubmissionHistoriesUseCase
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -24,10 +25,10 @@ import kotlinx.datetime.LocalDateTime
 @OptIn(FlowPreview::class)
 class SubmissionHistoriesViewModel(
     private val getSubmissionHistoriesUseCase: GetSubmissionHistoriesUseCase,
-    private val getLetterTypeOptionsUseCase: GetLetterTypeOptionsUseCase
+    private val getLetterTypeOptionsUseCase: GetLetterTypeOptionsUseCase,
+    private val getLetterStatusOptionsUseCase: GetLetterStatusOptionsUseCase
 ): BaseViewModel<HistoryListUiState, HistoryListUiAction>() {
     override val _state = MutableStateFlow(HistoryListUiState())
-
 
     private val _pagingFlow = MutableStateFlow<PagingData<SubmissionHistory>>(PagingData.empty())
     val pagingFlow: Flow<PagingData<SubmissionHistory>> = _pagingFlow
@@ -47,7 +48,7 @@ class SubmissionHistoriesViewModel(
     override fun doAction(action: HistoryListUiAction) {
         when(action){
             HistoryListUiAction.LoadData -> loadData()
-            HistoryListUiAction.LoadLetterStatus -> Unit //TODO()
+            HistoryListUiAction.LoadLetterStatus -> loadLetterStatus()
             HistoryListUiAction.LoadLetterType -> loadLetterType()
             HistoryListUiAction.ResetFilter -> resetFilter()
             is HistoryListUiAction.Search -> search(action.keyword)
@@ -55,7 +56,6 @@ class SubmissionHistoriesViewModel(
                 action.startDate, action.endDate,
                 action.letterType, action.letterStatus
             )
-
 
             is HistoryListUiAction.SetDummyPagingData -> {
                 viewModelScope.launch() {
@@ -108,6 +108,17 @@ class SubmissionHistoriesViewModel(
         }
     }
 
+    private fun loadLetterStatus(){
+        viewModelScope.launch{
+            getLetterStatusOptionsUseCase().collectLatest{
+                _state.update { state ->
+                    state.copy(
+                        letterStatusOptions = it
+                    )
+                }
+            }
+        }
+    }
 
     private fun search(keyword: String) {
         _state.update { state ->
@@ -137,7 +148,6 @@ sealed class HistoryListUiAction{
     data object LoadLetterType: HistoryListUiAction()
     data object LoadLetterStatus: HistoryListUiAction()
     data object ResetFilter: HistoryListUiAction()
-
     data class SetFilter(
         val letterType: Int? = null,
         val letterStatus: String? = null,
@@ -149,6 +159,7 @@ sealed class HistoryListUiAction{
     data class SetDummyState(val state: HistoryListUiState): HistoryListUiAction()
 }
 
+internal typealias FileUrl = String
 data class HistoryListUiState(
     val filterStartDate: LocalDateTime? = null,
     val filterEndDate: LocalDateTime? = null,
@@ -157,5 +168,5 @@ data class HistoryListUiState(
     val searchKeyword: String = "",
     val filterActive: Int = 0,
     val letterTypeOptions: Resource<InputOptions> = Resource.Idle(),
-    val letterStatusOptions: Resource<InputOptions> = Resource.Idle(),
+    val letterStatusOptions: Resource<InputOptions> = Resource.Idle()
 )

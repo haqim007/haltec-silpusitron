@@ -35,10 +35,6 @@ class ProfileRepository(
             authPreference
         ) {
 
-            override suspend fun getToken(): String {
-                return authPreference.getToken().first()
-            }
-
             override suspend fun requestFromRemote(): Result<SubmitProfileResponse> {
                 return remoteDataSource.submitProfile(getToken(), input.toProfileRequest())
             }

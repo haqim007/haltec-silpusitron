@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.haltec.silpusitron.core.ui.R
+import com.haltec.silpusitron.core.ui.parts.error.ErrorView
 
 @Composable
 fun DialogError(
@@ -48,7 +49,6 @@ fun DialogError(
                 ErrorView(
                     modifier = Modifier,
                     message = message,
-                    tryAgain = tryAgain,
                     onTryAgain = onTryAgain
                 )
 

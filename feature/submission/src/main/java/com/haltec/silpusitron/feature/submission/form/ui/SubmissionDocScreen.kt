@@ -30,11 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.DialogError
-import com.haltec.silpusitron.core.ui.parts.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.ErrorView
-import com.haltec.silpusitron.core.ui.parts.LoadingView
+import com.haltec.silpusitron.core.ui.backgroundGradient
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
+import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
+import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.haltec.silpusitron.core.ui.parts.error.ErrorView
+import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
 import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.theme.gradientColors
@@ -70,13 +71,7 @@ fun SubmissionDocScreen(
             .fillMaxSize()
     ) {
         Row(
-            Modifier
-                .background(
-                brush = Brush.linearGradient(
-                    gradientColors,
-                    start = Offset(0f, Float.POSITIVE_INFINITY),
-                    end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                ),
+            Modifier.backgroundGradient(
                 shape = RoundedCornerShape(
                     bottomEnd = 20.dp, bottomStart = 20.dp
                 )

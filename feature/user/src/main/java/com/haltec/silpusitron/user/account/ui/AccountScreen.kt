@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.haltec.silpusitron.core.ui.R
 import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
 import com.haltec.silpusitron.core.ui.theme.BackgroundLight
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper

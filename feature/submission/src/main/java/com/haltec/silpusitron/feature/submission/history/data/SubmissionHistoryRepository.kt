@@ -7,9 +7,11 @@ import com.haltec.silpusitron.common.util.DispatcherProvider
 import com.haltec.silpusitron.data.mechanism.NetworkBoundResource
 import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.submission.history.data.remote.SubmissionHistoryRemoteDataSource
+import com.haltec.silpusitron.feature.submission.history.data.remote.response.LetterStatusesResponse
 import com.haltec.silpusitron.feature.submission.history.data.remote.response.LetterTypesResponse
 import com.haltec.silpusitron.feature.submission.history.domain.ISubmissionHistoryRepository
 import com.haltec.silpusitron.feature.submission.history.domain.SubmissionHistory
+import com.haltec.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResource
 import com.haltec.silpusitron.shared.auth.preference.AuthPreference
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import com.haltec.silpusitron.shared.form.domain.model.InputTextData
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.LocalDateTime
+import java.io.File
 
 internal class SubmissionHistoryRepository(
     private val remoteDataSource: SubmissionHistoryRemoteDataSource,
@@ -85,6 +88,50 @@ internal class SubmissionHistoryRepository(
                         }
                     )
                 )
+            }
+
+        }.asFlow()
+            .flowOn(dispatcherProvider.io)
+    }
+
+    override fun getLetterStatusOptions(): Flow<Resource<InputOptions>> {
+        return object: AuthorizedNetworkBoundResource<InputOptions, LetterStatusesResponse>(authPreference){
+
+            override suspend fun requestFromRemote(): Result<LetterStatusesResponse> {
+                return remoteDataSource.getLetterStatuses(
+                    getToken()
+                )
+            }
+
+            override fun loadResult(responseData: LetterStatusesResponse): Flow<InputOptions> {
+                return flowOf(
+                    InputOptions(
+                        options = responseData.data.map {
+                            InputTextData.Option(
+                                value = it.value,
+                                label = it.label,
+                                key = ""
+                            )
+                        }
+                    )
+                )
+            }
+
+        }.asFlow()
+            .flowOn(dispatcherProvider.io)
+    }
+
+    override fun getStreamedPDF(history: SubmissionHistory): Flow<Resource<File>> {
+        return object: AuthorizedNetworkBoundResource<File, File>(authPreference){
+
+            override suspend fun requestFromRemote(): Result<File> {
+                return remoteDataSource.getStreamedPDF(
+                    getToken(), history.title, history.fileUrl!!
+                )
+            }
+
+            override fun loadResult(responseData: File): Flow<File> {
+                return flowOf(responseData)
             }
 
         }.asFlow()

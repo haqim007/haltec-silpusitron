@@ -22,9 +22,6 @@ internal class DashboardUserRepository(
 
     override fun getData(): Flow<Resource<List<DashboardData>>> {
         return object : AuthorizedNetworkBoundResource<List<DashboardData>, DashboardResponse>(preferences) {
-            override suspend fun getToken(): String {
-                return preferences.getToken().first()
-            }
 
             override suspend fun requestFromRemote(): Result<DashboardResponse> {
                 return remoteDataSource.getDashboard(getToken())

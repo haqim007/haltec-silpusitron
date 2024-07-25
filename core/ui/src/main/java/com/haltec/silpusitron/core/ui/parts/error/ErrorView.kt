@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui.parts
+package com.haltec.silpusitron.core.ui.parts.error
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,8 +33,7 @@ fun ErrorView(
         fontSize = 14.sp,
         fontWeight = FontWeight.SemiBold
     ),
-    tryAgain: Boolean = true,
-    onTryAgain: (() -> Unit) ? = null
+    onTryAgain: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -60,12 +59,12 @@ fun ErrorView(
             text = message ?: stringResource(R.string.unknown_error),
             style = textStyle
         )
-        if (tryAgain){
+        if (onTryAgain != null){
             Button(
                 modifier = Modifier
                     .padding(top = 25.dp, bottom = 6.dp)
                     .wrapContentWidth(),
-                onClick = { onTryAgain?.let { it() } },
+                onClick = { onTryAgain.let { it() } },
                 colors = ButtonDefaults.buttonColors().copy(
                     containerColor = MaterialTheme.colorScheme.primary
                 ),

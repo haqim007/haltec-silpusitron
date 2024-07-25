@@ -5,6 +5,7 @@ import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
+import java.io.File
 
 internal interface ISubmissionHistoryRepository {
     fun getHistories(
@@ -16,5 +17,6 @@ internal interface ISubmissionHistoryRepository {
     ): Flow<PagingData<SubmissionHistory>>
 
     fun getLetterTypeOptions(): Flow<Resource<InputOptions>>
-
+    fun getLetterStatusOptions(): Flow<Resource<InputOptions>>
+    fun getStreamedPDF(history: SubmissionHistory): Flow<Resource<File>>
 }

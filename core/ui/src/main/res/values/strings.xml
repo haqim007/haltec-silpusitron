@@ -53,7 +53,7 @@
     <string name="allow">Izinkan</string>
     <string name="permission_needed">Izin akses dibutuhkan</string>
     <string name="app_need_location_and_folder_access">Aplikasi membutuhkan akses lokasi dan folder.</string>
-    <string name="permission_has_denied_before">Izin telah ditolak sebelumnya. Silahkan ubah izin pada pengaturan</string>
+    <string name="permission_has_denied_before">Beberapa izin telah ditolak sebelumnya. Silahkan ubah izin pada pengaturan</string>
     <string name="open_settings">Buka Pengaturan</string>
     <string name="cannot_less_than_">Tidak boleh kurang dari %s</string>
     <string name="cannot_more_than_">Tidak boleh lebih dari %s</string>
@@ -62,4 +62,11 @@
     <string name="letter_type_title">Jenis Surat</string>
     <string name="letter_level_type">Level Surat</string>
     <string name="letter_status_title">Status Surat</string>
+    <string name="detail">Detail</string>
+    <string name="download">Unduh</string>
+    <string name="failed_to_load_pdf">Gagal memuat PDF</string>
+    <string name="open_folder">Buka folder</string>
+    <string name="folder_access_permit_required">Akses ke penyimpanan dibutuhkan!</string>
+    <string name="download_complete">Pengunduhan berhasil!</string>
+    <string name="submission_in_progress">Pengajuan sedang diproses. Silahkan periksa kembali nanti</string>
 </resources>

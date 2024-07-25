@@ -55,7 +55,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.backgroundGradient
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
 import com.haltec.silpusitron.core.ui.parts.AppExposedDropdown
 import com.haltec.silpusitron.core.ui.parts.AppExposedDropdownModel
 import com.haltec.silpusitron.core.ui.parts.PagerView
@@ -131,13 +132,7 @@ fun ReqDocList(
                 .defaultMinSize(minHeight = 100.dp)
         ){
             Box(modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(
-                        gradientColors,
-                        start = Offset(0f, Float.POSITIVE_INFINITY),
-                        end = Offset(Float.POSITIVE_INFINITY, 1000f),
-                    )
-                )
+                .backgroundGradient()
                 .fillMaxWidth()
                 .height(50.dp))
 

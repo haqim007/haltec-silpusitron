@@ -48,7 +48,7 @@ import com.canopas.lib.showcase.IntroShowcase
 import com.canopas.lib.showcase.component.ShowcaseStyle
 import com.canopas.lib.showcase.component.rememberIntroShowcaseState
 import com.haltec.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.component.SmallTopBar
+import com.haltec.silpusitron.core.ui.parts.SmallTopBar
 import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.haltec.silpusitron.data.di.dataModule

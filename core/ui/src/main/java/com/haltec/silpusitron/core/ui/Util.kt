@@ -1,5 +1,14 @@
 package com.haltec.silpusitron.core.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import com.haltec.silpusitron.core.ui.theme.gradientColors
+
 fun generateColorShades(startColor: Int, count: Int): List<Int> {
     val alpha = startColor and -0x1000000 // Extract alpha channel (FF)
     val baseColor = startColor and 0x00FFFFFF // Extract RGB channels
@@ -17,3 +26,13 @@ fun generateColorShades(startColor: Int, count: Int): List<Int> {
     }
     return colors
 }
+
+@Composable
+fun Modifier.backgroundGradient(shape: Shape = RectangleShape) = this.background(
+    brush = Brush.linearGradient(
+        gradientColors,
+        start = Offset(0f, Float.POSITIVE_INFINITY),
+        end = Offset(Float.POSITIVE_INFINITY, 1000f),
+    ),
+    shape = shape
+)
