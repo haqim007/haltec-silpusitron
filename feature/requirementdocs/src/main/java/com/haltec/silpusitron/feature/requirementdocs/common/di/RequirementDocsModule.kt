@@ -7,17 +7,17 @@ import com.haltec.silpusitron.feature.requirementdocs.common.domain.GetReqDocsUs
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.IReqDocsRepository
 import com.haltec.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
 import com.haltec.silpusitron.feature.requirementdocs.submission.domain.usecase.GetLetterLevelOptionsUseCase
-import com.haltec.silpusitron.feature.requirementdocs.submission.domain.usecase.GetLetterTypeOptionsUseCase
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocViewModel
+import com.haltec.silpusitron.shared.lettertype.letterTypeModule
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val requirementDocModule = module {
+    includes(letterTypeModule)
     factory { ReqDocsService(getProperty("BASE_URL"), getProperty("API_VERSION")) }
     factory { ReqDocsRemoteDataSource(get()) }
     factory<IReqDocsRepository> { ReqDocsRepository(get(), get()) }
     factory { GetReqDocsUseCase() }
-    factory { GetLetterTypeOptionsUseCase() }
     factory { GetLetterLevelOptionsUseCase() }
     viewModel { SimpleReqDocViewModel(get()) }
     viewModel { ReqDocViewModel(get(), get(), get()) }

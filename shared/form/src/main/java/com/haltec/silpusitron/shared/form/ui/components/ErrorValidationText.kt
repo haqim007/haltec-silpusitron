@@ -32,7 +32,7 @@ fun <T, V> ErrorValidationText(
                  is TextValidationType.ExactLength -> {
                      stringResource(id = R.string.n_length_required, labelName, validation.length)
                  }
-                TextValidationType.Email -> null //TODO()
+                TextValidationType.Email -> stringResource(id = R.string.invalid_email)
                 TextValidationType.Invalid -> null //TODO()
                 is TextValidationType.MaxLength ->
                     stringResource(id = R.string.max_length_n_chars, validation.maxLength)

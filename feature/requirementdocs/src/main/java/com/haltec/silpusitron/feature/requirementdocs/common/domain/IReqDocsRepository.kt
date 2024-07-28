@@ -13,5 +13,4 @@ internal interface IReqDocsRepository {
     ): Flow<PagingData<RequirementDoc>>
 
     fun getLetterLevelOptions(): Flow<Resource<InputOptions>>
-    fun getLetterTypeOptions(): Flow<Resource<InputOptions>>
 }

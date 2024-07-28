@@ -52,4 +52,5 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
     implementation(project(":shared:form"))
+    implementation(project(":shared:lettertype"))
 }

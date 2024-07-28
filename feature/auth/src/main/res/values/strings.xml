@@ -13,4 +13,6 @@
     <string name="username_nik">Username/NIK</string>
     <string name="password_no_kk">Password/No KK</string>
     <string name="failed_to_verify_otp">Gagal memverifikasi OTP</string>
+    <string name="username_nip">Username/NIP</string>
+    <string name="password_fingerprintid">Password/Fingerprint ID</string>
 </resources>

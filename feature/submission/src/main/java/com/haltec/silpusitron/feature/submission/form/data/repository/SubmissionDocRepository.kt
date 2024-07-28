@@ -79,8 +79,12 @@ internal class SubmissionDocRepository(
                     marriageStatus = profile[FormProfileInputKey.MARRIAGE_STATUS]?.value ?: "",
                     latitude = profile[FormProfileInputKey.LATITUDE]?.value ?: "",
                     longitude = profile[FormProfileInputKey.LONGITUDE]?.value ?: "",
-                    docs = docs.map {
-                        val file = File(it.value.value)
+                    docs = docs
+                        .filterValues {
+                            it.value != null
+                        }
+                        .map {
+                        val file = File(it.value.value!!)
                         val mimeType = FileHelper.getMimeType(file)
                         SubmitSubmissionRequest.BerkasPersyaratanItem(
                             id = it.key,

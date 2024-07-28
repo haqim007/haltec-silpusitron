@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Person2
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.StackedBarChart
 import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StackedBarChart
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.Scaffold
@@ -42,15 +42,15 @@ import com.haltec.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.haltec.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocList
 import com.haltec.silpusitron.feature.requirementdocs.submission.ui.ReqDocViewModel
-import com.haltec.silpusitron.feature.submission.docpreview.DocPreviewScreen
+import com.haltec.silpusitron.feature.settings.ui.AccountScreen
+import com.haltec.silpusitron.feature.submissionhistory.docpreview.DocPreviewScreen
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgs
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocFormArgsType
 import com.haltec.silpusitron.feature.submission.form.ui.SubmissionDocScreen
-import com.haltec.silpusitron.feature.submission.history.domain.SubmissionHistory
-import com.haltec.silpusitron.feature.submission.history.domain.submissionHistoryType
-import com.haltec.silpusitron.feature.submission.history.ui.SubmissionHistoriesScreen
-import com.haltec.silpusitron.user.account.ui.AccountScreen
-import com.haltec.silpusitron.user.accountprofile.ui.AccountProfileScreen
+import com.haltec.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
+import com.haltec.silpusitron.feature.submissionhistory.common.domain.SubmissionHistoryType
+import com.haltec.silpusitron.feature.submissionhistory.histories.SubmissionHistoriesScreen
+import com.haltec.silpusitron.feature.updateprofilecitizen.ui.UpdateProfileCitizenScreen
 import org.koin.androidx.compose.koinViewModel
 import kotlin.reflect.typeOf
 import com.haltec.silpusitron.core.ui.R as CoreR
@@ -64,38 +64,38 @@ fun HomeScreen(
     val navController = rememberNavController()
 
     val dashboardTab = TabBarItem(
-        title = stringResource(R.string.dashboard),
+        title = stringResource(CoreR.string.dashboard),
         selectedIcon = Icons.Filled.StackedBarChart,
         unselectedIcon = Icons.Outlined.StackedBarChart,
         navigate = {
-            navController.navigate(DashboardRoute)
+            navController.navigate(Routes.DashboardRoute)
         }
     )
     val addTab = TabBarItem(
-        title = stringResource(R.string.submission),
+        title = stringResource(CoreR.string.submission),
         selectedIcon = Icons.Filled.AddCircle,
         unselectedIcon = Icons.Rounded.AddCircle,
         navigate = {
-            navController.navigate(InquiryRoute)
+            navController.navigate(Routes.InquiryRoute)
         }
     )
     val historyTab = TabBarItem(
-        title = stringResource(R.string.history),
+        title = stringResource(CoreR.string.history),
         selectedIcon = Icons.Filled.History,
         unselectedIcon = Icons.Outlined.History,
         navigate = {
-            navController.navigate(HistoriesRoute)
+            navController.navigate(Routes.HistoriesRoute)
         }
     )
-    val profileTab = TabBarItem(
-        title = stringResource(CoreR.string.account),
-        selectedIcon = Icons.Filled.Person2,
-        unselectedIcon = Icons.Outlined.Person,
+    val settingsTab = TabBarItem(
+        title = stringResource(CoreR.string.settings),
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
         navigate = {
-            navController.navigate(AccountRoute)
+            navController.navigate(Routes.AccountRoute)
         }
     )
-    val tabBarItems = listOf(dashboardTab, addTab, historyTab, profileTab)
+    val tabBarItems = listOf(dashboardTab, addTab, historyTab, settingsTab)
 
     var firstTimeLogin by remember {
         mutableStateOf(true)
@@ -106,8 +106,8 @@ fun HomeScreen(
     val showBottomBar by remember {
         derivedStateOf {
             currentBackStackEntry?.destination?.hierarchy?.any {
-                it.hasRoute(DashboardRoute::class) || it.hasRoute(InquiryRoute::class) ||
-                        it.hasRoute(HistoriesRoute::class) || it.hasRoute(AccountRoute::class)
+                it.hasRoute(Routes.DashboardRoute::class) || it.hasRoute(Routes.InquiryRoute::class) ||
+                        it.hasRoute(Routes.HistoriesRoute::class) || it.hasRoute(Routes.AccountRoute::class)
             } ?: false
         }
     }
@@ -128,8 +128,8 @@ fun HomeScreen(
             }
         }
     ) { paddingInner ->
-        NavHost(navController = navController, startDestination = DashboardRoute){
-            composable<DashboardRoute>{
+        NavHost(navController = navController, startDestination = Routes.DashboardRoute){
+            composable<Routes.DashboardRoute>{
 
                 DisposableEffect(Unit) {
                     // Clean up resources if needed
@@ -141,11 +141,12 @@ fun HomeScreen(
                     }
                 }
                DashboardUserScreen(
+                   modifier = Modifier.padding(paddingInner),
                    sharedModifier = sharedModifier,
                    animateWelcome = firstTimeLogin,
                )
             }
-            composable<InquiryRoute>{
+            composable<Routes.InquiryRoute>{
                 val reqDocViewModel: ReqDocViewModel = koinViewModel()
                 val state by reqDocViewModel.state.collectAsState()
                 ReqDocList(
@@ -154,7 +155,7 @@ fun HomeScreen(
                     data = reqDocViewModel.pagingFlow,
                     onClick = { args ->
                         navController.navigate(
-                            FormSubmission(
+                            Routes.FormSubmission(
                                 SubmissionDocFormArgs(
                                     args.id,
                                     args.title,
@@ -166,12 +167,12 @@ fun HomeScreen(
                     }
                 )
             }
-            composable<FormSubmission>(
+            composable<Routes.FormSubmission>(
                 typeMap = mapOf(typeOf<SubmissionDocFormArgs>() to SubmissionDocFormArgsType)
             ) { backStackEntry ->
 
                 val param: SubmissionDocFormArgs by remember {
-                    mutableStateOf(backStackEntry.toRoute<FormSubmission>().args)
+                    mutableStateOf(backStackEntry.toRoute<Routes.FormSubmission>().args)
                 }
                 SubmissionDocScreen(
                     args = param,
@@ -183,21 +184,21 @@ fun HomeScreen(
                     }
                 )
             }
-            composable<HistoriesRoute>{
+            composable<Routes.HistoriesRoute>{
                 SubmissionHistoriesScreen(
                     modifier = Modifier.padding(paddingInner),
                     onClick = { history ->
                         navController.navigate(
-                            DocPreviewRoute(history)
+                            Routes.DocPreviewRoute(history)
                         )
                     }
                 )
             }
-            composable<DocPreviewRoute>(
-                typeMap = mapOf(typeOf<SubmissionHistory>() to submissionHistoryType)
+            composable<Routes.DocPreviewRoute>(
+                typeMap = mapOf(typeOf<SubmissionHistory>() to SubmissionHistoryType)
             ) { backStackEntry ->
                 val history: SubmissionHistory by remember {
-                    mutableStateOf(backStackEntry.toRoute<DocPreviewRoute>().history)
+                    mutableStateOf(backStackEntry.toRoute<Routes.DocPreviewRoute>().history)
                 }
                 DocPreviewScreen(
                     modifier = Modifier.padding(paddingInner),
@@ -205,15 +206,15 @@ fun HomeScreen(
                     onNavigateBack = navController::navigateUp,
                 )
             }
-            composable<AccountRoute>{
+            composable<Routes.AccountRoute>{
                 AccountScreen(
                     navigateToAccountProfileScreen = {
-                        navController.navigate(ProfileAccountRoute)
+                        navController.navigate(Routes.ProfileAccountRoute)
                     }
                 )
             }
-            composable<ProfileAccountRoute>{
-                AccountProfileScreen(
+            composable<Routes.ProfileAccountRoute>{
+                UpdateProfileCitizenScreen(
                     onNavigateBack = {
                         navController.navigateUp()
                     }

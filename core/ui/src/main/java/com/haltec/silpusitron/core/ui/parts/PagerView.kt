@@ -25,13 +25,21 @@ fun <T : Any> PagerView(
     content: @Composable (modifier: Modifier) -> Unit
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
-    if(pullToRefreshState.isRefreshing){
-        pagingItems.refresh()
-    }
 
     if(pullToRefreshState.isRefreshing){
         pagingItems.refresh()
     }
+
+    LaunchedEffect(key1 = Unit) {
+        if (
+            pagingItems.itemCount > 0 &&
+            (pagingItems.loadState.refresh != LoadState.Loading ||
+                    pagingItems.loadState.append != LoadState.Loading)
+        ){
+            pagingItems.refresh()
+        }
+    }
+
     LaunchedEffect(pagingItems.loadState) {
         when (pagingItems.loadState.refresh) {
             is LoadState.Loading -> Unit
@@ -64,7 +72,8 @@ fun <T : Any> PagerView(
                 onTryAgain = onLoadData
             )
 
+        }else{
+            content(Modifier)
         }
-        content(Modifier)
     }
 }

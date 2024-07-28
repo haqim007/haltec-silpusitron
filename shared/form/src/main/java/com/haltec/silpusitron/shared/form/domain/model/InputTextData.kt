@@ -16,6 +16,8 @@ data class InputTextData<ValidationType, ValueType>(
     val everChanged: Boolean = false,
     val inputLabel: String = "",
     val options: List<Option>? = null,
+    val enabled: Boolean = true,
+    val prefix: String? = null
 ){
     val isValid get() = message == null && validationError == null
 

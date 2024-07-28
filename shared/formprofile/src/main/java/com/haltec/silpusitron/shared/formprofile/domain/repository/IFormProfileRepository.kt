@@ -9,7 +9,7 @@ import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKe
 import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileData
 import kotlinx.coroutines.flow.Flow
 
-interface IFormProfileRepository {
+internal interface IFormProfileRepository {
     fun getProfile(): Flow<Resource<ProfileData>>
     fun getOptions(optionPath: FormOptionPath): Flow<Resource<InputOptions>>
     fun getSubDistricts(districtId: String?): Flow<Resource<InputOptions>>

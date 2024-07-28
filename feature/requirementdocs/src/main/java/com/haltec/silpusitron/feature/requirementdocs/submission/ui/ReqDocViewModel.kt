@@ -8,15 +8,14 @@ import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.GetReqDocsUseCase
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.haltec.silpusitron.feature.requirementdocs.submission.domain.usecase.GetLetterLevelOptionsUseCase
-import com.haltec.silpusitron.feature.requirementdocs.submission.domain.usecase.GetLetterTypeOptionsUseCase
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
+import com.haltec.silpusitron.shared.lettertype.domain.GetLetterTypeOptionsUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map

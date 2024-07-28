@@ -19,17 +19,25 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
+            <option value="$PROJECT_DIR$/feature/confirmprofilecitizen" />
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/home" />
+            <option value="$PROJECT_DIR$/feature/homeofficer" />
             <option value="$PROJECT_DIR$/feature/landingpage" />
+            <option value="$PROJECT_DIR$/feature/officertask" />
             <option value="$PROJECT_DIR$/feature/requirementdocs" />
+            <option value="$PROJECT_DIR$/feature/settings" />
             <option value="$PROJECT_DIR$/feature/submission" />
-            <option value="$PROJECT_DIR$/feature/user" />
+            <option value="$PROJECT_DIR$/feature/submissionhistory" />
+            <option value="$PROJECT_DIR$/feature/updateprofilecitizen" />
+            <option value="$PROJECT_DIR$/feature/updateprofileofficer" />
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/shared/auth" />
             <option value="$PROJECT_DIR$/shared/district" />
             <option value="$PROJECT_DIR$/shared/form" />
             <option value="$PROJECT_DIR$/shared/formprofile" />
+            <option value="$PROJECT_DIR$/shared/lettertype" />
+            <option value="$PROJECT_DIR$/shared/pdfviewer" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

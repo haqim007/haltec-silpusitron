@@ -11,8 +11,5 @@
     <string name="privacy_term">Dengan ini saya menyatakan bahwa saya menyetujui penggunaan data pribadi saya untuk keperluan yang telah dijelaskan dalam kebijakan privasi KOMINFO Blitar</string>
     <string name="agreement_required">Anda harus menyetujui ketentuan pada form</string>
     <string name="doc_submission_history">Riwayat Pengajuan</string>
-    <string name="submitted_at_s">Diajukan pada %1$s</string>
-    <string name="proceed_by_s">Diproses oleh %1$s</string>
     <string name="the_current_status_is_s">Status saat ini %1$s</string>
-    <string name="the_current_status">Status saat ini</string>
 </resources>

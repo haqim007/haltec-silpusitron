@@ -2,7 +2,6 @@ package com.haltec.silpusitron.feature.requirementdocs.common.data.remote
 
 import com.haltec.silpusitron.data.remote.base.KtorService
 import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.LetterLevelsResponse
-import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.LetterTypesResponse
 import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.RequirementDocsResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -36,17 +35,6 @@ internal class ReqDocsService (
         checkOrThrowError(response)
 
         return response.body<RequirementDocsResponse>()
-    }
-
-    suspend fun getLetterTypes(): LetterTypesResponse{
-
-        val response = client.get {
-            endpoint("jenis-surat")
-        }
-
-        checkOrThrowError(response)
-
-        return response.body<LetterTypesResponse>()
     }
 
     suspend fun getLetterLevels(): LetterLevelsResponse{

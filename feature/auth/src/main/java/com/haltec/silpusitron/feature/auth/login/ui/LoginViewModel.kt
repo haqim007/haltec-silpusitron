@@ -175,7 +175,7 @@ data class LoginUiState(
         value = "",
         validations = listOf(
             TextValidationType.Required,
-            TextValidationType.MinLength(7)
+            TextValidationType.MinLength(5)
         ),
         validationError = null
     ),

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProfileFieldsErrorResponse(
+internal data class ProfileFieldsErrorResponse(
 
     @SerialName("desa_id")
     val desaId: String? = null,

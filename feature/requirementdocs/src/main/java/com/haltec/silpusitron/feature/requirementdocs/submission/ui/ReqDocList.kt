@@ -98,13 +98,6 @@ fun ReqDocList(
     LaunchedEffect(key1 = Unit) {
         action(ReqDocUiAction.LoadLetterLevel)
         action(ReqDocUiAction.LoadLetterType)
-        if (
-                pagingItems.itemCount > 0 &&
-                (pagingItems.loadState.refresh != LoadState.Loading ||
-                        pagingItems.loadState.append != LoadState.Loading)
-            ){
-            pagingItems.refresh()
-        }
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current

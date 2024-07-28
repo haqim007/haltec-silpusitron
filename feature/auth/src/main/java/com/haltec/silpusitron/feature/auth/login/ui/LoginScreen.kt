@@ -29,7 +29,7 @@ import com.haltec.silpusitron.core.ui.R as CoreR
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    userType: UserType,
+    userType: UserType, // TODO: should just consume from getKoin().getProperty()
     onProfileDataComplete: () -> Unit,
     sharedModifier: Modifier = Modifier,
     onProfileDataIncomplete: () -> Unit
@@ -87,7 +87,7 @@ fun LoginScreenPreview() {
     }) {
         SILPUSITRONTheme {
             LoginScreen(
-                userType = UserType.APP,
+                userType = UserType.CITIZEN,
                 onProfileDataComplete = {
                     Toast
                         .makeText(

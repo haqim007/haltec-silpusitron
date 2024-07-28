@@ -14,7 +14,7 @@ plugins {
 apply(from = "../shared-dependencies.gradle")
 apply(from = "../shared-ui-dependencies.gradle")
 
-val secretPropertiesFile = rootProject.file("secret.properties")
+val secretPropertiesFile = rootProject.file("app/secret.properties")
 val secretProperties = Properties().apply {
     load(secretPropertiesFile.inputStream())
 }
@@ -27,8 +27,8 @@ android {
         applicationId = "com.haltec.silpusitron"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.2"
+        versionCode = 3
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -37,6 +37,7 @@ android {
 
         buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
         buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
+        buildConfigField("Boolean", "IS_FOR_PETUGAS", secretProperties.getProperty("IS_FOR_PETUGAS"))
     }
 
     buildTypes {
@@ -76,7 +77,7 @@ dependencies {
     implementation(project(":feature:landingpage"))
     implementation(project(":feature:dashboard"))
     implementation(project(":feature:auth"))
-    implementation(project(":feature:user"))
+    implementation(project(":feature:confirmprofilecitizen"))
     implementation(project(":feature:home"))
     implementation(project(":feature:requirementdocs"))
     implementation(project(":shared:formprofile"))

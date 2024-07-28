@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProfileRequest(
+internal data class ProfileRequest(
 
 	@SerialName("desa_id")
 	val subDistrictId: String,

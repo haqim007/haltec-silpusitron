@@ -9,7 +9,6 @@ import com.haltec.silpusitron.data.mechanism.Resource
 import com.haltec.silpusitron.feature.requirementdocs.common.data.pagingsource.ReqDocsPagingSource
 import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.ReqDocsRemoteDataSource
 import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.LetterLevelsResponse
-import com.haltec.silpusitron.feature.requirementdocs.common.data.remote.response.LetterTypesResponse
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.IReqDocsRepository
 import com.haltec.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.haltec.silpusitron.shared.form.domain.model.InputOptions
@@ -43,30 +42,6 @@ internal class ReqDocsRepository(
             }
         )
             .flow
-            .flowOn(dispatcherProvider.io)
-    }
-
-    override fun getLetterTypeOptions(): Flow<Resource<InputOptions>> {
-        return object: NetworkBoundResource<InputOptions, LetterTypesResponse>(){
-            override suspend fun requestFromRemote(): Result<LetterTypesResponse> {
-                return remoteDataSource.getLetterTypes()
-            }
-
-            override fun loadResult(responseData: LetterTypesResponse): Flow<InputOptions> {
-                return flowOf(
-                    InputOptions(
-                        options = responseData.data.map {
-                            InputTextData.Option(
-                                value = it.jenisSuratId.toString(),
-                                label = it.jenisSurat,
-                                key = ""
-                            )
-                        }
-                    )
-                )
-            }
-
-        }.asFlow()
             .flowOn(dispatcherProvider.io)
     }
 

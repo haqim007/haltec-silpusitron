@@ -80,6 +80,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
+import org.koin.compose.getKoin
 import com.haltec.silpusitron.core.ui.R as CoreR
 
 @Composable
@@ -105,6 +106,7 @@ fun LoginForm(
     var showLoginErrorAlert by rememberSaveable {
         mutableStateOf(false)
     }
+    val isForPetugas = getKoin().getProperty<Boolean>("IS_FOR_PETUGAS")
 
     LaunchedEffect(key1 = initRecaptcha) {
         if (initRecaptcha == null){
@@ -228,11 +230,17 @@ fun LoginForm(
                     },
                     label = {
                         InputLabel(
-                            label = stringResource(R.string.username_nik),
+                            label = stringResource(
+                                if (isForPetugas == true) R.string.username_nip
+                                else R.string.username_nik
+                            ),
                             isRequired = state.value.usernameInput.isRequired()
                         )
                     },
-                    inputLabel = stringResource(R.string.username_nik),
+                    inputLabel = stringResource(
+                        if (isForPetugas == true) R.string.username_nip
+                        else R.string.username_nik
+                    ),
                     singleLine = true,
                     isLoading = isLoading,
                     inputData = state.value.usernameInput,
@@ -249,10 +257,16 @@ fun LoginForm(
                 FormTextField(
                     value = state.value.password,
                     onValueChange = { action(LoginUiAction.SetPassword(it)) },
-                    inputLabel = stringResource(R.string.password_no_kk),
+                    inputLabel = stringResource(
+                        if (isForPetugas == true) R.string.password_fingerprintid
+                        else R.string.password_no_kk
+                    ),
                     label = {
                         InputLabel(
-                            label = stringResource(R.string.password_no_kk),
+                            label = stringResource(
+                                if (isForPetugas == true) R.string.password_fingerprintid
+                                else R.string.password_no_kk
+                            ),
                             isRequired = state.value.passwordInput.isRequired()
                         )
                     },
@@ -433,7 +447,7 @@ fun LoginFormPreview() {
     }) {
         SILPUSITRONTheme {
             LoginForm(
-                userType = UserType.APP,
+                userType = UserType.CITIZEN,
                 onProfileDataComplete = {},
                 onProfileDataIncomplete = {}
             )

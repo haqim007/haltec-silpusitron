@@ -53,6 +53,8 @@ dependencies {
     implementation(project(":feature:dashboard"))
     implementation(project(":feature:requirementdocs"))
     implementation(project(":feature:submission"))
-    implementation(project(":feature:user"))
+    implementation(project(":feature:settings"))
+    implementation(project(":feature:updateprofilecitizen"))
+    implementation(project(":feature:submissionhistory"))
     implementation(project(":shared:formprofile"))
 }

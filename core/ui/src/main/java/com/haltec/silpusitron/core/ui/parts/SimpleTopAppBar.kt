@@ -1,6 +1,7 @@
 package com.haltec.silpusitron.core.ui.parts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,20 +28,20 @@ import com.haltec.silpusitron.core.ui.theme.gradientColors
 @Composable
 fun SimpleTopAppBar(
     title: String,
+    prependContent: (@Composable (modifier: Modifier) -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null
 ){
     Row(
         Modifier
             .backgroundGradient(
                 shape = onNavigateBack?.let {
-                    RoundedCornerShape(
-                        bottomEnd = 20.dp, bottomStart = 20.dp
-                    )
+                    RoundedCornerShape(bottomStart = 20.dp)
                 }  ?: RectangleShape
             )
     ) {
         onNavigateBack?.let {
             IconButton(
+                modifier = Modifier.weight(0.75f),
                 onClick = { it() },
                 colors = IconButtonDefaults.iconButtonColors()
             ) {
@@ -53,7 +54,7 @@ fun SimpleTopAppBar(
         }
         SmallTopBar(
             shape = RoundedCornerShape(0.dp),
-            modifier = Modifier.height(50.dp),
+            modifier = Modifier.height(50.dp).weight(5f),
         ) {
             Text(
                 text = title,
@@ -61,8 +62,14 @@ fun SimpleTopAppBar(
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
+                ),
+                maxLines = 1,
+                modifier = Modifier.basicMarquee(
+                    iterations = Int.MAX_VALUE
                 )
             )
         }
+
+        prependContent?.let { it(Modifier.weight(1f)) }
     }
 }

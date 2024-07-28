@@ -30,7 +30,7 @@ import com.haltec.silpusitron.ui.nav.OTPRoute
 import com.haltec.silpusitron.ui.nav.PublicDashboardRoute
 import com.haltec.silpusitron.ui.nav.SimpleRequirementFilesRoute
 import com.haltec.silpusitron.ui.nav.SplashScreenRoute
-import com.haltec.silpusitron.user.profileold.ui.ProfileDataScreen
+import com.haltec.silpusitron.feature.confirmprofilecitizen.ui.ConfirmProfileCitizenScreen
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -79,7 +79,7 @@ fun AppContainer(
                     }
                     composable<LoginRoute> {
                         LoginScreen(
-                            userType = UserType.APP,
+                            userType = UserType.CITIZEN,
                             sharedModifier = Modifier
                                 .sharedElement(
                                     this@SharedTransitionLayout.rememberSharedContentState(key = "logo"),
@@ -133,10 +133,10 @@ fun AppContainer(
                         )
                     }
                     composable<ConfirmProfileDataRoute> {
-                        ProfileDataScreen(
+                        ConfirmProfileCitizenScreen(
                             onTokenExpired = {
-                                navController.navigate(LoginRoute){
-                                    popUpTo(navController.graph.id){
+                                navController.navigate(LoginRoute) {
+                                    popUpTo(navController.graph.id) {
                                         inclusive = true
                                     }
                                 }

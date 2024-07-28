@@ -59,6 +59,7 @@ import com.haltec.silpusitron.feature.dashboard.exposed.di.dashboardExposedModul
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.DashboardFilterView
 import com.haltec.silpusitron.feature.dashboard.exposed.ui.parts.NewsImagesPager
 import kotlinx.coroutines.delay
+import org.koin.compose.getKoin
 import com.haltec.silpusitron.core.ui.R as CoreR
 
 
@@ -111,18 +112,34 @@ fun DashboardExposedScreen(
 
     Scaffold(
         floatingActionButton = {
-            DashboardFloatingButton(
-                state,
-                action,
-                showAllFloatingButton,
-                onShowAllFloatingButton = {show ->
-                    showAllFloatingButton = show
-                },
-                onOpenRequirementFiles,
-                onShowFilterSheet = {show ->
-                    showFilterSheet = show
+
+            if (getKoin().getProperty<Boolean>("IS_FOR_PETUGAS") != true){ // null or false
+                DashboardFloatingButton(
+                    state,
+                    action,
+                    showAllFloatingButton,
+                    onShowAllFloatingButton = {show ->
+                        showAllFloatingButton = show
+                    },
+                    onOpenRequirementFiles,
+                    onShowFilterSheet = {show ->
+                        showFilterSheet = show
+                    }
+                )
+            }
+            else{
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        showFilterSheet = true
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                ) {
+                    Icon(Icons.Filled.FilterAlt, contentDescription = "")
                 }
-            )
+            }
+
         }
     ) { contentPadding ->
 

@@ -10,37 +10,37 @@ import com.haltec.silpusitron.shared.formprofile.domain.model.FormProfileInputKe
 import com.haltec.silpusitron.shared.formprofile.domain.model.ProfileData
 
 
-val validationsInput: Map<FormProfileInputKey, List<com.haltec.silpusitron.shared.form.domain.model.TextValidationType>> = mapOf(
-    FormProfileInputKey.SUB_DISTRICT to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.RT to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+val validationsInput: Map<FormProfileInputKey, List<TextValidationType>> = mapOf(
+    FormProfileInputKey.SUB_DISTRICT to listOf(TextValidationType.Required),
+    FormProfileInputKey.RT to listOf(TextValidationType.Required),
     FormProfileInputKey.PHONE_NUMBER to listOf(
-        com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required,
-        com.haltec.silpusitron.shared.form.domain.model.TextValidationType.MinLength(11),
-        com.haltec.silpusitron.shared.form.domain.model.TextValidationType.MaxLength(15)
+        TextValidationType.Required,
+        TextValidationType.MinLength(11),
+        TextValidationType.MaxLength(15)
     ),
-    FormProfileInputKey.RW to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.MOTHER_NAME to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.BLOOD_TYPE to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.RW to listOf(TextValidationType.Required),
+    FormProfileInputKey.MOTHER_NAME to listOf(TextValidationType.Required),
+    FormProfileInputKey.BLOOD_TYPE to listOf(TextValidationType.Required),
     FormProfileInputKey.FULL_NAME to listOf(),
-    FormProfileInputKey.RELIGION to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.RELIGION to listOf(TextValidationType.Required),
     FormProfileInputKey.LONGITUDE to listOf(),
-    FormProfileInputKey.ID_NUMBER to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.BIRTH_PLACE to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.FAMILY_RELATION to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.ID_NUMBER to listOf(TextValidationType.Required),
+    FormProfileInputKey.BIRTH_PLACE to listOf(TextValidationType.Required),
+    FormProfileInputKey.FAMILY_RELATION to listOf(TextValidationType.Required),
     FormProfileInputKey.FAM_CARD_NUMBER to listOf(),
-    FormProfileInputKey.GENDER to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.GENDER to listOf(TextValidationType.Required),
     FormProfileInputKey.BIRTH_DATE to listOf(),
-    FormProfileInputKey.EDUCATION to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.EDUCATION to listOf(TextValidationType.Required),
     FormProfileInputKey.LATITUDE to listOf(),
-    FormProfileInputKey.DISTRICT to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.ADDRESS to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.PROFESSION to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.FATHER_NAME to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
-    FormProfileInputKey.MARRIAGE_STATUS to listOf(com.haltec.silpusitron.shared.form.domain.model.TextValidationType.Required),
+    FormProfileInputKey.DISTRICT to listOf(TextValidationType.Required),
+    FormProfileInputKey.ADDRESS to listOf(TextValidationType.Required),
+    FormProfileInputKey.PROFESSION to listOf(TextValidationType.Required),
+    FormProfileInputKey.FATHER_NAME to listOf(TextValidationType.Required),
+    FormProfileInputKey.MARRIAGE_STATUS to listOf(TextValidationType.Required),
 )
 
 
-fun SubmitProfileResponse.toProfileData(
+internal fun SubmitProfileResponse.toProfileData(
     profileData: ProfileData
 ): ProfileData = this.errors?.let {
     return ProfileData(
@@ -326,7 +326,7 @@ internal fun ProfileResponse.toProfileData(): ProfileData {
 }
 
 
-fun Map<FormProfileInputKey, InputTextData<TextValidationType, String>>
+internal fun Map<FormProfileInputKey, InputTextData<TextValidationType, String>>
         .toProfileRequest(): ProfileRequest {
     return ProfileRequest(
         subDistrictId = this[FormProfileInputKey.SUB_DISTRICT]?.value ?: "",

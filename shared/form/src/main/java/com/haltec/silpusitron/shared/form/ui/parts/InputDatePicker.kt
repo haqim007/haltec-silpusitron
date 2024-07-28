@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.haltec.silpusitron.common.util.toStringFormat
 import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -42,10 +43,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.haltec.silpusitron.core.ui.R as CoreR
 
-fun LocalDateTime.toStringFormat() :String {
-    val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")) // Indonesian locale
-    return this.toJavaLocalDateTime().format(formatter)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

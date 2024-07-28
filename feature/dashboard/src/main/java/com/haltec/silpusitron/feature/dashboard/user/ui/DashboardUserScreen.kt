@@ -54,7 +54,7 @@ fun DashboardUserScreen(
 
         DashboardContent(
             modifier = Modifier
-                .padding(top = 16.dp, bottom = 100.dp)
+                .padding(top = 16.dp)
                 .padding(horizontal = 18.dp),
             data = state.data,
             onTryAgain = {action(DashboardUserUiAction.GetData)}
