@@ -71,7 +71,9 @@ class FormProfileViewModel(
     }
 
     private fun submit() {
-        if(!validateAll()) return
+        val isAllValid = validateAll()
+        _state.update { state -> state.copy(isAllValid = isAllValid) }
+        if(!isAllValid) return
         viewModelScope.launch {
             submitUseCase(
                 state.value.profileData.data!!,

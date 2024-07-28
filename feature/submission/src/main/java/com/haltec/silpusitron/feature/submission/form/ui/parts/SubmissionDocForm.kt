@@ -120,22 +120,21 @@ fun SubmissionDocForm(
                 Text(
                     text = args.title,
                     style = MaterialTheme.typography.titleMedium.copy(
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    )
                 )
                 Text(
                     text = stringResource(R.string.letter_level_n, args.letterLevel),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 )
                 Text(
                     text = stringResource(R.string.letter_type_n, args.letterType),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 )
@@ -201,15 +200,18 @@ fun SubmissionDocForm(
         ) {
             Text(
                 text = stringResource(R.string.personal_data),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (state.stepperIndex == 0) FontWeight.Bold else FontWeight.Normal
             )
             Text(
                 text = stringResource(R.string.requirement_docs),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (state.stepperIndex == 1) FontWeight.Bold else FontWeight.Normal
             )
             Text(
                 text = stringResource(R.string.form),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (state.stepperIndex == 2) FontWeight.Bold else FontWeight.Normal
             )
         }
         Column(
@@ -218,11 +220,7 @@ fun SubmissionDocForm(
 
             val formProfileViewModel: FormProfileViewModel = koinViewModel()
             val formProfileState by formProfileViewModel.state.collectAsState()
-
-            var hasLoadForm by remember {
-                mutableStateOf(false)
-            }
-
+            var hasLoadForm by remember { mutableStateOf(false) }
 
             LaunchedEffect(key1 = formProfileState.isAllValid) {
                 if (formProfileState.isAllValid == true) {
@@ -275,7 +273,7 @@ fun SubmissionDocForm(
                         Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             ButtonNext(
                                 onClick = {
-                                    formProfileViewModel.doAction(FormProfileUiAction.ValidateAll)
+                                    formProfileViewModel.doAction(FormProfileUiAction.Submit)
                                 }
                             )
                         }
