@@ -250,32 +250,34 @@ fun OfficerTasksScreen(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.SpaceAround
-        ){
-            Button(
+        if (state.selectMultipleActive){
+            Row(
                 modifier = Modifier
-                    .width(150.dp)
-                    .height(40.dp),
-                shape = RoundedCornerShape(5.dp),
-                colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.error
-                ),
-                onClick = { isRejecting = true }
-            ) {
-                Text(text = stringResource(id = CoreR.string.reject))
-            }
-            Button(
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(40.dp),
-                shape = RoundedCornerShape(5.dp),
-                onClick = { isSigning = true }
-            ) {
-                Text(text = stringResource(id = CoreR.string.sign))
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceAround
+            ){
+                Button(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(40.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = MaterialTheme.colorScheme.error
+                    ),
+                    onClick = { isRejecting = true }
+                ) {
+                    Text(text = stringResource(id = CoreR.string.reject))
+                }
+                Button(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(40.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    onClick = { isSigning = true }
+                ) {
+                    Text(text = stringResource(id = CoreR.string.sign))
+                }
             }
         }
     }

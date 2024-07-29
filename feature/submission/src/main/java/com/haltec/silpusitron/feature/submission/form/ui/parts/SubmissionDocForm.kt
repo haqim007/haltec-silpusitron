@@ -193,8 +193,7 @@ fun SubmissionDocForm(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp),
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(45.dp)
         ) {
@@ -232,10 +231,12 @@ fun SubmissionDocForm(
 
             val permissions = mutableListOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
             }
             PermissionRequester(
