@@ -13,7 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+secret.properties
 app/secret.properties
+app-petugas/secret.properties
 .idea
 .kotlin
 
