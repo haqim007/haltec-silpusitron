@@ -23,8 +23,8 @@ fun Modifier.surroundInnerShadow(
     blur: Dp,
     spread: Dp,
     color: Color = Color.Black.copy(0.5f)
-) = then(
-    innerShadow(
+) = this
+    .innerShadow(
         shape = shape, color = color,
         offsetY = (-2).dp, offsetX = (-2).dp, blur = blur, spread = spread
     )
@@ -33,7 +33,6 @@ fun Modifier.surroundInnerShadow(
         shape = shape, color = color,
         offsetY = 2.dp, offsetX = 2.dp, blur = blur, spread = spread
     )
-)
 
 @Composable
 fun Modifier.innerShadow(

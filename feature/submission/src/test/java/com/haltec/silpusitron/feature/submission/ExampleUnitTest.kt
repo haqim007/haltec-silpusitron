@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.submission
+package com.silpusitron.feature.submission
 
 import org.junit.Test
 

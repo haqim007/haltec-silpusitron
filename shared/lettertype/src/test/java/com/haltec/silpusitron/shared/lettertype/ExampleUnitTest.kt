@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.lettertype
+package com.silpusitron.shared.lettertype
 
 import org.junit.Test
 

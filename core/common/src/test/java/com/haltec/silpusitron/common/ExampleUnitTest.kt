@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.common
+package com.silpusitron.common
 
 import org.junit.Test
 

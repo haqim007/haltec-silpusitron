@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.lettertype
+package com.silpusitron.shared.lettertype
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.haltec.silpusitron.shared.lettertype.test", appContext.packageName)
+        assertEquals("com.silpusitron.shared.lettertype.test", appContext.packageName)
     }
 }

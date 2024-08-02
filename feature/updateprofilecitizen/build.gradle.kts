@@ -8,7 +8,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.updateprofilecitizen"
+    namespace = "com.silpusitron.feature.updateprofilecitizen"
     compileSdk = 34
 
     defaultConfig {

@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.landingpage
+package com.silpusitron.feature.landingpage
 
 import org.junit.Test
 

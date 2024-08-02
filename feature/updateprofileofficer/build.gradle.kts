@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.updateprofileofficer"
+    namespace = "com.silpusitron.feature.updateprofileofficer"
     compileSdk = 34
 
     defaultConfig {

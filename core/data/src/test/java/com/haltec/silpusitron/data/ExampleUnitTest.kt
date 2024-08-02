@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.data
+package com.silpusitron.core.data
 
 import org.junit.Test
 

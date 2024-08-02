@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.updateprofileofficer
+package com.silpusitron.feature.updateprofileofficer
 
 import org.junit.Test
 

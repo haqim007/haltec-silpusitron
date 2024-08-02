@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.form
+package com.silpusitron.shared.form
 
 import org.junit.Test
 

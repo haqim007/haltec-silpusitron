@@ -9,7 +9,7 @@ plugins {
 apply(from = "../../shared-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.shared.pdfviewer"
+    namespace = "com.silpusitron.shared.pdfviewer"
     compileSdk = 34
 
     defaultConfig {

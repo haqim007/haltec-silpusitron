@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.pdfviewer
+package com.silpusitron.shared.pdfviewer
 
 import org.junit.Test
 

@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.officertask"
+    namespace = "com.silpusitron.feature.officertask"
     compileSdk = 34
 
     defaultConfig {

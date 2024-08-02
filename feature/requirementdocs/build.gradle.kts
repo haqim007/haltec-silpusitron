@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.requirementdocs"
+    namespace = "com.silpusitron.feature.requirementdocs"
     compileSdk = 34
 
     defaultConfig {

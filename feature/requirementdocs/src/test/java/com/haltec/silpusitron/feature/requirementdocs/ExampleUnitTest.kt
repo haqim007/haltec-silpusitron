@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.requirementdocs
+package com.silpusitron.feature.requirementdocs
 
 import org.junit.Test
 

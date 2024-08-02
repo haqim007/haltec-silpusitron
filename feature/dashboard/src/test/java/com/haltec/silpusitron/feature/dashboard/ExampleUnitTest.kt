@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.dashboard
+package com.silpusitron.feature.dashboard
 
 import org.junit.Test
 

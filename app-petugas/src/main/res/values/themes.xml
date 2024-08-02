@@ -5,7 +5,7 @@
 
     <style name="SplashScreenTheme" parent="Theme.SILPUSITRON">
         <item name="android:windowBackground">#5185F3</item>
-        <item name="android:windowSplashScreenBackground">#5185F3</item>
-        <item name="android:windowSplashScreenAnimationDuration">0</item>
+<!--        <item name="android:windowSplashScreenBackground">#5185F3</item>-->
+<!--        <item name="android:windowSplashScreenAnimationDuration">0</item>-->
     </style>
 </resources>

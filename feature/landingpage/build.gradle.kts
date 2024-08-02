@@ -11,7 +11,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.landingpage"
+    namespace = "com.silpusitron.feature.landingpage"
     compileSdk = 34
 
     defaultConfig {

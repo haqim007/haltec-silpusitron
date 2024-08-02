@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.submissionhistory
+package com.silpusitron.feature.submissionhistory
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.settings
+package com.silpusitron.feature.settings
 
 import org.junit.Test
 

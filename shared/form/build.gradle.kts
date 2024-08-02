@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.shared.form"
+    namespace = "com.silpusitron.shared.form"
     compileSdk = 34
 
     defaultConfig {

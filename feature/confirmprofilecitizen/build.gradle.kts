@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.confirmprofilecitizen"
+    namespace = "com.silpusitron.feature.confirmprofilecitizen"
     compileSdk = 34
 
     defaultConfig {

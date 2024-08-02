@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.updateprofilecitizen
+package com.silpusitron.feature.updateprofilecitizen
 
 import org.junit.Test
 

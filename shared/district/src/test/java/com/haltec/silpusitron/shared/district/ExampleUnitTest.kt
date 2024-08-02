@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.district
+package com.silpusitron.shared.district
 
 import org.junit.Test
 

@@ -12,7 +12,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.feature.submissionhistory"
+    namespace = "com.silpusitron.feature.submissionhistory"
     compileSdk = 34
 
     defaultConfig {

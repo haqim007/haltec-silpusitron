@@ -19,7 +19,7 @@ val secretProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.haltec.silpusitron.feature.auth"
+    namespace = "com.silpusitron.feature.auth"
     compileSdk = 34
 
     defaultConfig {

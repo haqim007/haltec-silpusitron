@@ -23,8 +23,6 @@ rootProject.name = "SILPUSITRON"
 include(":app")
 include(":app-petugas")
 include(":core:data")
-include(":core:di")
-include(":core:domain")
 include(":core:ui")
 include(":feature:landingpage")
 include(":feature:auth")

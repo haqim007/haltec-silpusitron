@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.confirmprofilecitizen
+package com.silpusitron.feature.confirmprofilecitizen
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,7 +20,7 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals(
-            "com.haltec.silpusitron.feature.confirmprofilecitizen.test",
+            "com.silpusitron.feature.confirmprofilecitizen.test",
             appContext.packageName
         )
     }

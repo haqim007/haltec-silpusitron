@@ -9,7 +9,7 @@ plugins {
 apply(from = "../../shared-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.common"
+    namespace = "com.silpusitron.common"
     compileSdk = 34
 
     defaultConfig {

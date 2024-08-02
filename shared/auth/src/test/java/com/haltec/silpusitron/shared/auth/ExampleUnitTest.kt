@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.shared.auth
+package com.silpusitron.shared.auth
 
 import org.junit.Test
 

@@ -20,15 +20,15 @@ val secretProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.haltec.silpusitron.app_petugas"
+    namespace = "com.silpusitron.app_petugas"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.haltec.silpusitron.app_petugas"
+        applicationId = "com.silpusitron.app_petugas"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.3"
+        versionCode = 4
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -37,7 +37,7 @@ android {
 
         buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
         buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
-        buildConfigField("Boolean", "IS_FOR_PETUGAS", secretProperties.getProperty("IS_FOR_PETUGAS"))
+        buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
     }
 
     buildTypes {

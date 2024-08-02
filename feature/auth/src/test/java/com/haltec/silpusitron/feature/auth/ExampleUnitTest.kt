@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.feature.auth
+package com.silpusitron.feature.auth
 
 import org.junit.Test
 
