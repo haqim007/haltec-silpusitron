@@ -72,7 +72,6 @@ class FormProfileViewModel(
 
     private fun submit() {
         val isAllValid = validateAll()
-        _state.update { state -> state.copy(isAllValid = isAllValid) }
         if(!isAllValid) return
         viewModelScope.launch {
             submitUseCase(
@@ -158,6 +157,8 @@ class FormProfileViewModel(
                 firstErrorInputKey = firstErrorInputKey
             )
         }
+
+        _state.update { state -> state.copy(isAllValid = isAllValid) }
 
         return isAllValid
     }
@@ -507,6 +508,11 @@ class FormProfileViewModel(
 
 }
 
+/**
+ * Form profile ui action
+ *
+ * @constructor Create empty Form profile ui action
+ */
 sealed class FormProfileUiAction{
     data object GetProfileData: FormProfileUiAction()
     data class SetInput(val input: FormProfileInputKey, val value: String): FormProfileUiAction()
@@ -517,7 +523,13 @@ sealed class FormProfileUiAction{
     data object GetEducationOptions: FormProfileUiAction()
     data object GetProfessionOptions: FormProfileUiAction()
     data object GetMarriageStatusOptions: FormProfileUiAction()
+    /**
+     * Validate all inputs without submit it
+     */
     data object ValidateAll: FormProfileUiAction()
+    /**
+     * Validate all inputs then submit it
+     */
     data object Submit: FormProfileUiAction()
     data object GetDistrictOptions: FormProfileUiAction()
     data object GetSubDistrictOptions: FormProfileUiAction()

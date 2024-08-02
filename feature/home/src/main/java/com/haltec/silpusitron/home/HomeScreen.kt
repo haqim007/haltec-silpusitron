@@ -175,6 +175,7 @@ fun HomeScreen(
                     mutableStateOf(backStackEntry.toRoute<Routes.FormSubmission>().args)
                 }
                 SubmissionDocScreen(
+                    modifier = Modifier.padding(paddingInner),
                     args = param,
                     onNavigateBack = {
                         navController.navigateUp()

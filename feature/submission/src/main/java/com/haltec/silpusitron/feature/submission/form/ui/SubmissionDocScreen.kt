@@ -177,15 +177,17 @@ fun SubmissionDocScreen(
 @Preview
 @Composable
 fun SubmissionDocForm_Preview(){
-    SILPUSITRONTheme {
-        SubmissionDocScreen(
-            args = SubmissionDocFormArgs(
-                title = "SURAT REKOMENDASI PEMBELIAN BBM JENIS TERTENTU 1",
-                id = 6,
-                letterType = "Resmi",
-                letterLevel = "Kelurahan"
+    KoinPreviewWrapper(modules = listOf(submissionDocModule)) {
+        SILPUSITRONTheme {
+            SubmissionDocScreen(
+                args = SubmissionDocFormArgs(
+                    title = "SURAT REKOMENDASI PEMBELIAN BBM JENIS TERTENTU 1",
+                    id = 6,
+                    letterType = "Resmi",
+                    letterLevel = "Kelurahan"
+                )
             )
-        )
+        }
     }
 }
 

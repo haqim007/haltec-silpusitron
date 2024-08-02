@@ -108,6 +108,10 @@ object FileHelper {
         } else if ("file".equals(uri.scheme, ignoreCase = true)) {
             return uri.path
         }
+        else if (uri.scheme == "msf") {
+            // Extract the path from the URI
+            return uri.path
+        }
         return null
     }
 
@@ -277,7 +281,7 @@ object FileHelper {
         val file = File(absolutePath)
         return FileProvider.getUriForFile(
             context,
-            "${context.packageName}.fileprovider", // Replace with your FileProvider authority
+            "${context.packageName}.fileprovider",
             file
         )
     }

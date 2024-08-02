@@ -1,6 +1,7 @@
 package com.haltec.silpusitron.feature.submission.form.ui.parts
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +23,10 @@ import com.haltec.silpusitron.shared.form.ui.components.FormTextField
 
 @Composable
 fun FormSubmission(
-    modifier: Modifier,
     state: SubmissionDocUiState,
-    action: (SubmissionDocUiAction) -> Unit
+    action: (SubmissionDocUiAction) -> Unit,
+    modifier: Modifier = Modifier,
+    additionalContent: @Composable (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -40,13 +42,15 @@ fun FormSubmission(
         )
 
         val inputs = state.forms.values.toList()
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
             items(
                 count = inputs.size,
                 key = {
                     inputs[it].inputName
                 }
-            ) {
+            ) { it ->
                 val item = inputs[it]
 
                 FormTextField(
@@ -69,6 +73,12 @@ fun FormSubmission(
                 )
             }
 
+
+            item {
+                additionalContent?.let { it() }
+            }
+
         }
+
     }
 }

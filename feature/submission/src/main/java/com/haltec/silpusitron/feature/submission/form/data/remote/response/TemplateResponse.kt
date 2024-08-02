@@ -136,16 +136,28 @@ data class TemplateResponse(
 	data class PenandaTangan(
 
 		@SerialName("lurah")
-		val lurah: String,
+		val lurah: String? = null,
 
 		@SerialName("pelayanan_kelurahan")
-		val pelayananKelurahan: String,
+		val pelayananKelurahan: String? = null,
 
 		@SerialName("sekretaris_kelurahan")
-		val sekretarisKelurahan: String,
+		val sekretarisKelurahan: String? = null,
 
 		@SerialName("plt_lurah")
-		val pltLurah: String
+		val pltLurah: String? = null,
+
+		@SerialName("camat")
+		val camat: String? = null,
+
+		@SerialName("plt_camat")
+		val pltCamat: String? = null,
+
+		@SerialName("pelayanan_kecamatan")
+		val pelayananKecamatan: String? = null,
+
+		@SerialName("sekretaris_kecamatan")
+		val sekretarisKecamatan: String? = null,
 	)
 	@Serializable
 	data class BerkasPersyaratanIdItem(

@@ -99,15 +99,13 @@ fun FormRequirementDocs(
                     key = {
                         inputs[it].inputName+inputs[it].isValid
                     }
-                ) {
+                ) { it ->
                     val item = inputs[it]
                     var hasFocus by remember {
                         mutableStateOf(false)
                     }
                     var filename: String by remember {
-                        mutableStateOf(
-                            item.getFilename()
-                        )
+                        mutableStateOf(item.getFilename())
                     }
 
                     FormTextField(
@@ -173,19 +171,15 @@ private fun FileInputActionButton(
     absoluteFilePath: FileAbsolutePath?,
     onResult: (uri: Uri?, filename: String) -> Unit
 ) {
+    val context = LocalContext.current
+
     var fileUri: Uri? by remember {
-        mutableStateOf(null)
+        mutableStateOf(absoluteFilePath?.let { FileHelper.absolutePathToUri(context, it) })
     }
 
     var mimeType: String? by remember {
-        mutableStateOf(null)
+        mutableStateOf(absoluteFilePath?.let { FileHelper.getMimeType(it) })
     }
-
-    var filename: String by remember {
-        mutableStateOf("")
-    }
-
-    val context = LocalContext.current
 
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = GetContentWithMultiFilter(),
@@ -193,7 +187,7 @@ private fun FileInputActionButton(
             fileUri = uri
             mimeType = uri?.let { FileHelper.getMimeType(context, it) }
 
-            onResult(uri, uri?.let { FileHelper.getFileName(it) } ?: "")
+            onResult(uri, uri?.let { FileHelper.getFileName(context, it) } ?: "")
         }
     )
 

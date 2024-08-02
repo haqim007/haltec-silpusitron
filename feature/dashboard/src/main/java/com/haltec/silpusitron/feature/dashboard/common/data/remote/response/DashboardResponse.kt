@@ -10,17 +10,17 @@ data class DashboardResponse(
 ){
 	@Serializable
 	data class Data(
-        @SerialName("jenis_surat")
-		val jenisSurat: List<PieDataResponse>? = null,
-        val statistik: List<PieDataResponse>? = null,
-        @SerialName("rasio_pelayanan")
+		@SerialName("jenis_surat")
+		val jenisSurat: List<LabelValueResponse>? = null,
+		val statistik: List<LabelValueResponse>? = null,
+		@SerialName("rasio_pelayanan")
 		val rasioPelayanan: List<RasioPelayananResponse>? = null,
-        @SerialName("status_surat")
-		val statusSurat: List<PieDataResponse>? = null
+		@SerialName("status_surat")
+		val statusSurat: List<LabelValueResponse>? = null
 	)
 
 	@Serializable
-	data class PieDataResponse(
+	data class LabelValueResponse(
 		val label: String,
 		@SerialName("jumlah")
 		val value: Int
@@ -35,17 +35,18 @@ data class DashboardResponse(
 		val totalLetterOut: Int
 	)
 
-	@Serializable
-	data class StatistikItem(
-		val label: String,
-		@SerialName("jumlah")
-		val value: Int
-	)
-
-	@Serializable
-	data class JenisSuratItem(
-		val label: String,
-		@SerialName("jumlah")
-		val value: Int
-	)
+//	@Serializable
+//	data class StatistikItem(
+//		val label: String,
+//		@SerialName("jumlah")
+//		val value: Int
+//	)
+//
+//	@Serializable
+//	data class JenisSuratItem(
+//		@SerialName("jenis_surat")
+//		val label: String,
+//		@SerialName("total_surat")
+//		val value: Int
+//	)
 }

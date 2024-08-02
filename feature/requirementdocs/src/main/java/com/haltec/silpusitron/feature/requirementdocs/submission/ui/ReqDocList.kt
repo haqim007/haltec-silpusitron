@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -137,7 +139,7 @@ fun ReqDocList(
                 Surface(
                     shadowElevation = 10.dp,
                     shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.weight(5f)
+                    modifier = Modifier.weight(1f)
                 ) {
                     TextField(
                         shape = RoundedCornerShape(8.dp),
@@ -172,7 +174,7 @@ fun ReqDocList(
                             contentColor = MaterialTheme.colorScheme.scrim.copy(alpha = 0.75f)
                         ),
                     modifier = Modifier
-                        .weight(2f)
+                        .wrapContentWidth()
                         .height(55.dp)
                         .padding(start = 8.dp),
                     elevation = ButtonDefaults.elevatedButtonElevation(
@@ -181,7 +183,6 @@ fun ReqDocList(
                     onClick = { showFilterSheet = !showFilterSheet }
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
