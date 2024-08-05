@@ -20,4 +20,4 @@ app/src/main/res/values/google_maps_key.xml
 app-petugas/secret.properties
 app-petugas/google-services.json
 .kotlin/errors/*
-/.idea/*
+.idea/*

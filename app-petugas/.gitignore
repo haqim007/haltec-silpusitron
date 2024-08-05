@@ -1,1 +1,3 @@
 /build
+app/src/release/secret.properties
+app/src/debug/secret.properties
