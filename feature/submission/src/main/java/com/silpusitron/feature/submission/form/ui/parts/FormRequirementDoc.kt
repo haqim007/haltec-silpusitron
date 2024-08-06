@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +38,10 @@ import androidx.compose.ui.unit.sp
 import com.silpusitron.common.util.AllowedFileExtension
 import com.silpusitron.common.util.FileHelper
 import com.silpusitron.common.util.GetContentWithMultiFilter
-import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
-import com.haltec.silpusitron.core.ui.theme.SuccessColor
+import com.silpusitron.core.ui.component.InputLabel
+import com.silpusitron.core.ui.parts.SubmitSuccessView
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.theme.SuccessColor
 import com.silpusitron.feature.submission.R
 import com.silpusitron.feature.submission.form.ui.SubmissionDocUiAction
 import com.silpusitron.feature.submission.form.ui.SubmissionDocUiState
@@ -48,7 +49,9 @@ import com.silpusitron.shared.form.domain.model.FileAbsolutePath
 import com.silpusitron.shared.form.domain.model.getFilename
 import com.silpusitron.shared.form.domain.model.isRequiredFile
 import com.silpusitron.shared.form.ui.components.FormTextField
-import com.haltec.silpusitron.core.ui.R as CoreR
+import kotlinx.coroutines.launch
+import kotlin.math.abs
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -64,6 +67,7 @@ fun FormRequirementDocs(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SubmitSuccessView(
+                borderColor = Color.Unspecified,
                 text = {
                     Text(
                         text = stringResource(id = R.string.doc_has_complete),
@@ -174,11 +178,16 @@ private fun FileInputActionButton(
     val context = LocalContext.current
 
     var fileUri: Uri? by remember {
-        mutableStateOf(absoluteFilePath?.let { FileHelper.absolutePathToUri(context, it) })
+        mutableStateOf(
+            if (absoluteFilePath?.contains("http") == true) null else
+                absoluteFilePath?.let { FileHelper.absolutePathToUri(context, it) }
+        )
     }
 
     var mimeType: String? by remember {
-        mutableStateOf(absoluteFilePath?.let { FileHelper.getMimeType(it) })
+        mutableStateOf(
+            if (absoluteFilePath?.contains("http") == true) null else
+            absoluteFilePath?.let { FileHelper.getMimeType(it) })
     }
 
     val filePickerLauncher = rememberLauncherForActivityResult(
@@ -190,6 +199,7 @@ private fun FileInputActionButton(
             onResult(uri, uri?.let { FileHelper.getFileName(context, it) } ?: "")
         }
     )
+    val scope = rememberCoroutineScope()
 
     Row {
         TextButton(
@@ -207,15 +217,26 @@ private fun FileInputActionButton(
                     contentColor = MaterialTheme.colorScheme.primary
                 ),
                 onClick = {
-                    if (fileUri == null || mimeType == null) return@IconButton
-                    try {
-                        val intent = Intent(Intent.ACTION_VIEW).apply {
-                            setDataAndType(fileUri, mimeType)
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) // Grant temporary read permission
+                    if (fileUri != null && mimeType != null){
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(fileUri, mimeType)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) // Grant temporary read permission
+                            }
+                            context.startActivity(intent)
+                        } catch (e: Exception) {
+                            Log.e("FilePreview", e.localizedMessage ?: "file preview error")
                         }
-                        context.startActivity(intent)
-                    } catch (e: Exception) {
-                        Log.e("FilePreview", e.localizedMessage ?: "file preview error")
+                    }
+                    else if (absoluteFilePath.contains("http")){
+                        scope.launch {
+                            try {
+                                FileHelper.checkContentTypeAndOpen(context, absoluteFilePath)
+                            }catch (e: Exception) {
+                                Log.e("FilePreview absolutepath", e.localizedMessage ?: "file preview error")
+                            }
+
+                        }
                     }
                 }
             ) {

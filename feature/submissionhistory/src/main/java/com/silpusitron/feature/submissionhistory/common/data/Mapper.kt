@@ -10,9 +10,12 @@ internal fun SubmissionHistoriesResponse.toModels() = this.data.data.map {
         title = it.templateSurat,
         number = it.noSurat,
         proceedBy = it.diprosesOleh,
-        status = it.status,
+        statusLabel = it.statusLabel,
         submissionDate = it.tanggalPengajuan.formatDate(),
         isFinish = it.isFinish,
-        fileUrl = it.fileUrl
+        fileUrl = it.fileUrl,
+        status = it.status,
+        letterType = it.jenisSurat,
+        isEditable = it.isEditable
     )
 }

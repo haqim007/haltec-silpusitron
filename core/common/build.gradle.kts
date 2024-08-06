@@ -36,3 +36,8 @@ android {
         jvmTarget = "1.8"
     }
 }
+
+dependencies {
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+}

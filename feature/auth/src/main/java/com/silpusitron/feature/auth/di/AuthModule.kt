@@ -8,6 +8,7 @@ import com.silpusitron.feature.auth.common.domain.IAuthRepository
 import com.silpusitron.feature.auth.common.domain.LogoutUseCase
 import com.silpusitron.feature.auth.login.domain.usecase.LoginUseCase
 import com.silpusitron.feature.auth.login.ui.LoginViewModel
+import com.silpusitron.feature.auth.otp.di.otpModule
 import com.silpusitron.feature.auth.otp.domain.usecase.RequestOTPUseCase
 import com.silpusitron.feature.auth.otp.domain.usecase.VerifyOTPUseCase
 import com.silpusitron.feature.auth.otp.ui.OTPViewModel
@@ -17,15 +18,12 @@ import org.koin.dsl.module
 
 
 val authModule = module {
-    includes(authSharedModule)
+    includes(authSharedModule, otpModule)
     factory { AuthRemoteDataSource(get()) }
     factory { AuthService(getProperty("BASE_URL"), getProperty("API_VERSION")) }
     factory <IAuthRepository>{ AuthRepository(get(), get(), get()) }
     factory <LoginUseCase> { LoginUseCase() }
     factory <LogoutUseCase> { LogoutUseCase() }
     factory <CheckSessionUseCase> { CheckSessionUseCase() }
-    factory { RequestOTPUseCase() }
-    factory { VerifyOTPUseCase() }
     viewModel { LoginViewModel(get()) }
-    viewModel { OTPViewModel(get(), get(), get()) }
 }

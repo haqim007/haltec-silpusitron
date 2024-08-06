@@ -14,15 +14,17 @@ import kotlinx.serialization.json.Json
 data class SubmissionDocFormArgs(
     val id: Int,
     val title: String,
-    val letterLevel: String,
-    val letterType: String
+    val letterLevel: String?,
+    val letterType: String,
+    val isNew: Boolean
 ): Parcelable
 
 val submissionDocFormArgsDummy = SubmissionDocFormArgs(
     id = 1,
     title = "Test",
     letterLevel = "Kecamatan",
-    letterType = "Resmi"
+    letterType = "Resmi",
+    isNew = true
 )
 
 

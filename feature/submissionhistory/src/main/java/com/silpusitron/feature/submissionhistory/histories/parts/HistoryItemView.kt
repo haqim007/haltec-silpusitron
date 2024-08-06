@@ -28,12 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistoryDummies
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -72,7 +72,7 @@ fun HistoryItemView(
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable {
-                if (data.isFinish) onClick(data)
+                if (data.isFinish || data.isEditable) onClick(data)
                 else showAlert = true
             },
         border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.secondary),
@@ -121,7 +121,7 @@ fun HistoryItemView(
                 pushStyle(SpanStyle(fontSize = 14.sp)) // Set base style
                 append(stringResource(id = CoreR.string.the_current_status))
                 pushStyle(SpanStyle(fontWeight = FontWeight.Bold)) // Set bold style
-                append(" ${data.status}")
+                append(" ${data.statusLabel}")
                 pop()
             }
             Text(

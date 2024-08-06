@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_approved_letters">Daftar Surat Belum Di TTE</string>
+    <string name="choose_all">Pilih Semua</string>
+    <string name="there_is_no_new_submission_currently">Belum ada pengajuan surat saat ini</string>
 </resources>

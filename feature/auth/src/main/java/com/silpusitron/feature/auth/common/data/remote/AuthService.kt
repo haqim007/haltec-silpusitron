@@ -34,39 +34,4 @@ class AuthService(
 
         return response.body<LoginResponse>()
     }
-
-
-
-    suspend fun verifyOTP(request: VerifyOTPRequest, token: String): VerifyOTPResponse{
-        val response = client.post {
-            bearerAuth(token)
-            endpoint("$path/otp")
-            setBody(request)
-        }
-
-        checkOrThrowError(response)
-
-        return response.body<VerifyOTPResponse>()
-    }
-
-    suspend fun requestOTP(token: String): RequestOTPResponse {
-        val response = client.get {
-            endpoint("$path/otp")
-            bearerAuth(token)
-        }
-
-        // Parse JSON string into a dynamic structure (JsonElement)
-        val json = Json.parseToJsonElement(response.bodyAsText())
-        val errors = json.jsonObject["errors"]?.jsonPrimitive?.content
-        val message = json.jsonObject["message"]?.jsonPrimitive?.content
-        if (response.status != HttpStatusCode.OK && (message != null || errors != null)) {
-            throw CustomRequestException(
-                dataJson = json,
-                statusCode = response.status,
-                errorMessage = message
-            )
-        }
-
-        return response.body<RequestOTPResponse>()
-    }
 }

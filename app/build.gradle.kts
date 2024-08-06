@@ -14,10 +14,6 @@ plugins {
 apply(from = "../shared-dependencies.gradle")
 apply(from = "../shared-ui-dependencies.gradle")
 
-val secretPropertiesFile = rootProject.file("app/secret.properties")
-val secretProperties = Properties().apply {
-    load(secretPropertiesFile.inputStream())
-}
 
 android {
     namespace = "com.silpusitron.app"
@@ -27,17 +23,13 @@ android {
         applicationId = "com.silpusitron.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.0.6"
+        versionCode = 7
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
-        buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
-        buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
     }
 
     buildTypes {
@@ -47,6 +39,34 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            manifestPlaceholders["FILE_PROVIDER_AUTHORITY"] = "${defaultConfig.applicationId}.fileprovider"
+
+            val secretPropertiesFile = rootProject.file("app/src/release/secret.properties")
+            val secretProperties = Properties().apply {
+                load(secretPropertiesFile.inputStream())
+            }
+            buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
+            buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
+            buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
+        }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["FILE_PROVIDER_AUTHORITY"] = "${defaultConfig.applicationId}.debug.fileprovider"
+
+            val secretPropertiesFile = rootProject.file("app/src/debug/secret.properties")
+            val secretProperties = Properties().apply {
+                load(secretPropertiesFile.inputStream())
+            }
+            buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
+            buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
+            buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
         }
     }
     compileOptions {

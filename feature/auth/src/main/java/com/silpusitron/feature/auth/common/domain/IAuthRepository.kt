@@ -18,8 +18,4 @@ interface IAuthRepository {
     fun checkSession(): Flow<Boolean>
 
     suspend fun logout()
-
-    fun verifyOTP(otp: String): Flow<Resource<Boolean>>
-
-    fun requestOTP(): Flow<Resource<RequestOTPResult>>
 }

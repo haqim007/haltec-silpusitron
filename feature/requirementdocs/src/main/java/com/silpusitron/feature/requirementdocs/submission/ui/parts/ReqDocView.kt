@@ -21,12 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.requirementdocs.R
 import com.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.silpusitron.feature.requirementdocs.common.domain.requirementDocDummies
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun ReqDocView(

@@ -3,7 +3,7 @@ package com.silpusitron.shared.form.ui
 import android.content.Context
 import android.net.Uri
 import com.silpusitron.common.util.FileHelper
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.shared.form.domain.model.FileAbsolutePath
 import com.silpusitron.shared.form.domain.model.FileValidationType
 import com.silpusitron.shared.form.domain.model.InputTextData

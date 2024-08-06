@@ -39,12 +39,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.haltec.silpusitron.core.ui.R
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.R
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.SubmitSuccessView
+import com.silpusitron.core.ui.parts.dialog.DialogError
+import com.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
 import com.silpusitron.data.mechanism.Resource
 
 @Composable

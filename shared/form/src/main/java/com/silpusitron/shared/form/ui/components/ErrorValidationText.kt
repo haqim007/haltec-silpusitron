@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.R
+import com.silpusitron.core.ui.R
 import com.silpusitron.shared.form.domain.model.FileValidationType
 import com.silpusitron.shared.form.domain.model.InputTextData
 import com.silpusitron.shared.form.domain.model.TextValidationType
@@ -33,7 +33,7 @@ fun <T, V> ErrorValidationText(
                      stringResource(id = R.string.n_length_required, labelName, validation.length)
                  }
                 TextValidationType.Email -> stringResource(id = R.string.invalid_email)
-                TextValidationType.Invalid -> null //TODO()
+                TextValidationType.Invalid -> stringResource(id = R.string.invalid_input)
                 is TextValidationType.MaxLength ->
                     stringResource(id = R.string.max_length_n_chars, validation.maxLength)
                 is TextValidationType.MaxValue ->

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -18,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -52,16 +49,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.haltec.silpusitron.core.ui.backgroundGradient
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdown
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdownModel
-import com.haltec.silpusitron.core.ui.parts.PagerView
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.backgroundGradient
+import com.silpusitron.core.ui.parts.AppExposedDropdown
+import com.silpusitron.core.ui.parts.AppExposedDropdownModel
+import com.silpusitron.core.ui.parts.PagerView
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submissionhistory.common.di.submissionHistoryModule
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
@@ -70,7 +66,7 @@ import com.silpusitron.feature.submissionhistory.histories.parts.HistoryItemView
 import com.silpusitron.shared.form.ui.parts.InputDatePicker
 import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -201,6 +197,9 @@ fun SubmissionHistoriesScreen(
             pagingItems = pagingItems,
             onLoadData = {
                 action(HistoryListUiAction.LoadData)
+            },
+            onResetFilter = {
+                action(HistoryListUiAction.ResetFilter)
             }
         ){
             LazyColumn(

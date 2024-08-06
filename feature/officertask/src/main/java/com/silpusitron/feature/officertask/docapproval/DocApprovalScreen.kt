@@ -16,17 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -34,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,35 +36,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.silpusitron.common.util.FileHelper
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.SimpleTopAppBar
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.error.ErrorView
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
-import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
-import com.haltec.silpusitron.core.ui.util.PermissionRequester
-import com.haltec.silpusitron.core.ui.util.isPermissionGranted
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.SimpleTopAppBar
+import com.silpusitron.core.ui.parts.error.ErrorView
+import com.silpusitron.core.ui.parts.loading.LoadingView
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.util.PermissionRequester
+import com.silpusitron.core.ui.util.isPermissionGranted
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.officertask.common.di.officerTaskModules
 import com.silpusitron.feature.officertask.common.ui.DialogRejectingForm
@@ -86,7 +66,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import java.io.IOException
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -367,7 +347,7 @@ fun DocApprovalScreen(
         SigningResultView(
             signingResult = state.signingResult,
             onSuccess = { onNavigateBack(true) },
-            onDismiss = { action(DocPreviewApprovalUiAction.ResetSigningResult) }
+            onDismissError = { action(DocPreviewApprovalUiAction.ResetSigningResult) }
         )
 
     }

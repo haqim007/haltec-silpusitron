@@ -17,9 +17,12 @@ data class SubmissionHistory(
     val submissionDate: String,
     val proceedBy: String,
     val status: String,
+    val statusLabel: String,
     val id: Int,
     val isFinish: Boolean,
-    val fileUrl: String?
+    val fileUrl: String?,
+    val letterType: String,
+    val isEditable: Boolean
 ): Parcelable
 
 val SubmissionHistoryType = object : NavType<SubmissionHistory>(
@@ -51,29 +54,38 @@ internal val SubmissionHistoryDummies = listOf(
         number = "P20240312001",
         submissionDate = "12 Mar 2024",
         proceedBy = "Sekda",
-        status = "Ter TTE",
+        status = "",
+        statusLabel = "Ter TTE",
         id = 1,
         isFinish = false,
-        fileUrl = null
+        fileUrl = null,
+        letterType = "Resmi",
+        isEditable = false
     ),
     SubmissionHistory(
         title = "Pengajuan Surat Kehilangan",
         number = "P20240312001",
         submissionDate = "12 Mar 2024",
         proceedBy = "Sekda",
-        status = "Ter TTE",
+        statusLabel = "Ter TTE",
         id = 2,
         isFinish = true,
-        fileUrl = ""
+        fileUrl = "",
+        status = "",
+        letterType = "Resmi",
+        isEditable = false
     ),
     SubmissionHistory(
         title = "Pengajuan Surat Kehilangan",
         number = "P20240312001",
         submissionDate = "12 Mar 2024",
         proceedBy = "Sekda",
-        status = "Ter TTE",
+        statusLabel = "Ter TTE",
         id = 3,
         isFinish = false,
-        fileUrl = null
+        fileUrl = null,
+        status = "",
+        letterType = "Resmi",
+        isEditable = false
     )
 )

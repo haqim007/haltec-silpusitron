@@ -3,7 +3,7 @@ package com.silpusitron.feature.requirementdocs.submission.ui
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.requirementdocs.common.domain.GetReqDocsUseCase
 import com.silpusitron.feature.requirementdocs.common.domain.RequirementDoc

@@ -44,14 +44,14 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
-import com.haltec.silpusitron.core.ui.R
+import com.silpusitron.core.ui.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import java.util.Locale
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 private lateinit var fusedLocationProviderClient: FusedLocationProviderClient

@@ -2,6 +2,7 @@ package com.silpusitron.feature.dashboard.common.ui.components
 
 import android.text.TextUtils
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -27,7 +29,7 @@ import co.yml.charts.common.model.PlotType
 import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.haltec.silpusitron.core.ui.generateColorShades
+import com.silpusitron.core.ui.generateColorShades
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.domain.model.PiesData
 import com.silpusitron.feature.dashboard.common.domain.model.total
@@ -82,38 +84,53 @@ fun PieChartCard(
                     .padding(top = 16.dp)
             )
 
-            Row(
+            Column(
                 modifier = Modifier
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 PieChart(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                        .size(225.dp),
                     pieChartData,
                     pieChartConfig
                 )
 
                 Column(
                     modifier = Modifier
-                        .weight(1f)
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp)
                     ) {
+
+                        Canvas(
+                            modifier = Modifier
+                                .padding(vertical = 6.dp)
+                                .size(10.dp)
+                                .weight(1f)
+
+                        ) {
+                            drawCircle(Color.Unspecified)
+                        }
 
                         Text(
                             text = stringResource(R.string.total),
+                            textAlign = TextAlign.Start,
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
-                            )
+                            ),
+                            modifier = Modifier
+                                .weight(4f),
+                            maxLines = 1
                         )
                         Text(
-                            data.total.roundToInt().toString(),
+                            text = data.total.roundToInt().toString(),
+                            modifier = Modifier
+                                .weight(1f)
+                                .wrapContentWidth(),
                             style = MaterialTheme.typography.labelLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
@@ -143,7 +160,10 @@ fun PieChartCard(
                                     fontSize = 14.sp
                                 ),
                                 modifier = Modifier
-                                    .weight(4f),
+                                    .weight(4f)
+                                    .basicMarquee(
+                                        iterations = Int.MAX_VALUE
+                                    ),
                                 maxLines = 1
                             )
                             Text(

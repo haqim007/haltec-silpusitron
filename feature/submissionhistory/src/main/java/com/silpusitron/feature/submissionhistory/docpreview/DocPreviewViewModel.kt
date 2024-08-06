@@ -1,7 +1,7 @@
 package com.silpusitron.feature.submissionhistory.docpreview
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.silpusitron.shared.pdfviewer.domain.GetPDFUseCase

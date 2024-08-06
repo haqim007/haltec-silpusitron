@@ -11,7 +11,7 @@ apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
 android {
-    namespace = "com.haltec.silpusitron.core.ui"
+    namespace = "com.silpusitron.core.ui"
     compileSdk = 34
 
     defaultConfig {

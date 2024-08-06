@@ -39,16 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.parts.SimpleTopAppBar
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.error.ErrorView
-import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.component.InputLabel
+import com.silpusitron.core.ui.parts.SimpleTopAppBar
+import com.silpusitron.core.ui.parts.SubmitSuccessView
+import com.silpusitron.core.ui.parts.dialog.DialogError
+import com.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.silpusitron.core.ui.parts.error.ErrorView
+import com.silpusitron.core.ui.parts.loading.LoadingView
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.updateprofileofficer.di.updateProfileOfficerModule
 import com.silpusitron.feature.updateprofileofficer.domain.FormProfileOfficerInputKey
@@ -56,7 +56,7 @@ import com.silpusitron.shared.form.domain.model.isRequired
 import com.silpusitron.shared.form.domain.model.valueOrEmpty
 import com.silpusitron.shared.form.ui.components.FormTextField
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 @Composable
 fun UpdateProfileOfficerScreen(
     modifier: Modifier = Modifier,

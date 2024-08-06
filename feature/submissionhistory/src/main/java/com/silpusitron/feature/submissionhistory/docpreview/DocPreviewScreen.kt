@@ -33,12 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.silpusitron.common.util.AllowedFileExtension
 import com.silpusitron.common.util.FileHelper
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.SimpleTopAppBar
-import com.haltec.silpusitron.core.ui.parts.error.ErrorView
-import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
-import com.haltec.silpusitron.core.ui.util.PermissionRequester
-import com.haltec.silpusitron.core.ui.util.isPermissionGranted
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.SimpleTopAppBar
+import com.silpusitron.core.ui.parts.error.ErrorView
+import com.silpusitron.core.ui.parts.loading.LoadingView
+import com.silpusitron.core.ui.util.PermissionRequester
+import com.silpusitron.core.ui.util.isPermissionGranted
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.rajat.pdfviewer.compose.PdfRendererViewCompose
@@ -46,7 +46,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable

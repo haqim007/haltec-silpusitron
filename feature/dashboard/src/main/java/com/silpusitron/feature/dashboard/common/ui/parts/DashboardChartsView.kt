@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.domain.model.BarCharts
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardChart
@@ -105,6 +105,10 @@ fun DashboardChartsView(
 @Composable
 private fun DashboardChartsView_Preview(){
     SILPUSITRONTheme {
-        DashboardChartsView(data = dashboardUiStateDummy.data.data ?: emptyList())
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
+            DashboardChartsView(data = dashboardUiStateDummy.data.data ?: emptyList())
+        }
     }
 }

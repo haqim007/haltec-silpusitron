@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.auth.common.domain.UserType
 import com.silpusitron.feature.auth.login.ui.LoginScreen
 import com.silpusitron.feature.auth.otp.ui.OTPScreen

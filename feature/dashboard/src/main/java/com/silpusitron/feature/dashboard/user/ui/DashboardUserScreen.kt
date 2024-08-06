@@ -11,13 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.parts.ContainerWithBanner
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.di.dataModule
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.common.ui.parts.DashboardContent
+import com.silpusitron.feature.dashboard.common.ui.parts.NewsImagesPager
+import com.silpusitron.feature.dashboard.exposed.ui.DashboardExposedUiAction
 import com.silpusitron.feature.dashboard.user.di.dashboardUserModule
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
 
@@ -27,7 +30,7 @@ fun DashboardUserScreen(
     modifier: Modifier = Modifier,
     sharedModifier: Modifier = Modifier,
     viewModel: DashboardUserViewModel = koinViewModel(),
-    animateWelcome: Boolean
+    firstTimeLogin: Boolean
 ){
 
     val state by viewModel.state.collectAsState()
@@ -39,13 +42,34 @@ fun DashboardUserScreen(
         action(DashboardUserUiAction.GetData)
     }
 
+    LaunchedEffect(key1 = state.news) {
+        if (state.news !is Resource.Success){
+            action(DashboardUserUiAction.LoadNews)
+        }
+    }
+
+    LaunchedEffect(key1 = state.showNewsDialog, key2 = state.news, key3 = firstTimeLogin) {
+        if (state.news is Resource.Success && state.showNewsDialog != false && firstTimeLogin) {
+            action(DashboardUserUiAction.ShowNewsDialog)
+        }
+    }
+
+    if (state.showNewsDialog == true){
+        NewsImagesPager(
+            onDismissRequest = {
+                action(DashboardUserUiAction.HideNewsDialog)
+            },
+            data = state.news.data ?: listOf()
+        )
+    }
+
     ContainerWithBanner(
         modifier = modifier
             .fillMaxSize(),
         bannerModifier = Modifier
             .height(242.dp),
         sharedModifier = sharedModifier,
-        withWelcome = animateWelcome,
+        withWelcome = firstTimeLogin,
         onBannerInvisible = {
             println("onBannerInvisible: $it")
         },
@@ -78,7 +102,7 @@ fun DashboardScreenPreview(){
         SILPUSITRONTheme {
             DashboardUserScreen(
                 viewModel = viewModel,
-                animateWelcome = true
+                firstTimeLogin = true
             )
         }
     }
@@ -99,7 +123,7 @@ fun DashboardScreen_LoadingPreview(){
         SILPUSITRONTheme {
             DashboardUserScreen(
                 viewModel = viewModel,
-                animateWelcome = true
+                firstTimeLogin = true
             )
         }
     }

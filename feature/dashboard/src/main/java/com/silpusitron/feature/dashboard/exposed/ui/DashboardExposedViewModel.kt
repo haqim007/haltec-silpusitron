@@ -1,14 +1,14 @@
 package com.silpusitron.feature.dashboard.exposed.ui
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.common.domain.model.BarCharts
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardChart
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardData
 import com.silpusitron.feature.dashboard.common.domain.model.PiesData
 import com.silpusitron.feature.dashboard.common.domain.model.Summaries
-import com.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
+import com.silpusitron.feature.dashboard.common.domain.model.NewsImage
 import com.silpusitron.feature.dashboard.exposed.domain.usecase.GetDashboardExposedUseCase
 import com.silpusitron.feature.dashboard.exposed.domain.usecase.GetNewsImagesUseCase
 import com.silpusitron.shared.district.domain.usecase.GetDistrictsUseCase

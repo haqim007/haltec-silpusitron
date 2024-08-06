@@ -56,6 +56,8 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
             }else{
                 emit(Resource.Error(message = "Request is not allowed"))
             }
+
+            onComplete()
             
         }catch (e: Exception){
             onFailed()
@@ -95,6 +97,12 @@ abstract class NetworkBoundResource<ResultType, ResponseType> {
     protected open suspend fun onSuccess(responseData: ResponseType) {}
 
     protected open suspend fun onFailed(exceptionOrNull: CustomThrowable? = null) {}
+
+    /**
+     * Do anything after succeed or error (not thrown exception)
+     *
+     */
+    protected open  suspend fun onComplete() {}
     
     /*
     * 

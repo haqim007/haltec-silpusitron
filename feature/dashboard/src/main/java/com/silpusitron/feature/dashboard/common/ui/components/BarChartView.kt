@@ -35,7 +35,7 @@ import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.barchart.models.GroupBar
 import co.yml.charts.ui.barchart.models.GroupBarChartData
 import co.yml.charts.ui.barchart.models.SelectionHighlightData
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.domain.model.BarCharts
 

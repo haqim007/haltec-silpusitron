@@ -14,11 +14,6 @@ plugins {
 apply(from = "../shared-dependencies.gradle")
 apply(from = "../shared-ui-dependencies.gradle")
 
-val secretPropertiesFile = rootProject.file("app-petugas/secret.properties")
-val secretProperties = Properties().apply {
-    load(secretPropertiesFile.inputStream())
-}
-
 android {
     namespace = "com.silpusitron.app_petugas"
     compileSdk = 34
@@ -27,17 +22,14 @@ android {
         applicationId = "com.silpusitron.app_petugas"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 5
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
-        buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
-        buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
     }
 
     buildTypes {
@@ -47,8 +39,35 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            val secretPropertiesFile = rootProject.file("app-petugas/src/release/secret.properties")
+            val secretProperties = Properties().apply {
+                load(secretPropertiesFile.inputStream())
+            }
+            manifestPlaceholders["FILE_PROVIDER_AUTHORITY"] = "${defaultConfig.applicationId}.fileprovider"
+            buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
+            buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
+            buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
+        }
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["FILE_PROVIDER_AUTHORITY"] = "${defaultConfig.applicationId}.debug.fileprovider"
+            val secretPropertiesFile = rootProject.file("app-petugas/src/debug/secret.properties")
+            val secretProperties = Properties().apply {
+                load(secretPropertiesFile.inputStream())
+            }
+
+            buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
+            buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
+            buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

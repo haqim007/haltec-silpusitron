@@ -29,17 +29,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.haltec.silpusitron.core.ui.parts.SimpleTopAppBar
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
-import com.haltec.silpusitron.core.ui.util.PermissionRequester
-import com.haltec.silpusitron.core.ui.util.isPermissionGranted
+import com.silpusitron.core.ui.parts.SimpleTopAppBar
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.util.PermissionRequester
+import com.silpusitron.core.ui.util.isPermissionGranted
 import com.silpusitron.shared.formprofile.di.formProfileModule
 import com.silpusitron.shared.formprofile.ui.FormProfileScreen
 import com.silpusitron.shared.formprofile.ui.FormProfileUiAction
 import com.silpusitron.shared.formprofile.ui.FormProfileViewModel
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun UpdateProfileCitizenScreen(

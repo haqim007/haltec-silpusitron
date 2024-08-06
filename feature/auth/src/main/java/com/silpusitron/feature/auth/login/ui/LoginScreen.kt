@@ -18,12 +18,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.parts.ContainerWithBanner
 import com.silpusitron.feature.auth.common.domain.UserType
 import com.silpusitron.feature.auth.di.authModule
 import org.koin.compose.KoinApplication
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable

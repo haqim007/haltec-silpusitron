@@ -56,9 +56,9 @@ abstract class KtorService{
         }
 
         install(HttpTimeout){
-            socketTimeoutMillis = 10000L
-            connectTimeoutMillis = 10000L
-            requestTimeoutMillis = 10000L
+            socketTimeoutMillis = 30000L
+            connectTimeoutMillis = 30000L
+            requestTimeoutMillis = 30000L
         }
     }
 

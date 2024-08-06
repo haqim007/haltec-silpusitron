@@ -20,10 +20,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,24 +42,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.R
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.R
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.shared.auth.di.authSharedModule
 import com.silpusitron.feature.settings.di.settingsModule
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
-fun AccountScreen(
+fun SettingsScreen(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),
     navigateToAccountProfileScreen: () -> Unit
 ){
     val action = {action: AccountUiAction -> viewModel.doAction(action)}
+    val state by viewModel.state.collectAsState()
+
+    var showLogoutConfirmationDialog by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = state.logoutResult) {
+        if(state.logoutResult is Resource.Loading){
+            if (showLogoutConfirmationDialog){
+                showLogoutConfirmationDialog = false
+            }
+        }
+    }
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -121,16 +140,14 @@ fun AccountScreen(
                 }
             }
 
-            var showDialog by remember {
-                mutableStateOf(false)
-            }
-
             Card(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .clickable {
-                        showDialog = true
+                        if (state.logoutResult !is Resource.Loading) {
+                            showLogoutConfirmationDialog = true
+                        }
                     },
                 border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.secondary),
                 colors = CardDefaults.cardColors().copy(
@@ -161,18 +178,25 @@ fun AccountScreen(
                         )
                     )
 
-                    Icon(
-                        modifier = Modifier.weight(1f),
-                        imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
-                        contentDescription = null
-                    )
+                    if (state.logoutResult is Resource.Loading){
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(30.dp),
+                            strokeWidth = 3.dp
+                        )
+                    }else{
+                        Icon(
+                            modifier = Modifier.weight(1f),
+                            imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
 
             DialogLogout(
-                showDialog,
+                showLogoutConfirmationDialog,
                 onShow = {
-                    showDialog = it
+                    showLogoutConfirmationDialog = it
                 },
                 onLogout = {
                     action(AccountUiAction.Logout)
@@ -259,12 +283,14 @@ private fun DialogLogout(
     }
 }
 
-@Preview
+@Preview(apiLevel = 34)
 @Composable
 fun AccountScreen_Preview(){
-    KoinPreviewWrapper(modules = listOf(commonModule, authSharedModule, settingsModule)) {
+    KoinPreviewWrapper(
+        modules = listOf(commonModule, authSharedModule, settingsModule)
+    ) {
         SILPUSITRONTheme {
-            AccountScreen(navigateToAccountProfileScreen = {})
+            SettingsScreen(navigateToAccountProfileScreen = {})
         }
     }
 }

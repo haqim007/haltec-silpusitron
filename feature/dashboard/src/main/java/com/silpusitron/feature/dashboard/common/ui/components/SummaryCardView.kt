@@ -27,8 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.extension.surroundInnerShadow
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.extension.surroundInnerShadow
+import com.silpusitron.core.ui.theme.BackgroundLight
 import kotlinx.datetime.Clock
 
 

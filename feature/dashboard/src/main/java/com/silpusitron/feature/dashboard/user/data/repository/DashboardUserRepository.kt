@@ -1,10 +1,13 @@
 package com.silpusitron.feature.dashboard.user.data.repository
 
 import com.silpusitron.common.util.DispatcherProvider
+import com.silpusitron.data.mechanism.NetworkBoundResource
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.common.data.remote.response.DashboardResponse
 import com.silpusitron.feature.dashboard.common.data.toDashboardData
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardData
+import com.silpusitron.feature.dashboard.common.domain.model.NewsImage
+import com.silpusitron.feature.dashboard.exposed.data.remote.NewsImagesResponse
 import com.silpusitron.feature.dashboard.user.data.remote.DashboardUserRemoteDataSource
 import com.silpusitron.feature.dashboard.user.domain.repository.IDashboardUserRepository
 import com.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResource
@@ -29,6 +32,29 @@ internal class DashboardUserRepository(
 
             override fun loadResult(responseData: DashboardResponse): Flow<List<DashboardData>> {
                 return flowOf(responseData.toDashboardData())
+            }
+
+        }.asFlow()
+            .flowOn(dispatcher.io)
+    }
+
+    override fun getNewsImages(): Flow<Resource<List<NewsImage>>> {
+        return object : AuthorizedNetworkBoundResource<List<NewsImage>, NewsImagesResponse>(preferences) {
+            override suspend fun requestFromRemote(): Result<NewsImagesResponse> {
+                return remoteDataSource.getNewsImages(getToken())
+            }
+
+            override fun loadResult(responseData: NewsImagesResponse): Flow<List<NewsImage>> {
+                return flowOf(responseData.data.map {
+                    NewsImage(
+                        title = it.title,
+                        imageURL = if (it.image.contains("https://")){
+                            it.image
+                        }else{
+                            "https://${it.image.removePrefix("http://")}"
+                        }
+                    )
+                })
             }
 
         }.asFlow()

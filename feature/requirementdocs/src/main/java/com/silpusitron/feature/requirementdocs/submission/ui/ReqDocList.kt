@@ -57,16 +57,16 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.haltec.silpusitron.core.ui.backgroundGradient
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdown
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdownModel
-import com.haltec.silpusitron.core.ui.parts.PagerView
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.gradientColors
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.backgroundGradient
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.parts.AppExposedDropdown
+import com.silpusitron.core.ui.parts.AppExposedDropdownModel
+import com.silpusitron.core.ui.parts.PagerView
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.gradientColors
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.requirementdocs.R
 import com.silpusitron.feature.requirementdocs.common.di.requirementDocModule
@@ -75,7 +75,7 @@ import com.silpusitron.feature.requirementdocs.common.domain.requirementDocDummi
 import com.silpusitron.feature.requirementdocs.submission.ui.parts.ReqDocView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -200,6 +200,9 @@ fun ReqDocList(
             pagingItems = pagingItems,
             onLoadData = {
                 action(ReqDocUiAction.LoadData)
+            },
+            onResetFilter = {
+                action(ReqDocUiAction.ResetFilter)
             }
         ){
             LazyColumn(
@@ -263,7 +266,7 @@ fun ReqDocList(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.Refresh,
-                                        contentDescription = stringResource(com.haltec.silpusitron.core.ui.R.string.click_to_reload_this_options)
+                                        contentDescription = stringResource(com.silpusitron.core.ui.R.string.click_to_reload_this_options)
                                     )
                                 }
                             }
@@ -302,7 +305,7 @@ fun ReqDocList(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.Refresh,
-                                        contentDescription = stringResource(com.haltec.silpusitron.core.ui.R.string.click_to_reload_this_options)
+                                        contentDescription = stringResource(com.silpusitron.core.ui.R.string.click_to_reload_this_options)
                                     )
                                 }
                             }

@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.DisabledInputContainer
 import com.silpusitron.shared.form.domain.model.InputTextData
 
 @Composable

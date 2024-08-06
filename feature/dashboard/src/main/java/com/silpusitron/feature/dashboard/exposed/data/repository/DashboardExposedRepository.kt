@@ -8,7 +8,7 @@ import com.silpusitron.feature.dashboard.common.data.toDashboardData
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardData
 import com.silpusitron.feature.dashboard.exposed.data.remote.DashboardExposedRemoteDataSource
 import com.silpusitron.feature.dashboard.exposed.data.remote.NewsImagesResponse
-import com.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
+import com.silpusitron.feature.dashboard.common.domain.model.NewsImage
 import com.silpusitron.feature.dashboard.exposed.domain.repository.IDashboardExposedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -49,7 +49,11 @@ class DashboardExposedRepository(
                 return flowOf(responseData.data.map {
                     NewsImage(
                         title = it.title,
-                        imageURL = it.image
+                        imageURL = if (it.image.contains("https://")){
+                            it.image
+                        }else{
+                            "https://${it.image.removePrefix("http://")}"
+                        }
                     )
                 })
             }

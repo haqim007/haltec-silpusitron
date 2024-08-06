@@ -38,25 +38,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.tab.TabBarItem
-import com.haltec.silpusitron.core.ui.parts.tab.TabBarView
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.tab.TabBarItem
+import com.silpusitron.core.ui.parts.tab.TabBarView
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
 import com.silpusitron.feature.officertask.docapproval.DocApprovalScreen
 import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetter
 import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetterType
 import com.silpusitron.feature.officertask.tasks.ui.OfficerTasksScreen
-import com.silpusitron.feature.settings.ui.AccountScreen
+import com.silpusitron.feature.settings.ui.SettingsScreen
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistoryType
 import com.silpusitron.feature.submissionhistory.docpreview.DocPreviewScreen
 import com.silpusitron.feature.submissionhistory.histories.SubmissionHistoriesScreen
 import com.silpusitron.feature.updateprofileofficer.ui.UpdateProfileOfficerScreen
 import kotlin.reflect.typeOf
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -150,7 +150,7 @@ fun HomeOfficerScreen(
                DashboardUserScreen(
                    modifier = Modifier.padding(paddingInner),
                    sharedModifier = sharedModifier,
-                   animateWelcome = firstTimeLogin,
+                   firstTimeLogin = firstTimeLogin,
                )
             }
             composable<Routes.Tasks>{
@@ -269,7 +269,7 @@ fun HomeOfficerScreen(
                 )
             }
             composable<Routes.AccountRoute>{
-                AccountScreen(
+                SettingsScreen(
                     modifier = Modifier.padding(paddingInner),
                     navigateToAccountProfileScreen = {
                         navController.navigate(Routes.ProfileAccountRoute)

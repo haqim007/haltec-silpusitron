@@ -9,7 +9,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-private val authPreference = named("AuthPreference")
+private val dataStorePreferenceAuth = named("AuthPreference")
 
 val Context.authDataStore by preferencesDataStore(name = "auth_preference")
 
@@ -18,10 +18,8 @@ fun provideAuthDataStore(context: Context): DataStore<Preferences> {
 }
 
 val authSharedModule = module {
-    single(authPreference) { provideAuthDataStore(androidContext()) }
+    single(dataStorePreferenceAuth) { provideAuthDataStore(androidContext()) }
     single<AuthPreference>{
-        AuthPreference(
-            get(authPreference)
-        )
+        AuthPreference(get(dataStorePreferenceAuth))
     }
 }

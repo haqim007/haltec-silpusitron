@@ -1,7 +1,7 @@
 package com.silpusitron.app_petugas
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.feature.auth.common.domain.IAuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

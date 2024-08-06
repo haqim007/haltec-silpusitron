@@ -1,4 +1,4 @@
-package com.haltec.silpusitron.core.ui
+package com.silpusitron.core.ui
 
 import org.junit.Test
 

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,15 +51,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.haltec.silpusitron.core.ui.backgroundGradient
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdown
-import com.haltec.silpusitron.core.ui.parts.AppExposedDropdownModel
-import com.haltec.silpusitron.core.ui.parts.PagerView
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.backgroundGradient
+import com.silpusitron.core.ui.parts.AppExposedDropdown
+import com.silpusitron.core.ui.parts.AppExposedDropdownModel
+import com.silpusitron.core.ui.parts.PagerView
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.officertask.R
 import com.silpusitron.feature.officertask.common.di.officerTaskModules
@@ -70,7 +71,7 @@ import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetterDummies
 import com.silpusitron.shared.form.ui.parts.InputDatePicker
 import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -212,10 +213,30 @@ fun OfficerTasksScreen(
             }
         }
 
+        if (state.selectMultipleActive) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = stringResource(R.string.choose_all))
+                Checkbox(
+                    checked = state.isSelectAllActive,
+                    onCheckedChange = {
+                        if (it) action(OfficerTasksUiAction.SelectAll)
+                        else action(OfficerTasksUiAction.DeselectAll)
+                    }
+                )
+            }
+        }
+
         PagerView(
             modifier = Modifier.weight(9f),
             pagingItems = pagingItems,
-            onLoadData = { action(OfficerTasksUiAction.LoadData) }
+            emptyDataMessage = stringResource(R.string.there_is_no_new_submission_currently),
+            onLoadData = { action(OfficerTasksUiAction.LoadData) },
+            onResetFilter = { action(OfficerTasksUiAction.ResetFilter) }
         ){
             LazyColumn(
                 contentPadding = PaddingValues(all = 12.dp)
@@ -225,26 +246,24 @@ fun OfficerTasksScreen(
                     key = pagingItems.itemKey { it.number }
                 ) { index ->
                     val item = pagingItems[index] ?: return@items
+
+                    // save displayed item id
+                    action(OfficerTasksUiAction.AddDisplayedId(item.id))
+
+                    // automatically select the id when isSelectAllActive true and the item is not selected yet
+                    if (state.isSelectAllActive &&
+                        state.selectedIds.firstOrNull { it == item.id } == null
+                    ){
+                        action(OfficerTasksUiAction.SelectId(item.id))
+                    }
                     OfficerTaskItemView(
                         data = item,
-                        onClick = {
-                            onClick(it)
-                        },
-                        onLongClick = {
-                            action(OfficerTasksUiAction.SelectId(it.id))
-                        },
+                        onClick = { onClick(it) },
+                        onLongClick = { action(OfficerTasksUiAction.SelectId(it.id)) },
                         multipleSelectActive = state.selectMultipleActive,
-                        onSelect = {it ->
-                            action(OfficerTasksUiAction.SelectId(it.id))
-                        },
-                        isSelected = state.selectedIds.firstOrNull {
-                            it == item.id
-                        } != null,
-                        modifier = Modifier
-                            .padding(
-                                vertical = 8.dp,
-                                horizontal = 16.dp
-                            )
+                        onSelect = { action(OfficerTasksUiAction.SelectId(it.id)) },
+                        isSelected = state.selectedIds.firstOrNull { it == item.id } != null,
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
                     )
                 }
             }
@@ -313,7 +332,10 @@ fun OfficerTasksScreen(
             action(OfficerTasksUiAction.LoadData)
             action(OfficerTasksUiAction.ResetSigningResult)
         },
-        onDismiss = { action(OfficerTasksUiAction.ResetSigningResult) }
+        onDismissError = {
+            action(OfficerTasksUiAction.ResetSigningResult)
+            action(OfficerTasksUiAction.LoadData)
+        }
     )
 
     // bottom sheet

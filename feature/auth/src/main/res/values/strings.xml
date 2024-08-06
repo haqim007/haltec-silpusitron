@@ -15,4 +15,8 @@
     <string name="failed_to_verify_otp">Gagal memverifikasi OTP</string>
     <string name="username_nip">Username/NIP</string>
     <string name="password_fingerprintid">Password/Fingerprint ID</string>
+    <string name="update_phone_number_question">Ganti nomor?</string>
+    <string name="otp_code_has_been_sent">Kode OTP telah dikirim ke nomor Whatsapp %1$s. </string>
+    <string name="please_enter_valid_whatsapp_number">Silahkan masukkan No Whatsapp yang sesuai</string>
+    <string name="input_whatsapp_number">Masukkan No Whatsapp</string>
 </resources>

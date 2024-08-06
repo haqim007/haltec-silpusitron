@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.haltec.silpusitron.core.ui.parts.error.ErrorView
-import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
+import com.silpusitron.core.ui.parts.error.ErrorView
+import com.silpusitron.core.ui.parts.loading.LoadingView
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardData
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun DashboardContent(

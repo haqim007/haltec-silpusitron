@@ -1,9 +1,11 @@
 package com.silpusitron.feature.officertask.tasks.ui
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import androidx.paging.map
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.officertask.common.domain.RejectingUseCase
 import com.silpusitron.feature.officertask.common.domain.SigningUseCase
@@ -12,19 +14,22 @@ import com.silpusitron.feature.officertask.tasks.domain.GetSubmittedLettersUseCa
 import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetter
 import com.silpusitron.shared.form.domain.model.InputOptions
 import com.silpusitron.shared.lettertype.domain.GetLetterTypeOptionsUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class OfficerTasksViewModel(
     private val getSubmittedLettersUseCase: GetSubmittedLettersUseCase,
     private val getLetterTypeOptionsUseCase: GetLetterTypeOptionsUseCase,
@@ -77,15 +82,44 @@ class OfficerTasksViewModel(
             OfficerTasksUiAction.ResetSigningResult -> _state.update { state ->
                 state.copy(signingResult = Resource.Idle())
             }
+            OfficerTasksUiAction.DeselectAll -> deselectAll()
+            OfficerTasksUiAction.SelectAll -> selectAll()
 
             is OfficerTasksUiAction.SetDummyState -> _state.update { action.state }
+            is OfficerTasksUiAction.AddDisplayedId -> addDisplayedId(action.id)
+        }
+    }
+
+    private fun addDisplayedId(id: Int){
+        _state.update { state ->
+            state.copy(
+                displayedIds = state.displayedIds + id
+            )
+        }
+    }
+
+    private fun selectAll(){
+        _state.update { state ->
+            state.copy(
+                isSelectAllActive = true,
+                selectedIds = state.displayedIds
+            )
+        }
+    }
+
+    private fun deselectAll(){
+        _state.update { state ->
+            state.copy(
+                isSelectAllActive = false,
+                selectedIds = setOf()
+            )
         }
     }
 
     private fun rejecting(reason: String){
         viewModelScope.launch {
             rejectingUseCase(
-                ids = state.value.selectedIds,
+                ids = state.value.selectedIds.toList(),
                 reason = reason
             ).collectLatest {
                 _state.update { state ->
@@ -98,7 +132,7 @@ class OfficerTasksViewModel(
     private fun signing(passphrase: String){
         viewModelScope.launch {
             signingUseCase(
-                ids = state.value.selectedIds,
+                ids = state.value.selectedIds.toList(),
                 passphrase = passphrase
             ).collectLatest {
                 _state.update { state ->
@@ -136,7 +170,7 @@ class OfficerTasksViewModel(
                 filterLetterStatus = letterStatus,
                 filterStartDate = startDate,
                 filterEndDate = endDate,
-                filterActive = listFilter.filter { it != null }.count()
+                filterActive = listFilter.filterNotNull().count()
             )
         }
         loadData()
@@ -174,6 +208,9 @@ class OfficerTasksViewModel(
     }
 
     private fun loadData() {
+        if (state.value.isSelectAllActive){
+            deselectAll()
+        }
         viewModelScope.launch {
             getSubmittedLettersUseCase(
                 searchKeyword = state.value.searchKeyword,
@@ -202,6 +239,9 @@ sealed class OfficerTasksUiAction{
     data class Signing(val passphrase: String): OfficerTasksUiAction()
     data class Rejecting(val reason: String): OfficerTasksUiAction()
     data object ResetSigningResult: OfficerTasksUiAction()
+    data object SelectAll: OfficerTasksUiAction()
+    data object DeselectAll: OfficerTasksUiAction()
+    data class AddDisplayedId(val id: Int): OfficerTasksUiAction()
 
     data class SetDummyPagingData(val data: List<SubmittedLetter>): OfficerTasksUiAction()
     data class SetDummyState(val state: OfficerTasksUiState): OfficerTasksUiAction()
@@ -215,7 +255,9 @@ data class OfficerTasksUiState(
     val searchKeyword: String = "",
     val filterActive: Int = 0,
     val letterTypeOptions: Resource<InputOptions> = Resource.Idle(),
-    val selectedIds: List<Int> = listOf(),
+    val selectedIds: Set<Int> = setOf(),
     val selectMultipleActive: Boolean = false,
+    val displayedIds: Set<Int> = setOf(),
+    val isSelectAllActive: Boolean = false,
     val signingResult: Resource<String> = Resource.Idle()
 )

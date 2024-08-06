@@ -32,13 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.silpusitron.common.util.toStringFormat
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.DisabledInputContainer
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @OptIn(ExperimentalMaterial3Api::class)

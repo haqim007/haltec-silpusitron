@@ -105,4 +105,6 @@
     <string name="passphrase">Passphrase</string>
     <string name="show_password">Tampilkan password</string>
     <string name="hide_password">Sembunyikan password</string>
+    <string name="invalid_input">Input tidak sah</string>
+    <string name="reset_filter">Reset Filter</string>
 </resources>

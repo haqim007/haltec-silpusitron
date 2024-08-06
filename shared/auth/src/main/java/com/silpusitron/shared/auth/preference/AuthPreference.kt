@@ -7,8 +7,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.map
 
-// TODO: Save authentication stuff here not in User module
-
 class AuthPreference(
     private val dataStore: DataStore<Preferences>
 ){
@@ -22,17 +20,23 @@ class AuthPreference(
         }
     }
 
-    suspend fun storeAuth(username: String, token: String, otpValid: Boolean){
+    suspend fun storeAuthWithPhoneNumber(
+        username: String,
+        phoneNumber: String,
+        token: String
+    ){
+        dataStore.edit {preferences ->
+            preferences[USER_NAME] = username
+            preferences[TOKEN] = token
+            preferences[PHONE_NUMBER] = phoneNumber
+        }
+    }
+
+    suspend fun storeAuthOnOTPValid(username: String, token: String, otpValid: Boolean){
         dataStore.edit {preferences ->
             preferences[USER_NAME] = username
             preferences[TOKEN] = token
             preferences[IS_OTP_VALID] = otpValid
-        }
-    }
-
-    suspend fun setOTPValid(){
-        dataStore.edit {preferences ->
-            preferences[IS_OTP_VALID] = true
         }
     }
 
@@ -44,6 +48,10 @@ class AuthPreference(
 
     fun getToken() = dataStore.data.map {preferences ->
         preferences[TOKEN] ?: ""
+    }
+
+    fun getPhoneNumber() = dataStore.data.map {preferences ->
+        preferences[PHONE_NUMBER] ?: ""
     }
 
     suspend fun resetAuth() {
@@ -66,6 +74,7 @@ class AuthPreference(
         private val USER_NAME = stringPreferencesKey("user_name")
         private val TOKEN = stringPreferencesKey("token")
         private val IS_OTP_VALID = booleanPreferencesKey("is_OTP_valid")
+        private val PHONE_NUMBER = stringPreferencesKey("phone_number")
         //private val TOKEN_EXPIRE = longPreferencesKey ("token_expire")
         //// Flag that the session end because of user logout
         //private val HAS_LOGOUT = booleanPreferencesKey("has_logout")

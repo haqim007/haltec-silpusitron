@@ -28,9 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.parts.ContainerWithBanner
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.di.dataModule
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.shared.formprofile.domain.model.ProfileDataDummy
@@ -40,7 +40,7 @@ import com.silpusitron.shared.formprofile.ui.FormProfileUiState
 import com.silpusitron.shared.formprofile.ui.FormProfileViewModel
 import com.silpusitron.feature.confirmprofilecitizen.di.confirmProfileCitizenModule
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable

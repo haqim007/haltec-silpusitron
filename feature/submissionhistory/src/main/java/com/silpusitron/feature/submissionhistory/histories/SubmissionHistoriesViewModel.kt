@@ -3,7 +3,7 @@ package com.silpusitron.feature.submissionhistory.histories
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.silpusitron.feature.submissionhistory.common.domain.usecase.GetLetterStatusOptionsUseCase

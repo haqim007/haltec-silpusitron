@@ -1,8 +1,6 @@
 package com.silpusitron.feature.landingpage.ui.splash
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,14 +14,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.haltec.silpusitron.core.ui.theme.PrimaryLight
-import com.haltec.silpusitron.core.ui.theme.PrimaryVariantLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.PrimaryLight
+import com.silpusitron.core.ui.theme.PrimaryVariantLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import kotlinx.coroutines.delay
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MySplashScreen(
     modifier: Modifier = Modifier,

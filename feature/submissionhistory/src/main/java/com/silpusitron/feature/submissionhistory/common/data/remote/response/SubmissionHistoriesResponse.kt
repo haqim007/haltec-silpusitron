@@ -16,6 +16,9 @@ data class SubmissionHistoriesResponse(
 		@SerialName("jenis_surat")
 		val jenisSurat: String,
 
+		@SerialName("is_editable")
+		val isEditable: Boolean,
+
 		@SerialName("diproses_oleh")
 		val diprosesOleh: String,
 
@@ -35,6 +38,9 @@ data class SubmissionHistoriesResponse(
 		val templateSurat: String,
 
 		@SerialName("status_label")
+		val statusLabel: String,
+
+		@SerialName("status")
 		val status: String,
 
 		@SerialName("url")

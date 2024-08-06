@@ -34,15 +34,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.haltec.silpusitron.core.ui.parts.tab.TabBarItem
-import com.haltec.silpusitron.core.ui.parts.tab.TabBarView
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.parts.tab.TabBarItem
+import com.silpusitron.core.ui.parts.tab.TabBarView
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.silpusitron.feature.dashboard.user.ui.DashboardUserScreen
 import com.silpusitron.feature.requirementdocs.submission.ui.ReqDocList
 import com.silpusitron.feature.requirementdocs.submission.ui.ReqDocViewModel
-import com.silpusitron.feature.settings.ui.AccountScreen
+import com.silpusitron.feature.settings.ui.SettingsScreen
 import com.silpusitron.feature.submissionhistory.docpreview.DocPreviewScreen
 import com.silpusitron.feature.submission.form.ui.SubmissionDocFormArgs
 import com.silpusitron.feature.submission.form.ui.SubmissionDocFormArgsType
@@ -53,7 +53,7 @@ import com.silpusitron.feature.submissionhistory.histories.SubmissionHistoriesSc
 import com.silpusitron.feature.updateprofilecitizen.ui.UpdateProfileCitizenScreen
 import org.koin.androidx.compose.koinViewModel
 import kotlin.reflect.typeOf
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -143,7 +143,7 @@ fun HomeScreen(
                DashboardUserScreen(
                    modifier = Modifier.padding(paddingInner),
                    sharedModifier = sharedModifier,
-                   animateWelcome = firstTimeLogin,
+                   firstTimeLogin = firstTimeLogin,
                )
             }
             composable<Routes.InquiryRoute>{
@@ -160,7 +160,8 @@ fun HomeScreen(
                                     args.id,
                                     args.title,
                                     args.letterLevel,
-                                    args.letterType
+                                    args.letterType,
+                                    true
                                 )
                             )
                         )
@@ -189,9 +190,23 @@ fun HomeScreen(
                 SubmissionHistoriesScreen(
                     modifier = Modifier.padding(paddingInner),
                     onClick = { history ->
-                        navController.navigate(
-                            Routes.DocPreviewRoute(history)
-                        )
+                        if (!history.isEditable){
+                            navController.navigate(
+                                Routes.DocPreviewRoute(history)
+                            )
+                        }else{
+                            navController.navigate(
+                                Routes.FormSubmission(
+                                    SubmissionDocFormArgs(
+                                        history.id,
+                                        history.title,
+                                        null,
+                                        history.letterType,
+                                        false
+                                    )
+                                )
+                            )
+                        }
                     }
                 )
             }
@@ -208,7 +223,7 @@ fun HomeScreen(
                 )
             }
             composable<Routes.AccountRoute>{
-                AccountScreen(
+                SettingsScreen(
                     navigateToAccountProfileScreen = {
                         navController.navigate(Routes.ProfileAccountRoute)
                     }

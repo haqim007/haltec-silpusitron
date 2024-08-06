@@ -5,8 +5,10 @@ import com.silpusitron.feature.submission.form.data.remote.SubmissionDocRemoteDa
 import com.silpusitron.feature.submission.form.data.remote.SubmissionDocService
 import com.silpusitron.feature.submission.form.data.repository.SubmissionDocRepository
 import com.silpusitron.feature.submission.form.domain.ISubmissionDocRepository
+import com.silpusitron.feature.submission.form.domain.usecase.GetSubmissionDraftUseCase
 import com.silpusitron.feature.submission.form.domain.usecase.GetTemplateUseCase
 import com.silpusitron.feature.submission.form.domain.usecase.SubmitSubmissionUseCase
+import com.silpusitron.feature.submission.form.domain.usecase.SubmitUpdateSubmissionUseCase
 import com.silpusitron.feature.submission.form.ui.SubmissionDocViewModel
 import com.silpusitron.shared.auth.di.authSharedModule
 import com.silpusitron.shared.formprofile.di.formProfileModule
@@ -19,6 +21,8 @@ internal val submissionFormModule = module {
     factory { SubmissionDocRemoteDatasource(get()) }
     factory<ISubmissionDocRepository> { SubmissionDocRepository(get(), get(), get()) }
     factory { GetTemplateUseCase() }
+    factory { GetSubmissionDraftUseCase() }
     factory { SubmitSubmissionUseCase() }
-    viewModel { SubmissionDocViewModel(get(), get()) }
+    factory { SubmitUpdateSubmissionUseCase() }
+    viewModel { SubmissionDocViewModel(get(), get(), get(), get()) }
 }

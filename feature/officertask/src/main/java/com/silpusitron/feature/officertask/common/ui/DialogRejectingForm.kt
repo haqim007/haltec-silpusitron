@@ -32,9 +32,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.haltec.silpusitron.core.ui.R
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.parts.getAppTextFieldColors
+import com.silpusitron.core.ui.R
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.parts.getAppTextFieldColors
 
 
 @Composable

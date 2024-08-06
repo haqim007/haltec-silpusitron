@@ -9,11 +9,19 @@ import com.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
 import kotlinx.coroutines.flow.Flow
 
 interface ISubmissionDocRepository {
-    fun getTemplate(id: Int): Flow<Resource<TemplateForm>>
+    fun getTemplate(id: Int): Flow<Resource<SubmissionForms>>
     fun submit(
         templateId: Int,
         profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>,
         docs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>,
         forms: Map<VariableId, InputTextData<TextValidationType, String>>
     ): Flow<Resource<String>>
+    fun submitUpdate(
+        submissionId: Int,
+        profile: Map<FormProfileInputKey, InputTextData<TextValidationType, String>>,
+        docs: Map<DocId, InputTextData<FileValidationType, FileAbsolutePath>>,
+        forms: Map<VariableId, InputTextData<TextValidationType, String>>
+    ): Flow<Resource<String>>
+
+    fun getDraftSubmission(submissionId: Int): Flow<Resource<SubmissionForms>>
 }

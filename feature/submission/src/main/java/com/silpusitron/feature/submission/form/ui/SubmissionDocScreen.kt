@@ -21,8 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,23 +28,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.haltec.silpusitron.core.ui.backgroundGradient
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
-import com.haltec.silpusitron.core.ui.parts.error.ErrorView
-import com.haltec.silpusitron.core.ui.parts.loading.LoadingView
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.theme.gradientColors
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.backgroundGradient
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.parts.dialog.DialogError
+import com.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.silpusitron.core.ui.parts.error.ErrorView
+import com.silpusitron.core.ui.parts.loading.LoadingView
+import com.silpusitron.core.ui.parts.SubmitSuccessView
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submission.R
 import com.silpusitron.feature.submission.common.di.submissionDocModule
-import com.silpusitron.feature.submission.form.domain.templateFormDummy
-import com.silpusitron.feature.submission.form.ui.parts.SubmissionDocForm
+import com.silpusitron.feature.submission.form.domain.submissionFormsDummy
+import com.silpusitron.feature.submission.form.ui.parts.SubmissionDocFormScreen
 import org.koin.androidx.compose.koinViewModel
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @Composable
@@ -62,7 +59,11 @@ fun SubmissionDocScreen(
     val action = {action: SubmissionDocUiAction -> viewModel.doAction(action)}
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.doAction(SubmissionDocUiAction.SetTemplateId(args.id))
+        if (args.isNew){
+            action(SubmissionDocUiAction.SetTemplateId(args.id))
+        }else{
+            action(SubmissionDocUiAction.SetDraftSubmissionId(args.id))
+        }
     }
 
     Column(
@@ -102,9 +103,9 @@ fun SubmissionDocScreen(
             }
         }
 
-        when (state.template) {
+        when (state.submissionForms) {
             is Resource.Success -> {
-                SubmissionDocForm(
+                SubmissionDocFormScreen(
                     modifier,
                     args,
                     state,
@@ -115,7 +116,7 @@ fun SubmissionDocScreen(
 
             is Resource.Error -> {
                 ErrorView(
-                    message = state.template.message,
+                    message = state.submissionForms.message,
                     onTryAgain = { action(SubmissionDocUiAction.GetTemplate) }
                 )
             }
@@ -184,7 +185,8 @@ fun SubmissionDocForm_Preview(){
                     title = "SURAT REKOMENDASI PEMBELIAN BBM JENIS TERTENTU 1",
                     id = 6,
                     letterType = "Resmi",
-                    letterLevel = "Kelurahan"
+                    letterLevel = "Kelurahan",
+                    isNew = true
                 )
             )
         }
@@ -203,7 +205,7 @@ fun SubmissionDocFormDocFileComplete_Preview(){
                         submissionDocUiStateDummy.copy(
                             requirementDocs = mapOf(),
                             stepperIndex = 1,
-                            template = Resource.Success(templateFormDummy)
+                            submissionForms = Resource.Success(submissionFormsDummy)
                         )
                     )
                 )
@@ -213,7 +215,8 @@ fun SubmissionDocFormDocFileComplete_Preview(){
                     title = "SURAT REKOMENDASI PEMBELIAN BBM JENIS TERTENTU 1",
                     id = 6,
                     letterType = "Resmi",
-                    letterLevel = "Kelurahan"
+                    letterLevel = "Kelurahan",
+                    isNew = true
                 ),
                 viewModel = viewModel
             )

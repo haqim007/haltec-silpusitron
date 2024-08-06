@@ -3,22 +3,22 @@ package com.silpusitron.feature.officertask.common.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.haltec.silpusitron.core.ui.parts.SubmitSuccessView
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogError
-import com.haltec.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
+import com.silpusitron.core.ui.parts.SubmitSuccessView
+import com.silpusitron.core.ui.parts.dialog.DialogError
+import com.silpusitron.core.ui.parts.dialog.DialogLoadingDocView
 import com.silpusitron.data.mechanism.Resource
 
 @Composable
 fun SigningResultView(
     signingResult: Resource<String>,
     onSuccess: () -> Unit,
-    onDismiss: () -> Unit
+    onDismissError: () -> Unit
 ) {
     when (signingResult) {
         is Resource.Error -> {
             DialogError(
                 message = signingResult.message,
-                onDismissRequest = onDismiss
+                onDismissRequest = onDismissError
             )
         }
 

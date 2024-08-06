@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.silpusitron.shared.form.domain.model.InputTextData
 import com.silpusitron.shared.form.domain.model.TextValidationType
 import com.silpusitron.shared.form.domain.model.getMaxLength
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.auth.common.domain.CheckSessionUseCase
 import com.silpusitron.feature.auth.otp.domain.model.RequestOTPResult

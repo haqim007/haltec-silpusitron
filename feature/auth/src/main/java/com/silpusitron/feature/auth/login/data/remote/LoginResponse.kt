@@ -14,7 +14,9 @@ data class LoginResponse(
 		val username: String,
 		val token: String,
 		@SerialName("complete_data")
-		val completeProfile: Boolean
+		val completeProfile: Boolean,
+		@SerialName("no_hp")
+		val phoneNumber: String,
 	)
 
 	@Serializable

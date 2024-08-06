@@ -19,7 +19,7 @@ import com.silpusitron.app_petugas.ui.nav.OTPRoute
 import com.silpusitron.app_petugas.ui.nav.PublicDashboardRoute
 import com.silpusitron.app_petugas.ui.nav.SimpleRequirementFilesRoute
 import com.silpusitron.app_petugas.ui.nav.SplashScreenRoute
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.auth.common.domain.UserType
 import com.silpusitron.feature.auth.login.ui.LoginScreen
 import com.silpusitron.feature.auth.otp.ui.OTPScreen

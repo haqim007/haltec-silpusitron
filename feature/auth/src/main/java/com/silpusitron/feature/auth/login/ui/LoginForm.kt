@@ -66,9 +66,9 @@ import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.component.InputLabel
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.component.InputLabel
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.auth.BuildConfig
 import com.silpusitron.feature.auth.R
@@ -82,7 +82,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
 import org.koin.compose.getKoin
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun LoginForm(

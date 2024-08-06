@@ -2,7 +2,7 @@ package com.silpusitron.feature.officertask.docapproval
 
 
 import androidx.lifecycle.viewModelScope
-import com.haltec.silpusitron.core.ui.ui.BaseViewModel
+import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.officertask.common.domain.RejectingUseCase
 import com.silpusitron.feature.officertask.common.domain.SigningUseCase

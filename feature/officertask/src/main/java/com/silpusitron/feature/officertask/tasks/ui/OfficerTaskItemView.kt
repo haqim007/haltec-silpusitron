@@ -36,13 +36,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.haltec.silpusitron.core.ui.R
-import com.haltec.silpusitron.core.ui.component.LottieLoader
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.R
+import com.silpusitron.core.ui.component.LottieLoader
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetter
 import com.silpusitron.feature.officertask.tasks.domain.SubmittedLetterDummies
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -104,77 +104,79 @@ fun OfficerTaskItemView(
         )
     ) {
         Box(
-        ) {
+            modifier = Modifier.fillMaxSize()
+        ){
             if (multipleSelectActive) {
                 Checkbox(
                     modifier = Modifier.align(Alignment.TopEnd),
                     checked = isSelected,
-                    onCheckedChange = {
-                        onSelect(data)
-                    }
+                    onCheckedChange = { onSelect(data) }
                 )
             }
-            Row(
+            Column(
                 modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                if (!multipleSelectActive) {
-                    Image(
-                        modifier = Modifier.size(50.dp),
-                        painter = painterResource(id = CoreR.drawable.doc_circle_blue),
-                        contentDescription = null
-                    )
-                }
-
-                Column {
-                    Text(
-                        text = data.number,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    if (!multipleSelectActive) {
+                        Image(
+                            modifier = Modifier.size(50.dp),
+                            painter = painterResource(id = CoreR.drawable.doc_circle_blue),
+                            contentDescription = null
                         )
-                    )
-                    Text(
-                        text = data.title,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                        modifier = Modifier.padding(bottom = 16.dp),
-                    )
-
-                    Text(
-                        text = stringResource(CoreR.string.submitted_at_s, data.submissionDate),
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-                    Text(
-                        text = stringResource(CoreR.string.requested_by, data.requestedBy),
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-
-                    val annotatedString = buildAnnotatedString {
-                        pushStyle(SpanStyle(fontSize = 14.sp)) // Set base style
-                        append(stringResource(id = R.string.the_current_status))
-                        pushStyle(SpanStyle(fontWeight = FontWeight.Bold)) // Set bold style
-                        append(" ${data.status}")
-                        pop()
                     }
-                    Text(
-                        text = annotatedString,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
+
+                    Column {
+                        Text(
+                            text = data.number,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline
+                            )
                         )
-                    )
+
+                        Text(
+                            text = data.title,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                            modifier = Modifier.padding(bottom = 16.dp),
+                        )
+                    }
                 }
+
+                Text(
+                    text = stringResource(CoreR.string.submitted_at_s, data.submissionDate),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
+                Text(
+                    text = stringResource(CoreR.string.requested_by, data.requestedBy),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
+
+                val annotatedString = buildAnnotatedString {
+                    pushStyle(SpanStyle(fontSize = 14.sp)) // Set base style
+                    append(stringResource(id = R.string.the_current_status))
+                    pushStyle(SpanStyle(fontWeight = FontWeight.Bold)) // Set bold style
+                    append(" ${data.status}")
+                    pop()
+                }
+                Text(
+                    text = annotatedString,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                )
             }
         }
     }

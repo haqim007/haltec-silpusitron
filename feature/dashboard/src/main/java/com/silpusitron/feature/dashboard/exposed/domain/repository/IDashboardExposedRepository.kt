@@ -2,7 +2,7 @@ package com.silpusitron.feature.dashboard.exposed.domain.repository
 
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.common.domain.model.DashboardData
-import com.silpusitron.feature.dashboard.exposed.domain.model.NewsImage
+import com.silpusitron.feature.dashboard.common.domain.model.NewsImage
 import kotlinx.coroutines.flow.Flow
 
 interface IDashboardExposedRepository {

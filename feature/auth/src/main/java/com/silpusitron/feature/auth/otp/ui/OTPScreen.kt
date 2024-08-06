@@ -1,8 +1,11 @@
 package com.silpusitron.feature.auth.otp.ui
 
 import android.app.Activity
+import android.text.TextPaint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,29 +37,44 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.theme.BackgroundLight
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.parts.ContainerWithBanner
-import com.silpusitron.shared.form.ui.components.ErrorValidationText
+import com.silpusitron.core.ui.parts.ContainerWithBanner
+import com.silpusitron.core.ui.theme.BackgroundLight
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.auth.R
 import com.silpusitron.feature.auth.di.authModule
+import com.silpusitron.feature.auth.phonenumberupdate.ui.PhoneNumberUpdateForm
+import com.silpusitron.shared.form.ui.components.ErrorValidationText
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @Composable
 fun OTPScreen(
@@ -72,7 +92,8 @@ fun OTPScreen(
                 .padding(
                     start = 32.dp,
                     end = 32.dp,
-                    top = 100.dp
+                    top = 50.dp,
+                    bottom = 50.dp,
                 )
                 .defaultMinSize(
                     minHeight = 251.dp
@@ -88,9 +109,8 @@ fun OTPScreen(
 
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
-
                 OTPForm()
             }
         }
@@ -102,16 +122,20 @@ private fun OTPForm(
     modifier: Modifier = Modifier,
     viewModel: OTPViewModel = koinViewModel(),
 ) {
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
     val action = {action: OTPUiAction -> viewModel.doAction(action)}
 
-    if (state.value.isLoading) CircularProgressIndicator()
+    if (state.isLoading) CircularProgressIndicator()
+
+    var showPhoneNumberForm by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = Unit){
         action(OTPUiAction.RequestOTP)
     }
 
-    if (state.value.otpVerificationResult is Resource.Error){
+    if (state.otpVerificationResult is Resource.Error){
         AlertDialog(
             onDismissRequest = { action(OTPUiAction.Retry) },
             confirmButton = {
@@ -126,13 +150,13 @@ private fun OTPForm(
                 Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
-                Text(text = state.value.otpVerificationResult.message ?: stringResource(R.string.failed_to_verify_otp))
+                Text(text = state.otpVerificationResult.message ?: stringResource(R.string.failed_to_verify_otp))
             }
         )
     }
 
     val context = LocalContext.current
-    if (state.value.requestOTPResult is Resource.Error){
+    if (state.requestOTPResult is Resource.Error){
         AlertDialog(
             onDismissRequest = { action(OTPUiAction.RequestOTP) },
             confirmButton = {
@@ -160,7 +184,7 @@ private fun OTPForm(
                 Text(text = stringResource(CoreR.string.attention_))
             },
             text = {
-                Text(text = state.value.requestOTPResult.message ?: stringResource(R.string.failed_to_retreive_otp))
+                Text(text = state.requestOTPResult.message ?: stringResource(R.string.failed_to_retreive_otp))
             }
         )
     }
@@ -169,15 +193,15 @@ private fun OTPForm(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize()
     ) {
-        if (state.value.requestOTPResult is Resource.Success){
+        if (state.requestOTPResult is Resource.Success){
             Text(
                 text = stringResource(R.string.please_check_otp_code),
                 style = MaterialTheme.typography.labelLarge.copy(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .width(200.dp)
                     .padding(16.dp)
             )
         }
@@ -191,11 +215,11 @@ private fun OTPForm(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .width(200.dp)
-                .padding(4.dp)
+                .padding(10.dp)
         )
 
         Text(
-            text = state.value.otpTimeOutInString ?: "0:00",
+            text = state.otpTimeOutInString ?: "0:00",
             style = MaterialTheme.typography.labelLarge.copy(
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.primary
@@ -207,14 +231,14 @@ private fun OTPForm(
 
         )
 
-        val color = if (state.value.otpInput.isValid)
+        val color = if (state.otpInput.isValid)
             MaterialTheme.colorScheme.primary
         else
             MaterialTheme.colorScheme.error
 
         val maxLength = 6
         BasicTextField(
-            value = state.value.otp,
+            value = state.otp,
             onValueChange = {
                 if (it.length <= maxLength) {
                     action(OTPUiAction.SetOTP(it))
@@ -226,12 +250,12 @@ private fun OTPForm(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    if (state.value.enableToVerifyOTP) action(OTPUiAction.Verify)
+                    if (state.enableToVerifyOTP) action(OTPUiAction.Verify)
                 }
             ),
             singleLine = true,
             modifier = Modifier.padding(top = 16.dp),
-            enabled = !state.value.isLoading,
+            enabled = !state.isLoading,
 
         ) {
             Row(
@@ -239,8 +263,8 @@ private fun OTPForm(
             ) {
                 repeat(maxLength) { index ->
                     val number: String = when {
-                        index >= state.value.otp.length -> ""
-                        else -> state.value.otp[index].toString()
+                        index >= state.otp.length -> ""
+                        else -> state.otp[index].toString()
                     }
 
                     Column(
@@ -266,19 +290,71 @@ private fun OTPForm(
         }
 
         ErrorValidationText(
-            data = state.value.otpInput, labelName = "OTP",
+            data = state.otpInput, labelName = "OTP",
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(start = 16.dp)
         )
 
+        if (state.requestOTPResult is Resource.Success){
+            val note = stringResource(
+                R.string.otp_code_has_been_sent,
+                state.requestOTPResult.data?.phoneNumber ?: ""
+            )
+            val changePhoneNumber = " ${stringResource(R.string.update_phone_number_question)}"
+            val annotatedString = buildAnnotatedString {
+                pushStyle(SpanStyle(
+                    fontWeight = FontWeight.SemiBold,
+                    fontStyle = FontStyle.Italic
+                ))
+                append(note)
+                pushStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) // Set bold style
+                append(changePhoneNumber)
+                pop()
+            }
+
+            var changePhoneNumberOffset: Offset? = null
+            BasicText(
+                text = annotatedString,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .pointerInput(Unit) {
+                    detectTapGestures { offset ->
+                        val changePhoneNumberOffsetY = (changePhoneNumberOffset?.y ?: 0f)
+                        if (offset.y in changePhoneNumberOffsetY..(changePhoneNumberOffsetY + 35f)){
+                            showPhoneNumberForm = true
+                        }
+                    }
+                },
+                onTextLayout = { textLayoutResult ->
+                    changePhoneNumberOffset = getClickableArea(
+                        textLayoutResult,
+                        note.length-1,
+                        note.length + changePhoneNumber.length - 1
+                    )
+                }
+            )
+//            Text(
+//                text = stringResource(
+//                    R.string.otp_code_has_been_sent,
+//                    state.requestOTPResult.data?.phoneNumber ?: ""
+//                ),
+//                style = MaterialTheme.typography.labelMedium.copy(
+//                    fontWeight = FontWeight.Bold,
+//                    fontStyle = FontStyle.Italic
+//                ),
+//                modifier = Modifier.padding(16.dp)
+//            )
+        }
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp, bottom = 6.dp)
         ) {
             Button(
                 modifier = Modifier
-                    .padding(top = 50.dp, bottom = 6.dp)
                     .weight(1f),
                 onClick = { action(OTPUiAction.RequestOTP) },
                 colors = ButtonDefaults.buttonColors().copy(
@@ -287,7 +363,7 @@ private fun OTPForm(
                     disabledContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                enabled = state.value.enableRequestOTPAgain,
+                enabled = state.enableRequestOTPAgain,
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
             ) {
                 Text(
@@ -298,7 +374,6 @@ private fun OTPForm(
 
             Button(
                 modifier = Modifier
-                    .padding(top = 50.dp, bottom = 6.dp)
                     .weight(1f),
                 onClick = { action(OTPUiAction.Verify) },
                 colors = ButtonDefaults.buttonColors().copy(
@@ -307,12 +382,39 @@ private fun OTPForm(
                     disabledContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                enabled = state.value.enableToVerifyOTP,
+                enabled = state.enableToVerifyOTP,
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
             ) {
                 Text(
                     text = stringResource(R.string.verify_otp),
                     fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+//        if (state.requemstOTPResult is Resource.Success){
+//            TextButton(
+//                onClick = { showPhoneNumberForm = true }
+//            ) {
+//                Text(
+//                    text = stringResource(R.string.update_phone_number),
+//                    style = MaterialTheme.typography.labelMedium.copy(
+//                        fontWeight = FontWeight.Bold
+//                    ),
+//                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
+//                )
+//            }
+//        }
+
+        if (showPhoneNumberForm){
+            Dialog(
+                onDismissRequest = { showPhoneNumberForm = false }
+            ) {
+                PhoneNumberUpdateForm(
+                    onClose = { showPhoneNumberForm = false },
+                    onSubmitSucceed = {
+                        action(OTPUiAction.RequestOTP)
+                    }
                 )
             }
         }
@@ -328,5 +430,16 @@ fun OTPScreenPreview() {
         SILPUSITRONTheme {
             OTPScreen()
         }
+    }
+}
+
+fun getClickableArea(
+    textLayout: TextLayoutResult,
+    startOffset: Int,
+    endOffset: Int
+): Offset? {
+    val textOffset = textLayout.getOffsetForPosition(Offset(startOffset.toFloat(), endOffset.toFloat()))
+    return textLayout.getBoundingBox(textOffset).let {
+        if (it.isEmpty) null else it.topRight
     }
 }

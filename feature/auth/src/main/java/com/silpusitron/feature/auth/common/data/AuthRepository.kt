@@ -9,16 +9,11 @@ import com.silpusitron.feature.auth.common.domain.UserType
 import com.silpusitron.feature.auth.login.data.remote.LoginRequest
 import com.silpusitron.feature.auth.login.data.remote.LoginResponse
 import com.silpusitron.feature.auth.login.domain.model.LoginResult
-import com.silpusitron.feature.auth.otp.data.remote.RequestOTPResponse
-import com.silpusitron.feature.auth.otp.data.remote.VerifyOTPRequest
-import com.silpusitron.feature.auth.otp.data.remote.VerifyOTPResponse
-import com.silpusitron.feature.auth.otp.domain.model.RequestOTPResult
 import com.silpusitron.shared.auth.preference.AuthPreference
 import com.silpusitron.shared.form.domain.model.InputTextData
 import com.silpusitron.shared.form.domain.model.TextValidationType
 import com.silpusitron.shared.form.domain.model.valueOrEmpty
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
@@ -51,7 +46,11 @@ class AuthRepository(
             }
 
             override suspend fun onSuccess(responseData: LoginResponse) {
-                preference.storeAuth(username = responseData.data?.username ?: "", token = responseData.data?.token  ?: "")
+                preference.storeAuthWithPhoneNumber(
+                    username = responseData.data?.username ?: "",
+                    token = responseData.data?.token  ?: "",
+                    phoneNumber = responseData.data?.phoneNumber ?: ""
+                )
             }
 
         }
@@ -67,51 +66,6 @@ class AuthRepository(
         withContext(dispatcher.io){
             preference.resetAuth()
         }
-    }
-
-    override fun verifyOTP(otp: String): Flow<Resource<Boolean>> {
-        return object: NetworkBoundResource<Boolean, VerifyOTPResponse>(){
-            override suspend fun requestFromRemote(): Result<VerifyOTPResponse> {
-                return remoteDataSource.verifyOTP(
-                    VerifyOTPRequest(otp),
-                    preference.getToken().first()
-                )
-            }
-
-            override fun loadResult(responseData: VerifyOTPResponse): Flow<Boolean> {
-                return flowOf(true)
-            }
-
-            override suspend fun onSuccess(responseData: VerifyOTPResponse) {
-                preference.storeAuth(
-                    username = responseData.data?.username ?: "",
-                    token = responseData.data?.token  ?: "",
-                    otpValid = true
-                )
-            }
-
-        }
-            .asFlow()
-            .flowOn(dispatcher.io)
-    }
-
-    override fun requestOTP(): Flow<Resource<RequestOTPResult>> {
-        return object: NetworkBoundResource<RequestOTPResult, RequestOTPResponse>(){
-            override suspend fun requestFromRemote(): Result<RequestOTPResponse> {
-                return remoteDataSource.requestOTP(preference.getToken().first())
-            }
-
-            override fun loadResult(responseData: RequestOTPResponse): Flow<RequestOTPResult> {
-                return flowOf(RequestOTPResult(responseData.data?.otpTime ?: 0L))
-            }
-
-            override suspend fun onSuccess(responseData: RequestOTPResponse) {
-                preference.storeAuth(username = responseData.data?.username ?: "", token = responseData.data?.token  ?: "")
-            }
-
-        }
-            .asFlow()
-            .flowOn(dispatcher.io)
     }
 
 }

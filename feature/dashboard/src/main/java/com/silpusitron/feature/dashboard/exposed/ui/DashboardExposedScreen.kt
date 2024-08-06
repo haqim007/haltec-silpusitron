@@ -48,19 +48,19 @@ import com.canopas.lib.showcase.IntroShowcase
 import com.canopas.lib.showcase.component.ShowcaseStyle
 import com.canopas.lib.showcase.component.rememberIntroShowcaseState
 import com.silpusitron.common.di.commonModule
-import com.haltec.silpusitron.core.ui.parts.SmallTopBar
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
-import com.haltec.silpusitron.core.ui.util.KoinPreviewWrapper
+import com.silpusitron.core.ui.parts.SmallTopBar
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.di.dataModule
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.ui.parts.DashboardContent
 import com.silpusitron.feature.dashboard.exposed.di.dashboardExposedModule
 import com.silpusitron.feature.dashboard.exposed.ui.parts.DashboardFilterView
-import com.silpusitron.feature.dashboard.exposed.ui.parts.NewsImagesPager
+import com.silpusitron.feature.dashboard.common.ui.parts.NewsImagesPager
 import kotlinx.coroutines.delay
 import org.koin.compose.getKoin
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 
 @OptIn(ExperimentalMaterial3Api::class)

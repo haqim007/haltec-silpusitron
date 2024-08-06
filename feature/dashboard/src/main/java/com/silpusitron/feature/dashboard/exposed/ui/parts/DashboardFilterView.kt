@@ -34,15 +34,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.haltec.silpusitron.core.ui.theme.DisabledInputContainer
-import com.haltec.silpusitron.core.ui.theme.SILPUSITRONTheme
+import com.silpusitron.core.ui.theme.DisabledInputContainer
+import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.shared.form.domain.model.InputOptions
 import com.silpusitron.shared.form.domain.model.getValue
 import com.silpusitron.shared.form.ui.parts.InputDatePicker
 import kotlinx.datetime.LocalDateTime
-import com.haltec.silpusitron.core.ui.R as CoreR
+import com.silpusitron.core.ui.R as CoreR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +109,7 @@ fun DashboardFilterView(
                             }) {
                                 Icon(
                                     imageVector = Icons.Filled.Refresh,
-                                    contentDescription = stringResource(com.haltec.silpusitron.core.ui.R.string.click_to_reload_this_options)
+                                    contentDescription = stringResource(com.silpusitron.core.ui.R.string.click_to_reload_this_options)
                                 )
                             }
                         }

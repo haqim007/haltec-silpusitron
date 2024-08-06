@@ -6,6 +6,7 @@ import com.silpusitron.feature.dashboard.user.data.remote.DashboardUserRemoteDat
 import com.silpusitron.feature.dashboard.user.data.remote.DashboardUserService
 import com.silpusitron.feature.dashboard.user.data.repository.DashboardUserRepository
 import com.silpusitron.feature.dashboard.user.domain.repository.IDashboardUserRepository
+import com.silpusitron.feature.dashboard.user.domain.usecase.GetNewsImagesUseCase
 import com.silpusitron.shared.auth.di.authSharedModule
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -16,5 +17,6 @@ val dashboardUserModule = module {
     factory { DashboardUserRemoteDataSource(get()) }
     factory<IDashboardUserRepository> { DashboardUserRepository(get(), get(), get()) }
     factory { GetDashboardUserUseCase() }
-    viewModel { DashboardUserViewModel(get()) }
+    factory { GetNewsImagesUseCase() }
+    viewModel { DashboardUserViewModel(get(), get()) }
 }

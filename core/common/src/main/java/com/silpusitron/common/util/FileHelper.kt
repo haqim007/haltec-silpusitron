@@ -19,6 +19,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.request.head
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpHeaders
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -317,6 +322,46 @@ object FileHelper {
     fun getFileNameFromAbsolutePath(filePath: String): String {
         val file = File(filePath)
         return file.name
+    }
+
+    suspend fun checkContentTypeAndOpen(context: Context, url: String) {
+        val client = HttpClient {
+            install(HttpTimeout) {
+                requestTimeoutMillis = 10000
+            }
+        }
+        val response: HttpResponse = client.head(url)
+        val contentType = response.headers[HttpHeaders.ContentType] ?: "unknown"
+
+        when {
+            contentType.startsWith("application/pdf") -> openPdf(context, url)
+            contentType.startsWith("image/") -> openImage(context, url)
+            else -> openInBrowser(context, url)
+        }
+    }
+
+    private fun openPdf(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+            setDataAndType(Uri.parse(url), "application/pdf")
+            flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        context.startActivity(intent)
+    }
+
+    private fun openImage(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+            setDataAndType(Uri.parse(url), "image/*")
+        }
+        context.startActivity(intent)
+    }
+
+    private fun openInBrowser(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+        }
+        context.startActivity(intent)
     }
 
 }
