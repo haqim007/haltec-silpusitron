@@ -1,12 +1,10 @@
 package com.silpusitron.feature.dashboard.common.ui.components
 
-import android.text.TextUtils
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +29,7 @@ import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.silpusitron.core.ui.generateColorShades
+import com.silpusitron.core.ui.parts.error.EmptyView
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.domain.model.PiesData
 import com.silpusitron.feature.dashboard.common.domain.model.total
@@ -39,7 +39,8 @@ import kotlin.math.roundToInt
 @Composable
 fun PieChartCard(
     title: String,
-    data: List<PiesData.PieData>
+    data: List<PiesData.PieData>,
+    onTryAgain: () -> Unit
 ) {
     val colorShades = generateColorShades(
         MaterialTheme.colorScheme.secondary.toArgb(),
@@ -73,26 +74,26 @@ fun PieChartCard(
             containerColor = MaterialTheme.colorScheme.background
         )
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = title, //stringResource(R.string.analysis_submission_letter_by_type),
+                text = title,
                 style = MaterialTheme.typography.labelLarge.copy(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier
                     .padding(top = 16.dp)
+                    .align(Alignment.Start)
             )
 
-            Column(
-                modifier = Modifier
-                    .padding(top = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
+            if (data.isNotEmpty()){
                 PieChart(
                     modifier = Modifier
-                        .size(225.dp),
+                        .size(225.dp)
+                        .padding(top = 16.dp),
                     pieChartData,
                     pieChartConfig
                 )
@@ -178,7 +179,12 @@ fun PieChartCard(
                         }
                     }
                 }
-
+            }else{
+                EmptyView(
+                    modifier = Modifier.padding(top = 16.dp),
+                    message = stringResource(R.string.no_data_to_be_displayed),
+                    onTryAgain = onTryAgain
+                )
             }
         }
     }

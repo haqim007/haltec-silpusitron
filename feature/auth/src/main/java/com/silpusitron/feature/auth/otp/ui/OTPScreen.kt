@@ -334,17 +334,6 @@ private fun OTPForm(
                     )
                 }
             )
-//            Text(
-//                text = stringResource(
-//                    R.string.otp_code_has_been_sent,
-//                    state.requestOTPResult.data?.phoneNumber ?: ""
-//                ),
-//                style = MaterialTheme.typography.labelMedium.copy(
-//                    fontWeight = FontWeight.Bold,
-//                    fontStyle = FontStyle.Italic
-//                ),
-//                modifier = Modifier.padding(16.dp)
-//            )
         }
 
         Row(
@@ -391,20 +380,6 @@ private fun OTPForm(
                 )
             }
         }
-
-//        if (state.requemstOTPResult is Resource.Success){
-//            TextButton(
-//                onClick = { showPhoneNumberForm = true }
-//            ) {
-//                Text(
-//                    text = stringResource(R.string.update_phone_number),
-//                    style = MaterialTheme.typography.labelMedium.copy(
-//                        fontWeight = FontWeight.Bold
-//                    ),
-//                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)
-//                )
-//            }
-//        }
 
         if (showPhoneNumberForm){
             Dialog(

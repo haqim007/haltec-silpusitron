@@ -57,7 +57,7 @@ class OTPViewModel(
                 .collect { (isLoading, timer) ->
                     _state.update {state ->
                         state.copy(
-                            enableRequestOTPAgain = !isLoading && timer == 0L
+                            enableRequestOTPAgain = !isLoading && (timer ?: 0) <= 0L
                         )
                     }
                 }
@@ -181,6 +181,7 @@ class OTPViewModel(
             while ((state.value.otpTimeOutInSec ?: 0) > 0){
                 delay(1000L)
                 val remaining = (state.value.otpTimeOutInSec ?: 0) - 1
+                if (remaining < 0) break
                 _state.update { state ->
                     state.copy(
                         otpTimeOutInSec = remaining,

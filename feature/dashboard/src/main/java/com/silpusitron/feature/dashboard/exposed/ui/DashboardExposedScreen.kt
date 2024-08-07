@@ -112,34 +112,18 @@ fun DashboardExposedScreen(
 
     Scaffold(
         floatingActionButton = {
-
-            if (getKoin().getProperty<Boolean>("IS_OFFICER") != true){ // null or false
-                DashboardFloatingButton(
-                    state,
-                    action,
-                    showAllFloatingButton,
-                    onShowAllFloatingButton = {show ->
-                        showAllFloatingButton = show
-                    },
-                    onOpenRequirementFiles,
-                    onShowFilterSheet = {show ->
-                        showFilterSheet = show
-                    }
-                )
-            }
-            else{
-                FloatingActionButton(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    onClick = {
-                        showFilterSheet = true
-                    },
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                ) {
-                    Icon(Icons.Filled.FilterAlt, contentDescription = "")
+            DashboardFloatingButton(
+                state,
+                action,
+                showAllFloatingButton,
+                onShowAllFloatingButton = {show ->
+                    showAllFloatingButton = show
+                },
+                onOpenRequirementFiles,
+                onShowFilterSheet = {show ->
+                    showFilterSheet = show
                 }
-            }
-
+            )
         }
     ) { contentPadding ->
 

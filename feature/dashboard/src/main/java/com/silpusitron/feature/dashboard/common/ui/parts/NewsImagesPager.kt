@@ -53,6 +53,7 @@ fun NewsImagesPager(
     data: List<NewsImage>,
 ) {
 
+
     var runSlides by remember {
         mutableStateOf(true)
     }
@@ -60,7 +61,15 @@ fun NewsImagesPager(
     val pagerState = rememberPagerState(
         pageCount = {data.size}
     )
-    LaunchedEffect(key1 = Unit, key2 = pagerState.pageCount) {
+
+    LaunchedEffect(key1 = Unit) {
+        // dismiss immediately if data is emoty
+        if (data.isEmpty()) {
+            onDismissRequest()
+        }
+    }
+
+    LaunchedEffect(key1 = pagerState.pageCount) {
         while (runSlides) {
             if (pagerState.pageCount == 0) {
                 runSlides = false

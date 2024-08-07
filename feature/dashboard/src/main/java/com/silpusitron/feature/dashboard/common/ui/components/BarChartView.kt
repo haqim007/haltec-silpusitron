@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +36,7 @@ import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.barchart.models.GroupBar
 import co.yml.charts.ui.barchart.models.GroupBarChartData
 import co.yml.charts.ui.barchart.models.SelectionHighlightData
+import com.silpusitron.core.ui.parts.error.EmptyView
 import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.feature.dashboard.R
 import com.silpusitron.feature.dashboard.common.domain.model.BarCharts
@@ -47,10 +49,11 @@ data class BarChartLegend(
 @Composable
 fun BarChartView(
     title: String,
-    data:  List<BarCharts.BarChartsData>,
+    data: List<BarCharts.BarChartsData>,
     @SuppressLint("ModifierParameter")
     modifier: Modifier = Modifier,
-    legends: List<BarChartLegend> = listOf()
+    legends: List<BarChartLegend> = listOf(),
+    onTryAgain: () -> Unit
 ){
 
     var maxY by remember {
@@ -141,30 +144,38 @@ fun BarChartView(
             Column(
                 Modifier
                     .background(MaterialTheme.colorScheme.background)
-                    .height(350.dp)
+                    .wrapContentHeight()
             ) {
-                GroupBarChart(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
-                        .height(300.dp)
-                        .padding(top = 10.dp),
-                    groupBarChartData = groupBarChartData
-                )
+                if (data.isNotEmpty()) {
+                    GroupBarChart(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .height(300.dp)
+                            .padding(top = 10.dp),
+                        groupBarChartData = groupBarChartData
+                    )
 
-                val legendsConfig = LegendsConfig(
-                    legendLabelList = legends.map {
-                        LegendLabel(
-                            color = it.color,
-                            name = it.name
-                        )
-                    },
-                    gridColumnCount = legends.size,
-                    spaceBWLabelAndColorBox = 3.dp
-                )
-                Legends(
-                    modifier = Modifier.fillMaxWidth(),
-                    legendsConfig = legendsConfig
-                )
+                    val legendsConfig = LegendsConfig(
+                        legendLabelList = legends.map {
+                            LegendLabel(
+                                color = it.color,
+                                name = it.name
+                            )
+                        },
+                        gridColumnCount = legends.size,
+                        spaceBWLabelAndColorBox = 3.dp
+                    )
+                    Legends(
+                        modifier = Modifier.fillMaxWidth(),
+                        legendsConfig = legendsConfig
+                    )
+                }else{
+                    EmptyView(
+                        modifier = Modifier.padding(top = 4.dp),
+                        message = stringResource(R.string.no_data_to_be_displayed),
+                        onTryAgain = onTryAgain
+                    )
+                }
             }
         }
     }
@@ -211,7 +222,30 @@ private fun BarChartViewPreview(){
                     stringResource(R.string.outgoing_letter),
                     Color(0XFFFC9A07)
                 )
-            )
+            ),
+            onTryAgain = {  }
+        )
+    }
+}
+
+@Preview("kosong")
+@Composable
+private fun BarChartViewEmptyPreview(){
+    SILPUSITRONTheme {
+        BarChartView(
+            title = stringResource(id = R.string.service_ratio),
+            data = listOf(),
+            legends = listOf(
+                BarChartLegend(
+                    stringResource(R.string.incoming_letter),
+                    Color(0Xff26A0FC)
+                ),
+                BarChartLegend(
+                    stringResource(R.string.outgoing_letter),
+                    Color(0XFFFC9A07)
+                )
+            ),
+            onTryAgain = {  }
         )
     }
 }

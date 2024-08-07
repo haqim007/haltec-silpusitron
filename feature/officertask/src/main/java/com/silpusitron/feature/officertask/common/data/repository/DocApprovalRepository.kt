@@ -20,17 +20,17 @@ class DocApprovalRepository(
 ): IDocApprovalRepository {
     override fun signing(ids: List<Int>, passphrase: String): Flow<Resource<String>> {
         return object: AuthorizedNetworkBoundResource<String, SigningResponse>(authPreference){
-            override suspend fun requestFromRemote(): Result<com.silpusitron.feature.officertask.common.data.remote.SigningResponse> {
+            override suspend fun requestFromRemote(): Result<SigningResponse> {
                 return remoteDataSource.signing(
                     getToken(),
-                    com.silpusitron.feature.officertask.common.data.remote.SigningRequest(
+                    SigningRequest(
                         ids = ids.joinToString(","),
                         passphrase = passphrase
                     )
                 )
             }
 
-            override fun loadResult(responseData: com.silpusitron.feature.officertask.common.data.remote.SigningResponse): Flow<String> {
+            override fun loadResult(responseData: SigningResponse): Flow<String> {
                 return flowOf(responseData.message)
             }
 
@@ -40,7 +40,7 @@ class DocApprovalRepository(
 
     override fun rejecting(ids: List<Int>, reason: String): Flow<Resource<String>> {
         return object: AuthorizedNetworkBoundResource<String, SigningResponse>(authPreference){
-            override suspend fun requestFromRemote(): Result<com.silpusitron.feature.officertask.common.data.remote.SigningResponse> {
+            override suspend fun requestFromRemote(): Result<SigningResponse> {
                 return remoteDataSource.rejecting(
                     getToken(),
                     com.silpusitron.feature.officertask.common.data.remote.RejectingRequest(
@@ -50,7 +50,7 @@ class DocApprovalRepository(
                 )
             }
 
-            override fun loadResult(responseData: com.silpusitron.feature.officertask.common.data.remote.SigningResponse): Flow<String> {
+            override fun loadResult(responseData: SigningResponse): Flow<String> {
                 return flowOf(responseData.message)
             }
 

@@ -23,7 +23,7 @@ data class DashboardResponse(
 	data class LabelValueResponse(
 		val label: String,
 		@SerialName("jumlah")
-		val value: Int
+		val value: Int? = null
 	)
 
 	@Serializable

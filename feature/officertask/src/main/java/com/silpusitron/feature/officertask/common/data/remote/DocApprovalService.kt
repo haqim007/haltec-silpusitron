@@ -12,8 +12,8 @@ class DocApprovalService(
 ) : KtorService() {
     suspend fun signing(
         token: String,
-        request: com.silpusitron.feature.officertask.common.data.remote.SigningRequest
-    ): com.silpusitron.feature.officertask.common.data.remote.SigningResponse {
+        request: SigningRequest
+    ): SigningResponse {
         val response = client.post {
             endpoint("surat/passphrase")
             setBody(request)
@@ -28,8 +28,8 @@ class DocApprovalService(
     suspend fun rejecting(
 
         token: String,
-        request: com.silpusitron.feature.officertask.common.data.remote.RejectingRequest
-    ): com.silpusitron.feature.officertask.common.data.remote.SigningResponse {
+        request: RejectingRequest
+    ): SigningResponse {
         val response = client.post {
             endpoint("surat/reject")
             setBody(request)

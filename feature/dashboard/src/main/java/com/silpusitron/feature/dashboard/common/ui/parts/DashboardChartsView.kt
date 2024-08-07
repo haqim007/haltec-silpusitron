@@ -29,7 +29,8 @@ import com.silpusitron.feature.dashboard.user.ui.dashboardUiStateDummy
 @Composable
 fun DashboardChartsView(
     data: List<DashboardData>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTryAgain: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -50,7 +51,8 @@ fun DashboardChartsView(
                                     stringResource(R.string.outgoing_letter),
                                     Color(0XFFFC9A07)
                                 )
-                            )
+                            ),
+                            onTryAgain = onTryAgain
                         )
                     }
                 }
@@ -58,13 +60,15 @@ fun DashboardChartsView(
                     if (chart.type == DashboardChart.INCOMING_LETTER_BY_TYPE){
                         PieChartCard(
                             title = stringResource(R.string.analysis_submission_letter_by_type),
-                            data = chart.data
+                            data = chart.data,
+                            onTryAgain = onTryAgain
                         )
                     }
                     else if(chart.type == DashboardChart.INCOMING_LETTER_BY_STATUS){
                         PieChartCard(
                             title = stringResource(R.string.analysis_submission_letter_by_status),
-                            data = chart.data
+                            data = chart.data,
+                            onTryAgain = onTryAgain
                         )
                     }
                 }
@@ -108,7 +112,10 @@ private fun DashboardChartsView_Preview(){
         Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
-            DashboardChartsView(data = dashboardUiStateDummy.data.data ?: emptyList())
+            DashboardChartsView(
+                data = dashboardUiStateDummy.data.data ?: emptyList(),
+                onTryAgain = {  }
+            )
         }
     }
 }

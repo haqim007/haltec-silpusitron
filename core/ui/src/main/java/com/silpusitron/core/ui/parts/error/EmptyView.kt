@@ -40,7 +40,8 @@ fun EmptyView(
             jsonRaw = R.raw.lottie_empty,
             modifier = Modifier
                 .padding(bottom = 14.dp)
-                .size(250.dp)
+                .size(250.dp),
+            iterations = 3
         )
 
         Text(

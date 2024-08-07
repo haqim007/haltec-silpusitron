@@ -18,7 +18,7 @@ fun DashboardResponse.toDashboardData(): List<DashboardData> {
                 data = it.map {
                     Summaries.Summary(
                         it.label,
-                        it.value
+                        it.value ?: 0
                     )
                 }
             )
@@ -49,7 +49,7 @@ fun DashboardResponse.toDashboardData(): List<DashboardData> {
                 data = it.map {
                     PiesData.PieData(
                         it.label,
-                        it.value.toFloat()
+                        it.value?.toFloat() ?: 0f
                     )
                 }
             )
@@ -63,7 +63,7 @@ fun DashboardResponse.toDashboardData(): List<DashboardData> {
                 data = it.map {
                     PiesData.PieData(
                         it.label,
-                        it.value.toFloat()
+                        it.value?.toFloat() ?: 0f
                     )
                 }
             )

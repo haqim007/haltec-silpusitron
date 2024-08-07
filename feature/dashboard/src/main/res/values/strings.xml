@@ -14,4 +14,5 @@
     <string name="click_here_to_filter_data">Tekan disini untuk menyaring data</string>
     <string name="doc_requirements">Berkas Persyaratan</string>
     <string name="more_menu">Menu lainnya</string>
+    <string name="no_data_to_be_displayed">Tidak ada data untuk ditampilkan</string>
 </resources>

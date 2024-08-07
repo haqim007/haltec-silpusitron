@@ -1,6 +1,7 @@
 package com.silpusitron.data.remote.base
 
 import android.util.Log
+import com.silpusitron.data.di.ktorHttpClient
 import com.silpusitron.data.util.CustomRequestException
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -24,49 +25,15 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-//private const val BASE_URL = "http://silpusitron.haltec.id/"
-// "api/v1/"
-abstract class KtorService{
+abstract class KtorService: KoinComponent{
 
     protected abstract val BASE_URL: String
     protected abstract val API_VERSION: String
 
-    protected open val client by lazy { createClient() }
-
-    private fun HttpClientConfig<CIOEngineConfig>.basicClient() {
-        install(Logging) {
-//            logger = Logger.ANDROID
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.d(KtorService::class.simpleName, message)
-                }
-            }
-            level = LogLevel.ALL
-
-            sanitizeHeader { header -> header == HttpHeaders.Authorization }
-        }
-
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                useAlternativeNames = false
-                encodeDefaults = true
-            })
-        }
-
-        install(HttpTimeout){
-            socketTimeoutMillis = 30000L
-            connectTimeoutMillis = 30000L
-            requestTimeoutMillis = 30000L
-        }
-    }
-
-    fun createClient(): HttpClient{
-        return HttpClient(CIO){
-            basicClient()
-        }
-    }
+    protected open val client: HttpClient by inject(ktorHttpClient)
 
     fun HttpRequestBuilder.endpoint(
         path: String,

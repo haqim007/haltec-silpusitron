@@ -27,7 +27,8 @@ fun DashboardContent(
             is Resource.Success -> {
                 DashboardChartsView(
                     modifier = chartModifier,
-                    data = data.data ?: emptyList()
+                    data = data.data ?: emptyList(),
+                    onTryAgain = onTryAgain
                 )
             }
             is Resource.Error -> {
