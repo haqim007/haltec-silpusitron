@@ -5,7 +5,9 @@
 - app/google-services.json
 - app/src/main/res/values/google_maps_key.xml
 - secret.properties
-- app/secret.properties
-- app-petugas/secret.properties
+- app/src/release/secret.properties
+- app/src/debug/secret.properties
+- app-petugas/src/release/secret.properties
+- app-petugas/src/debug/secret.properties
 
 Ask the owner for the files
