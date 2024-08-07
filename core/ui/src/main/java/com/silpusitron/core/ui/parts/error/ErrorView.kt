@@ -61,7 +61,8 @@ fun ErrorView(
         Text(
             modifier = Modifier.padding(16.dp),
             text = message ?: stringResource(R.string.unknown_error),
-            style = textStyle
+            style = textStyle,
+            maxLines = 3
         )
         if (onTryAgain != null){
             Button(

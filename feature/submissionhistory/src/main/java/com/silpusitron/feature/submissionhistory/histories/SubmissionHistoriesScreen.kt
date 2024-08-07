@@ -89,6 +89,7 @@ fun SubmissionHistoriesScreen(
     )
 
     LaunchedEffect(key1 = Unit) {
+        action(HistoryListUiAction.LoadData)
         action(HistoryListUiAction.LoadLetterStatus)
         action(HistoryListUiAction.LoadLetterType)
     }

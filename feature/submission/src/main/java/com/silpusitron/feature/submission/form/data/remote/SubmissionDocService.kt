@@ -117,7 +117,7 @@ internal class SubmissionDocService(
             append(FormProfileInputKey.FATHER_NAME.toString(), request.fatherName)
             append(FormProfileInputKey.MOTHER_NAME.toString(), request.motherName)
             request.forms.forEachIndexed { index, it ->
-                append("formulir[$index][id]", it.id)
+                append("formulir[$index][key]", it.id)
                 append("formulir[$index][value]", it.value)
             }
             request.docs.forEachIndexed { index, item ->
@@ -132,7 +132,7 @@ internal class SubmissionDocService(
         val response = client.submitFormWithBinaryData(
             formData = formData
         ){
-            endpoint("surat/$id/atrribute")
+            endpoint("surat/$id/attribute")
             bearerAuth(token)
         }
 

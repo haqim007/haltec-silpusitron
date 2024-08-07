@@ -168,7 +168,8 @@ internal class SubmissionDocRepository(
                     longitude = profile[FormProfileInputKey.LONGITUDE]?.value ?: "",
                     docs = docs
                         .filterValues {
-                            it.value != null
+                            it.value != null &&
+                            it.value?.contains("http") == false // do not include value contains http because it is default value and is not required
                         }
                         .map {
                             val file = File(it.value.value!!)

@@ -80,6 +80,7 @@ fun FormSubmission(
             )
 
             val inputs = state.forms.values.toList()
+            val keys = state.forms.keys.toList()
             LazyColumn(
                 modifier = Modifier.weight(1f)
             ) {
@@ -90,11 +91,12 @@ fun FormSubmission(
                     }
                 ) { it ->
                     val item = inputs[it]
+                    val key = keys[it]
 
                     FormTextField(
                         value = item.value ?: "",
                         onValueChange = {
-                            action(SubmissionDocUiAction.SetInput(item.inputName.toInt(), it))
+                            action(SubmissionDocUiAction.SetInput(key, it))
                         },
                         label = {
                             InputLabel(

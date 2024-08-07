@@ -43,7 +43,7 @@ fun DashboardUserScreen(
     }
 
     LaunchedEffect(key1 = state.news) {
-        if (state.news !is Resource.Success){
+        if (state.news is Resource.Idle){
             action(DashboardUserUiAction.LoadNews)
         }
     }

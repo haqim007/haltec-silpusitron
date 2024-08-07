@@ -14,6 +14,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,8 +40,8 @@ class SubmissionHistoriesViewModel(
         viewModelScope.launch {
             state.map { it.searchKeyword }.distinctUntilChanged()
                 .debounce(1500)
-                .collectLatest {
-                    loadData()
+                .collectIndexed { index, value ->
+                    if (index > 0) loadData()
                 }
         }
     }

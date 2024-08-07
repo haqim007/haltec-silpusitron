@@ -97,7 +97,7 @@ fun PhoneNumberUpdateForm(
             OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = {
-                    if (it.length > 15){
+                    if (it.length < 15){
                         phoneNumber = it
                     }
                 },

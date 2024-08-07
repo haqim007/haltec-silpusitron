@@ -7,6 +7,23 @@ import java.io.File
 
 typealias FileAbsolutePath = String
 
+/**
+ * Input text data
+ *
+ * @param ValidationType
+ * @param ValueType
+ * @property inputName Unique input name
+ * @property message error message if there any
+ * @property validationError validation error type if there any
+ * @property value
+ * @property validations collections of validation
+ * @property everChanged to flag that this input has ever been changed or not
+ * @property inputLabel
+ * @property options collection of options for this input. Also indicate this input as dropdown
+ * @property enabled
+ * @property prefix
+ * @constructor Create empty Input text data
+ */
 data class InputTextData<ValidationType, ValueType>(
     val inputName: String,
     val message: String? = null,

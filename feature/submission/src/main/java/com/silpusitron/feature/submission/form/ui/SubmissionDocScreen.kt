@@ -166,6 +166,7 @@ fun SubmissionDocScreen(
                 },
                 onTryAgain = {
                     action(SubmissionDocUiAction.Submit)
+                    showDialogSubmitError = false
                 }
             )
         }

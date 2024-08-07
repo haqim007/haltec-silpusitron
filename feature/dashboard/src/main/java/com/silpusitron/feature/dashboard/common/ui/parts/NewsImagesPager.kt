@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -98,7 +99,7 @@ fun NewsImagesPager(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(2.dp)
-                    .padding(top = 50.dp),
+                    .padding(vertical = 50.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors().copy(
                     containerColor = MaterialTheme.colorScheme.background
@@ -112,7 +113,6 @@ fun NewsImagesPager(
                     // Our page content
                     Column(
                         Modifier
-                            .defaultMinSize(minHeight = 500.dp)
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -128,8 +128,7 @@ fun NewsImagesPager(
 
                         )
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.weight(1f)
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
@@ -142,7 +141,7 @@ fun NewsImagesPager(
                                     Log.e("NewsImage", it.result.throwable.message.toString())
                                 },
                                 contentDescription = data[page].title,
-                                contentScale = ContentScale.Crop,
+                                contentScale = ContentScale.FillBounds,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .clip(RoundedCornerShape(8.dp))
