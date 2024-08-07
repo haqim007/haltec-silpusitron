@@ -9,5 +9,7 @@
 - app/src/debug/secret.properties
 - app-petugas/src/release/secret.properties
 - app-petugas/src/debug/secret.properties
+- app/app-keystore
+- app-petugas/app_petugas-keystore
 
 Ask the owner for the files
