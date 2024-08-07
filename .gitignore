@@ -21,3 +21,7 @@ app-petugas/secret.properties
 app-petugas/google-services.json
 .kotlin/errors/*
 .idea/*
+/app-petugas/release
+/app/release
+app-petugas/app_petugas-keystore
+app/app-keystore
