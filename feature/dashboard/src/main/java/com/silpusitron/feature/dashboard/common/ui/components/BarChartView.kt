@@ -144,6 +144,10 @@ fun BarChartView(
             Column(
                 Modifier
                     .background(MaterialTheme.colorScheme.background)
+                    .then(
+                        if (data.isEmpty()) Modifier.wrapContentHeight()
+                        else Modifier.height(350.dp)
+                    )
                     .wrapContentHeight()
             ) {
                 if (data.isNotEmpty()) {

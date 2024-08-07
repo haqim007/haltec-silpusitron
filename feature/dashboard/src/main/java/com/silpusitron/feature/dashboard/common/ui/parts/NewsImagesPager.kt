@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
@@ -37,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -101,7 +103,7 @@ fun NewsImagesPager(
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(600.dp)
+                .wrapContentHeight()
         ){
             // Draw a rectangle shape with rounded corners inside the dialog
             Card(
@@ -122,7 +124,8 @@ fun NewsImagesPager(
                     // Our page content
                     Column(
                         Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -134,10 +137,13 @@ fun NewsImagesPager(
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
                                 .align(Alignment.CenterHorizontally)
+                                .weight(1f)
 
                         )
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .weight(5f)
                         ) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
@@ -156,6 +162,18 @@ fun NewsImagesPager(
                                     .clip(RoundedCornerShape(8.dp))
                             )
                         }
+
+                        Text(
+                            text = data[page].caption,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 12.sp,
+                            ),
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .weight(1f),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }

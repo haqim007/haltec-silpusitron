@@ -52,7 +52,8 @@ internal class DashboardUserRepository(
                             it.image
                         }else{
                             "https://${it.image.removePrefix("http://")}"
-                        }
+                        },
+                        caption = it.description
                     )
                 })
             }
