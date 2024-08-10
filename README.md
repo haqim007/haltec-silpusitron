@@ -23,14 +23,24 @@ Menggunakan clean architecture, MVVM dan jetpack compose.
 ## Additional Notes
 ### Files that are not under git control
 - app-petugas/google-services.json
+  konfigurasi firebase app-petugas
 - app/google-services.json
+  konfigurasi firebase app
 - app/src/main/res/values/google_maps_key.xml
+  key google map
 - secret.properties
+  tempat untuk menyimpan variabel penting untuk dapat diakses semua module
 - app/src/release/secret.properties
+  tempat untuk menyimpan variable penting untuk hanya dapat diakses app module variant release
 - app/src/debug/secret.properties
+  tempat untuk menyimpan variable penting untuk hanya dapat diakses app module variant debug
 - app-petugas/src/release/secret.properties
+  tempat untuk menyimpan variable penting untuk hanya dapat diakses app-petugas module variant release
 - app-petugas/src/debug/secret.properties
+  tempat untuk menyimpan variable penting untuk hanya dapat diakses app-petugas module variant debug
 - app/app-keystore
+  keystore module all
 - app-petugas/app_petugas-keystore
+  keystore module app-petugas
 
 Ask the owner for the files
