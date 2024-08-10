@@ -1,5 +1,18 @@
 # SILPUSITRON
 
+## Folder Structures 
+### app-petugas
+Merupakan module app untuk petugas. ini adalah module utama yang diakses android ketika menjalankan aplikasi.
+### app
+Merupakan module app untuk penduduk. ini adalah module utama yang diakses android ketika menjalankan aplikasi.
+### core
+Berisi konfigurasi umum yang digunakan lebih dari 1 module
+### feature
+Merupakan kumpulan module fitur yang digunakan pada module app dan/atau app-petugas.
+### shared
+Kumpulan fitur kecil yang digunakan satu module fitur atau lebih.
+
+## Additional Notes
 ### File that are not under git control
 - app-petugas/google-services.json
 - app/google-services.json
