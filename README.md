@@ -34,7 +34,7 @@ Menggunakan clean architecture, MVVM dan jetpack compose.
   key google map
   
 - secret.properties
-- 
+  
   tempat untuk menyimpan variabel penting untuk dapat diakses semua module
   
 - app/src/release/secret.properties
