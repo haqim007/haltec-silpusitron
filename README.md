@@ -12,6 +12,13 @@ Merupakan kumpulan module fitur yang digunakan pada module app dan/atau app-petu
 ### shared
 Kumpulan fitur kecil yang digunakan satu module fitur atau lebih.
 
+## Architecture 
+Menggunakan clean architecture, MVVM dan jetpack compose.
+### Layer 
+- data: berisi kumpulan sumber data aplikasi
+- di: berisi definisi dependency injection - ui: berisi tampilan
+- domain: berisi usecase, bisnis logic dan model 
+
 ## Additional Notes
 ### File that are not under git control
 - app-petugas/google-services.json
