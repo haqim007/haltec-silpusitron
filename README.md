@@ -16,7 +16,8 @@ Kumpulan fitur kecil yang digunakan satu module fitur atau lebih.
 Menggunakan clean architecture, MVVM dan jetpack compose.
 ### Layer 
 - data: berisi kumpulan sumber data aplikasi
-- di: berisi definisi dependency injection - ui: berisi tampilan
+- di: berisi definisi dependency injection
+- ui: berisi tampilan
 - domain: berisi usecase, bisnis logic dan model 
 
 ## Additional Notes
