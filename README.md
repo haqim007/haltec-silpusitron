@@ -14,14 +14,14 @@ Kumpulan fitur kecil yang digunakan satu module fitur atau lebih.
 
 ## Architecture 
 Menggunakan clean architecture, MVVM dan jetpack compose.
-### Layer 
+### Layers 
 - data: berisi kumpulan sumber data aplikasi
 - di: berisi definisi dependency injection
 - ui: berisi tampilan
 - domain: berisi usecase, bisnis logic dan model 
 
 ## Additional Notes
-### File that are not under git control
+### Files that are not under git control
 - app-petugas/google-services.json
 - app/google-services.json
 - app/src/main/res/values/google_maps_key.xml
