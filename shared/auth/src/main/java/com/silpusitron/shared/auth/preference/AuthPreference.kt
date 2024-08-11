@@ -10,15 +10,6 @@ import kotlinx.coroutines.flow.map
 class AuthPreference(
     private val dataStore: DataStore<Preferences>
 ){
-    suspend fun storeAuth(
-        username: String,
-        token: String
-    ){
-        dataStore.edit {preferences ->
-            preferences[USER_NAME] = username
-            preferences[TOKEN] = token
-        }
-    }
 
     suspend fun storeAuthWithPhoneNumber(
         username: String,

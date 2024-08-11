@@ -42,7 +42,6 @@ class OTPRepository(
                     otpValid = true
                 )
             }
-
         }
             .asFlow()
             .flowOn(dispatcher.io)
@@ -62,9 +61,12 @@ class OTPRepository(
             }
 
             override suspend fun onSuccess(responseData: RequestOTPResponse) {
-                preference.storeAuth(username = responseData.data?.username ?: "", token = responseData.data?.token  ?: "")
+                preference.storeAuthWithPhoneNumber(
+                    username = responseData.data?.username ?: "",
+                    token = responseData.data?.token  ?: "",
+                    phoneNumber = responseData.data?.phoneNumber ?: ""
+                )
             }
-
         }
             .asFlow()
             .flowOn(dispatcher.io)

@@ -16,6 +16,5 @@ internal interface ISubmissionHistoryRepository {
         searchKeyword: String?
     ): Flow<PagingData<SubmissionHistory>>
 
-    fun getLetterTypeOptions(): Flow<Resource<InputOptions>>
     fun getLetterStatusOptions(): Flow<Resource<InputOptions>>
 }

@@ -8,6 +8,7 @@ import com.silpusitron.shared.auth.mechanism.AuthorizedNetworkBoundResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 class SettingsRepository(
@@ -26,12 +27,11 @@ class SettingsRepository(
             }
 
             override suspend fun onComplete() {
-                withContext(dispatcherProvider.io){
-                    authPreference.resetAuth()
-                }
+                authPreference.resetAuth()
             }
 
         }
             .asFlow()
+            .flowOn(dispatcherProvider.io)
     }
 }

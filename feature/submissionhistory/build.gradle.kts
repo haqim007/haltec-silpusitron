@@ -55,5 +55,6 @@ dependencies {
     implementation(project(":shared:district"))
     implementation(project(":shared:form"))
     implementation(project(":shared:pdfviewer"))
+    implementation(project(":shared:lettertype"))
     implementation(libs.pdf.viewer)
 }

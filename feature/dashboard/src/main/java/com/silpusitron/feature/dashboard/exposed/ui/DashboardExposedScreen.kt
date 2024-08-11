@@ -95,7 +95,7 @@ fun DashboardExposedScreen(
             delay(500)
             action(DashboardExposedUiAction.ShowAppIntro())
         }
-        else if (state.news is Resource.Success && state.showNewsDialog != false) {
+        else if (state.news is Resource.Success && state.showNewsDialog != false && state.news.data?.isNotEmpty() == true) {
             action(DashboardExposedUiAction.ShowNewsDialog)
         }
     }

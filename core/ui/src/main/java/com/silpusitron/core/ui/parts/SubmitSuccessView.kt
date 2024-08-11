@@ -35,6 +35,7 @@ fun SubmitSuccessView(
     borderColor: Color = SuccessColor.copy(
         alpha = 0.5f
     ),
+    modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(key1 = Unit) {
         delay(3000)
@@ -42,7 +43,7 @@ fun SubmitSuccessView(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentHeight()
             .width(250.dp)
             .clip(RoundedCornerShape(10.dp))

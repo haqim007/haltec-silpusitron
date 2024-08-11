@@ -400,6 +400,10 @@ fun SubmissionDocFormScreen(
                 }
 
                 FormSubmission(
+                    modifier = Modifier
+                        .weight(5f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     state = state,
                     action = action,
                     additionalContent = {

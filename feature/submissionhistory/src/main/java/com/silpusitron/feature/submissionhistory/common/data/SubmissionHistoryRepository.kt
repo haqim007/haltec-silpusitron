@@ -70,30 +70,6 @@ internal class SubmissionHistoryRepository(
 
     }
 
-    override fun getLetterTypeOptions(): Flow<Resource<InputOptions>> {
-        return object: NetworkBoundResource<InputOptions, LetterTypesResponse>(){
-            override suspend fun requestFromRemote(): Result<LetterTypesResponse> {
-                return remoteDataSource.getLetterTypes()
-            }
-
-            override fun loadResult(responseData: LetterTypesResponse): Flow<InputOptions> {
-                return flowOf(
-                    InputOptions(
-                        options = responseData.data.map {
-                            InputTextData.Option(
-                                value = it.jenisSuratId.toString(),
-                                label = it.jenisSurat,
-                                key = ""
-                            )
-                        }
-                    )
-                )
-            }
-
-        }.asFlow()
-            .flowOn(dispatcherProvider.io)
-    }
-
     override fun getLetterStatusOptions(): Flow<Resource<InputOptions>> {
         return object: AuthorizedNetworkBoundResource<InputOptions, LetterStatusesResponse>(authPreference){
 

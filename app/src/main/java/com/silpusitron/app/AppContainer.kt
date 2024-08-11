@@ -9,7 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -41,20 +47,40 @@ fun AppContainer(
 ){
     val navController = rememberNavController()
     val state = viewModel.state.collectAsState()
+    var splashscreenHasShown by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var homeRouteHasShown by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+
+    LaunchedEffect(lifecycleState) {
+        // Do something with your state
+        // You may want to use DisposableEffect or other alternatives
+        // instead of LaunchedEffect
+        if (lifecycleState == Lifecycle.State.RESUMED && splashscreenHasShown){
+            viewModel.doAction(AppUiAction.CheckSession)
+        }
+    }
 
     LaunchedEffect(key1 = state.value.isSessionValid) {
-        if(state.value.isSessionValid == true){
+        if(state.value.isSessionValid == true && !homeRouteHasShown){
             navController.navigate(HomeRoute){
                 popUpTo(navController.graph.id){
                     inclusive = true
                 }
             }
+            homeRouteHasShown = true // prevent to be shown again after on resume triggered
         }else if(state.value.isSessionValid == false){
             navController.navigate(PublicDashboardRoute){
                 popUpTo(navController.graph.id){
                     inclusive = true
                 }
             }
+            homeRouteHasShown = false
         }
     }
 
@@ -73,7 +99,8 @@ fun AppContainer(
                                 animatedVisibilityScope = this@composable
                             ),
                             navigate = {
-                                 viewModel.doAction(AppUiAction.CheckSession)
+                                viewModel.doAction(AppUiAction.CheckSession)
+                                splashscreenHasShown = true
                             }
                         )
                     }

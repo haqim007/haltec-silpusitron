@@ -11,7 +11,7 @@ class SettingsService(
 ) : KtorService() {
     suspend fun logout(token: String): LogoutResponse{
         val response = client.get {
-            endpoint("logout")
+            endpoint("users/logout")
             bearerAuth(token)
         }
 

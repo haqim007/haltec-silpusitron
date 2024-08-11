@@ -49,7 +49,11 @@ fun DashboardUserScreen(
     }
 
     LaunchedEffect(key1 = state.showNewsDialog, key2 = state.news, key3 = firstTimeLogin) {
-        if (state.news is Resource.Success && state.showNewsDialog != false && firstTimeLogin) {
+        if (state.news is Resource.Success
+            && state.showNewsDialog != false
+            && firstTimeLogin
+            && state.news.data?.isNotEmpty() == true
+        ) {
             action(DashboardUserUiAction.ShowNewsDialog)
         }
     }

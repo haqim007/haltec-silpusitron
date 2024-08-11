@@ -6,7 +6,7 @@ import org.koin.core.component.inject
 
 class CheckSessionUseCase: KoinComponent {
     private val repository: IAuthRepository by inject<IAuthRepository>()
-    suspend operator fun invoke(): Flow<Boolean> {
+    operator fun invoke(): Flow<Boolean> {
         return repository.checkSession()
     }
 }

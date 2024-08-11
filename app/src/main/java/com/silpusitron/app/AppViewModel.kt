@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.feature.auth.common.domain.IAuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -16,7 +17,7 @@ class AppViewModel(
         when(action){
             is AppUiAction.CheckSession -> {
                 viewModelScope.launch {
-                   authRepository.checkSession().collect{
+                   authRepository.checkSession().collectLatest{
                        _state.update { state ->
                            state.copy(isSessionValid = it)
                        }

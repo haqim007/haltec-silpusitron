@@ -7,9 +7,10 @@ import com.silpusitron.core.ui.ui.BaseViewModel
 import com.silpusitron.data.mechanism.Resource
 import com.silpusitron.feature.submissionhistory.common.domain.SubmissionHistory
 import com.silpusitron.feature.submissionhistory.common.domain.usecase.GetLetterStatusOptionsUseCase
-import com.silpusitron.feature.submissionhistory.common.domain.usecase.GetLetterTypeOptionsUseCase
+//import com.silpusitron.feature.submissionhistory.common.domain.usecase.GetLetterTypeOptionsUseCase
 import com.silpusitron.feature.submissionhistory.common.domain.usecase.GetSubmissionHistoriesUseCase
 import com.silpusitron.shared.form.domain.model.InputOptions
+import com.silpusitron.shared.lettertype.domain.GetLetterTypeOptionsUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

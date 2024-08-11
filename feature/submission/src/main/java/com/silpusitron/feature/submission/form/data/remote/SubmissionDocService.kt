@@ -8,12 +8,18 @@ import com.silpusitron.feature.submission.form.data.remote.response.SubmitRespon
 import com.silpusitron.feature.submission.form.data.remote.response.TemplateResponse
 import com.silpusitron.shared.formprofile.domain.model.FormProfileInputKey
 import io.ktor.client.call.body
+import io.ktor.client.content.LocalFileContent
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
+import io.ktor.http.ContentDisposition
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 internal class SubmissionDocService(
     override val BASE_URL: String,

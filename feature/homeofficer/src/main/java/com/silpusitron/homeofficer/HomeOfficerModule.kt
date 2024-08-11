@@ -2,6 +2,7 @@ package com.silpusitron.homeofficer
 
 import com.silpusitron.feature.dashboard.user.di.dashboardUserModule
 import com.silpusitron.feature.officertask.common.di.officerTaskModules
+import com.silpusitron.feature.requirementdocs.common.di.requirementDocModule
 import com.silpusitron.feature.settings.di.settingsModule
 import com.silpusitron.feature.submission.common.di.submissionDocModule
 import com.silpusitron.feature.submissionhistory.common.di.submissionHistoryModule
@@ -15,6 +16,7 @@ val homeOfficerModule = module {
         settingsModule,
         updateProfileOfficerModule,
         officerTaskModules,
-        submissionHistoryModule
+        submissionHistoryModule,
+        requirementDocModule,
     )
 }

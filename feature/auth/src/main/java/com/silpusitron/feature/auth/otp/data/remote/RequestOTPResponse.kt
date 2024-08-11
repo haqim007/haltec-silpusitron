@@ -13,7 +13,9 @@ data class RequestOTPResponse(
 		@SerialName("otp_time")
 		val otpTime: Long,
 		val username: String,
-		val token: String
+		val token: String,
+		@SerialName("no_hp")
+		val phoneNumber: String?
 	)
 }
 

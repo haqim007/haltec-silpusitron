@@ -3,7 +3,6 @@ package com.silpusitron.feature.submission.form.ui.parts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,17 +19,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.silpusitron.common.di.commonModule
 import com.silpusitron.core.ui.component.InputLabel
 import com.silpusitron.core.ui.parts.SubmitSuccessView
 import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.core.ui.theme.SuccessColor
 import com.silpusitron.core.ui.util.KoinPreviewWrapper
-import com.silpusitron.common.di.commonModule
 import com.silpusitron.feature.submission.R
 import com.silpusitron.feature.submission.common.di.submissionDocModule
 import com.silpusitron.feature.submission.form.ui.SubmissionDocUiAction
 import com.silpusitron.feature.submission.form.ui.SubmissionDocUiState
-import com.silpusitron.feature.submission.form.ui.submissionDocFormArgsDummy
 import com.silpusitron.feature.submission.form.ui.submissionDocUiStateDummy
 import com.silpusitron.shared.auth.di.authSharedModule
 import com.silpusitron.shared.form.domain.model.isRequired
@@ -52,6 +50,7 @@ fun FormSubmission(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SubmitSuccessView(
+                modifier = Modifier.weight(1f),
                 borderColor = Color.Unspecified,
                 text = {
                     Text(
@@ -64,11 +63,20 @@ fun FormSubmission(
                     )
                 }
             )
+
+            additionalContent?.let {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                ){
+                    it()
+                }
+            }
         }
     } else {
         Column(
             modifier = modifier
-                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.form),
@@ -113,19 +121,18 @@ fun FormSubmission(
                     )
                 }
 
-
                 item {
                     additionalContent?.let { it() }
                 }
 
             }
-
         }
     }
 }
 
+@Preview
 @Composable
-fun FormSubmission_Preview(){
+private fun FormSubmission_Preview(){
     KoinPreviewWrapper(modules = listOf(commonModule, formProfileModule, authSharedModule, submissionDocModule)) {
         SILPUSITRONTheme {
             Box(
@@ -143,7 +150,7 @@ fun FormSubmission_Preview(){
 
 @Preview(name = "empty forms", apiLevel = 34)
 @Composable
-fun FormSubmissionEmpty_Preview(){
+private fun FormSubmissionEmpty_Preview(){
     KoinPreviewWrapper(modules = listOf(commonModule, formProfileModule, authSharedModule, submissionDocModule)) {
         SILPUSITRONTheme {
             Box(

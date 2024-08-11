@@ -69,6 +69,7 @@ fun PermissionRequester(
         onResult = { permissionsResult ->
             val granted = permissionsResult.values.all { it }
             if (granted) {
+                shouldShowRationale = false
                 onPermissionGranted()
             } else {
 //                 shouldShowRationale = permissionsResult.keys.any {
@@ -77,10 +78,9 @@ fun PermissionRequester(
 //                        it,
 //                    )
 //                }
-//                if (!shouldShowRationale){
-//                    showDeniedDialog = true
-//                }
-                shouldShowRationale = true
+                if (!shouldShowRationale){
+                    shouldShowRationale = true
+                }
 //                else{
 //                    shouldShowRationale = permissionsResult.keys.any {
 //                        ActivityCompat.shouldShowRequestPermissionRationale(

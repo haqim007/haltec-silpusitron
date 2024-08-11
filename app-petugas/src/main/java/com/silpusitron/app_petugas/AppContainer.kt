@@ -26,6 +26,8 @@ import com.silpusitron.feature.auth.otp.ui.OTPScreen
 import com.silpusitron.feature.dashboard.exposed.ui.DashboardExposedScreen
 import com.silpusitron.feature.dashboard.exposed.ui.DashboardExposedViewModel
 import com.silpusitron.feature.landingpage.ui.splash.MySplashScreen
+import com.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocList
+import com.silpusitron.feature.requirementdocs.simple.ui.SimpleReqDocViewModel
 import com.silpusitron.homeofficer.HomeOfficerScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -107,6 +109,17 @@ fun AppContainer(
                                         inclusive = true
                                     }
                                 }
+                            }
+                        )
+                    }
+                    composable<SimpleRequirementFilesRoute> {
+                        val reqDocsViewModel: SimpleReqDocViewModel = koinViewModel()
+
+                        SimpleReqDocList(
+                            data = reqDocsViewModel.pagingFlow,
+                            action = {action -> reqDocsViewModel.doAction(action)},
+                            onClose = {
+                                navController.navigateUp()
                             }
                         )
                     }

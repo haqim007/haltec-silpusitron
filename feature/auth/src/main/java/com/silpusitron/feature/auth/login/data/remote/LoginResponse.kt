@@ -16,7 +16,7 @@ data class LoginResponse(
 		@SerialName("complete_data")
 		val completeProfile: Boolean,
 		@SerialName("no_hp")
-		val phoneNumber: String,
+		val phoneNumber: String? = null,
 	)
 
 	@Serializable

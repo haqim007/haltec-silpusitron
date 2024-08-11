@@ -47,8 +47,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.silpusitron.common.di.commonModule
-import com.silpusitron.core.ui.parts.SmallTopBar
 import com.silpusitron.core.ui.parts.PagerView
+import com.silpusitron.core.ui.parts.SmallTopBar
 import com.silpusitron.core.ui.theme.SILPUSITRONTheme
 import com.silpusitron.core.ui.util.KoinPreviewWrapper
 import com.silpusitron.data.di.dataModule
@@ -56,12 +56,12 @@ import com.silpusitron.feature.requirementdocs.R
 import com.silpusitron.feature.requirementdocs.common.di.requirementDocModule
 import com.silpusitron.feature.requirementdocs.common.domain.RequirementDoc
 import com.silpusitron.feature.requirementdocs.common.domain.requirementDocDummies
-import com.silpusitron.feature.requirementdocs.submission.ui.ReqDocUiAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import com.silpusitron.core.ui.R as CoreR
 
-@OptIn(ExperimentalMaterial3Api::class)
+// TODO: Separate module between SimpleReqDocList and Submission for separation concerns.
+// Why: app-petugas uses SimpleReqDocList but does not use Submission
 @Composable
 fun SimpleReqDocList(
     modifier: Modifier = Modifier,

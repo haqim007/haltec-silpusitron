@@ -5,11 +5,9 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.chuckerteam.chucker.api.ChuckerCollector
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.silpusitron.data.remote.base.KtorService
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -33,23 +31,14 @@ val Context.deviceDataStore by preferencesDataStore(name = "device_preference")
 fun provideDeviceDataStore(context: Context): DataStore<Preferences> {
     return context.deviceDataStore
 }
+
 internal val ktorHttpClient = named("ktor_engine")
 
 
 val dataModule = module {
     single(devicePreference) { provideDeviceDataStore(androidContext()) }
     single(ktorHttpClient) {
-        HttpClient(OkHttp) {
-            engine {
-                addInterceptor(
-                    ChuckerInterceptor.Builder(androidContext())
-                        .collector(ChuckerCollector(androidContext()))
-                        .maxContentLength(250000L)
-                        .redactHeaders(emptySet())
-                        .alwaysReadResponseBody(false)
-                        .build()
-                )
-            }
+        HttpClient(CIO) {
             install(Logging) {
 //            logger = Logger.ANDROID
                 logger = object : Logger {
