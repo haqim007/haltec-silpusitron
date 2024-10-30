@@ -24,6 +24,7 @@ class MainApplication : Application() {
             properties(mapOf("BASE_URL" to BuildConfig.BASE_URL))
             properties(mapOf("API_VERSION" to BuildConfig.API_VERSION))
             properties(mapOf("IS_OFFICER" to BuildConfig.IS_OFFICER))
+            properties(mapOf("RECAPTCHA_KEY_ID" to BuildConfig.RECAPTCHA_KEY_ID))
             // Load modules
              modules(
                  commonModule, dataModule, authModule, appModule,

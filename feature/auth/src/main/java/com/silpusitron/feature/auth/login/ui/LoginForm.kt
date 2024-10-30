@@ -108,20 +108,27 @@ fun LoginForm(
         mutableStateOf(false)
     }
     val isForPetugas = getKoin().getProperty<Boolean>("IS_OFFICER")
+    val recaptchaKey = getKoin().getProperty<String>("RECAPTCHA_KEY_ID")
 
     LaunchedEffect(key1 = initRecaptcha) {
         if (initRecaptcha == null){
             if (application != null) {
-                Recaptcha.getClient(application, BuildConfig.RECAPTCHA_KEY_ID)
-                    .onSuccess {
-                        recaptchaClient = it
-                        initRecaptcha = true
-                        Log.d("recaptchaClient", it.toString())
-                    }
-                    .onFailure {
-                        initRecaptcha = false
-                        Log.e("recaptchaClient", it.stackTraceToString())
-                    }
+                try {
+                    Log.e("recaptchaKey", recaptchaKey.toString())
+                    Recaptcha.getClient(application, recaptchaKey!!)
+                        .onSuccess {
+                            recaptchaClient = it
+                            initRecaptcha = true
+                            Log.d("recaptchaClient", it.toString())
+                        }
+                        .onFailure {
+                            initRecaptcha = false
+                            Log.e("recaptchaClient", it.stackTraceToString())
+                        }
+                }catch (e: Exception){
+                    initRecaptcha = false
+                    Log.e("recaptchaClient", e.stackTraceToString())
+                }
             }
         }
     }

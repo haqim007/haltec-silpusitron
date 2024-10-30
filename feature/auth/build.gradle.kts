@@ -13,11 +13,6 @@ plugins {
 apply(from = "../../shared-dependencies.gradle")
 apply(from = "../../shared-ui-dependencies.gradle")
 
-val secretPropertiesFile = rootProject.file("secret.properties")
-val secretProperties = Properties().apply {
-    load(secretPropertiesFile.inputStream())
-}
-
 android {
     namespace = "com.silpusitron.feature.auth"
     compileSdk = 34
@@ -27,8 +22,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "RECAPTCHA_KEY_ID", secretProperties.getProperty("RECAPTCHA_KEY_ID"))
     }
 
     buildTypes {

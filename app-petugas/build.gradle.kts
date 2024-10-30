@@ -48,6 +48,7 @@ android {
             buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
             buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
             buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
+            buildConfigField("String", "RECAPTCHA_KEY_ID", secretProperties.getProperty("RECAPTCHA_KEY_ID"))
         }
         debug {
             isMinifyEnabled = false
@@ -65,6 +66,7 @@ android {
             buildConfigField("String", "BASE_URL", secretProperties.getProperty("BASE_URL"))
             buildConfigField("String", "API_VERSION", secretProperties.getProperty("API_VERSION"))
             buildConfigField("Boolean", "IS_OFFICER", secretProperties.getProperty("IS_OFFICER"))
+            buildConfigField("String", "RECAPTCHA_KEY_ID", secretProperties.getProperty("RECAPTCHA_KEY_ID"))
         }
     }
 
