@@ -114,7 +114,6 @@ fun LoginForm(
         if (initRecaptcha == null){
             if (application != null) {
                 try {
-                    Log.e("recaptchaKey", recaptchaKey.toString())
                     Recaptcha.getClient(application, recaptchaKey!!)
                         .onSuccess {
                             recaptchaClient = it
